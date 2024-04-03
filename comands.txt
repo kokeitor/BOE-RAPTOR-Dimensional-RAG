@@ -1,0 +1,4 @@
+streamlit run --server.port 8000 app.py
+docker pull chromadb/chroma
+docker run  -p 8000:8000 --name chroma chromadb/chroma
+buscador web local : http://localhost:8000/api/v1

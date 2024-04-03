@@ -7,7 +7,7 @@ from langchain.chains.question_answering import load_qa_chain
 
 OPENAI_API_KEY = "Añadir OpenAI API Key"
 
-st.set_page_config('preguntaDOC')
+st.set_page_config('preguntaDOC KOKE')
 st.header("Pregunta a tu PDF")
 
 
@@ -22,23 +22,26 @@ with st.sidebar:
     
     if st.button('Procesar'):
         for pdf in files_uploaded:
+            #print("pdf type : ",type(pdf))
             if pdf is not None and pdf.name not in archivos:
                 archivos.append(pdf.name)
                 text_to_chromadb(pdf)
 
         archivos = save_name_files(FILE_LIST, archivos)
-
+        
     if len(archivos) > 0:
-        st.write("Archivos cargados:")
+        st.write("Archivos pdf procesados:")
         lista_documentos = st.empty()
-        with lista_documentos.container():
+        
+        with lista_documentos.container():    
+            #st.text("Has cargado los siguientes pdf : ") #menasaje opcional dentro del contain er que se borrara al pulsar boton borrar
             for arch in archivos:
                 st.write(arch)
             if st.button('Borrar documentos'):
                 archivos = []
                 clean_files(FILE_LIST)
                 lista_documentos.empty()
-
+"""
 if archivos:
     user_question = st.text_input("Pregunta:")
     if user_question:
@@ -56,4 +59,4 @@ if archivos:
         chain = load_qa_chain(llm, chain_type="stuff")
         respuesta = chain.run(input_documents=docs, question=user_question)
 
-        st.write(respuesta)
+        st.write(respuesta)"""

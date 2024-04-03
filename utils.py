@@ -13,7 +13,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 FILE_LIST = "archivos.txt"
 INDEX_NAME = 'taller'
 
-chroma_client = chromadb.HttpClient(host='localhost', port=8000)
+#chroma_client = chromadb.HttpClient(host='localhost', port=8000)
 
 def save_name_files(path, new_files):
 
@@ -41,8 +41,8 @@ def load_name_files(path):
 def clean_files(path):
     with open(path, "w") as file:
         pass
-    chroma_client.delete_collection(name=INDEX_NAME)
-    collection = chroma_client.create_collection(name=INDEX_NAME)
+    #chroma_client.delete_collection(name=INDEX_NAME)
+    #collection = chroma_client.create_collection(name=INDEX_NAME)
 
     return True
 
@@ -55,11 +55,18 @@ def text_to_chromadb(pdf):
         f.write(pdf.getvalue())
 
     loader = PyPDFLoader(temp_filepath)
-    text = loader.load()
+    doc_object = loader.load() 
+    # los doc objects tienen como atributos: .page_content [alamcena elk contenido paginas de pdf en tipo str] -- .metadata [dict con keys : "source" value: (ruta del  pdf absoluta), "page" etc]
+    """ 
+    # Prueba para cconocer mejor atributos de objeto document    
+    with open('prueba.txt', "w") as file:
+        for doc in doc_object:
+            file.write(doc.page_content)
+    """
 
     with st.spinner(f'Creando embedding fichero: {pdf.name}'):
-        create_embeddings(pdf.name, text)
-
+        create_embeddings(pdf.name, doc_object)
+    st.success('Embedding creado!', icon="✅")
     return True
 
 
@@ -77,11 +84,11 @@ def create_embeddings(file_name, text):
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         )
-    
+    """    
     Chroma.from_documents(
         chunks,
         embeddings,   
         client=chroma_client,
         collection_name=INDEX_NAME)
-        
+        """
     return True
