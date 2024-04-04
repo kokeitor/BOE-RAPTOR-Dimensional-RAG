@@ -93,14 +93,20 @@ def create_embeddings(file_name, doc_object):
         model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         )
     
-    # from_documents es un classmethod de clase Chroma que es un modulo de langchain
-    # este classmethod equivale a create_colletion de libreria chromadb solo que generalizado (p ejemplo: le pasa el chroma client y el nombre de la collection a la vez )
-    # docstring classmethod: Create a Chroma vectorstore from a list of documents
+    # from_documents es un classmethod de clase Chroma que pertenece a la lib langchain
+    # este classmethod equivale a chroma_client.create_colletion de libreria chromadb solo que de otra forma (p ejemplo: le pasa el chroma client y el nombre de la collection a la vez )
+    # y ademas no solo te crea esa collection en chroma si no que tambien devuelve un obj de la clase Chroma de la libreria langchain
+    # El docstring oficial del classmethod: Create a Chroma vectorstore from a list of documents
     _chroma_obj_db = Chroma.from_documents(
-        documents = chunks,
-        embedding = embeddings,   
-        client = chroma_client,
-        collection_name=INDEX_NAME)
+                                            documents = chunks,
+                                            embedding = embeddings,   
+                                            client = chroma_client,
+                                            collection_name=INDEX_NAME,
+                                            collection_metadata = None # dict o [deafult] None donde le puedes pasar metadata igual que se hace en el metodo 
+                                                                       # : chroma_client.create_collection en su argumento (que tambien es un dict)
+                                                                       # : "metadata" --- ejemplo metadata={"hnsw:space": "l2"}
+                                            )
+    # nota : Instanciar clase Chroma crea un objeto equivalnete a chroma_client de la libreria chromadb pero usando libreria langchain  
     print("Colection info : ", _chroma_obj_db.get().keys())
     print("Colection info ids len : ", len(_chroma_obj_db.get()["ids"]))
     print("Colection info : ", _chroma_obj_db.get()["documents"])
