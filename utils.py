@@ -13,7 +13,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 FILE_LIST = "archivos.txt"
 INDEX_NAME = 'taller'
 
-#chroma_client = chromadb.HttpClient(host='localhost', port=8000)
+chroma_client = chromadb.HttpClient(host='localhost', port=8000)
 
 def save_name_files(path, new_files):
 
@@ -41,8 +41,11 @@ def load_name_files(path):
 def clean_files(path):
     with open(path, "w") as file:
         pass
-    #chroma_client.delete_collection(name=INDEX_NAME)
-    #collection = chroma_client.create_collection(name=INDEX_NAME)
+    chroma_client.delete_collection(name=INDEX_NAME)
+    collection  = chroma_client.create_collection(
+        name=INDEX_NAME,
+        metadata={"hnsw:space": "l2"} # l2 is the default
+    )
 
     return True
 
@@ -56,7 +59,7 @@ def text_to_chromadb(pdf):
 
     loader = PyPDFLoader(temp_filepath)
     doc_object = loader.load() 
-    # los doc objects tienen como atributos: .page_content [alamcena elk contenido paginas de pdf en tipo str] -- .metadata [dict con keys : "source" value: (ruta del  pdf absoluta), "page" etc]
+    # los document objects tienen como atributos: .page_content [alamcena elk contenido paginas de pdf en tipo str] -- .metadata [dict con keys : "source" value: (ruta del  pdf absoluta), "page" etc]
     """ 
     # Prueba para cconocer mejor atributos de objeto document    
     with open('prueba.txt', "w") as file:
@@ -70,25 +73,37 @@ def text_to_chromadb(pdf):
     return True
 
 
-def create_embeddings(file_name, text):
+def create_embeddings(file_name, doc_object):
     print(f"Creando embeddings del archivo: {file_name}")
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
-        chunk_overlap=100,
+        chunk_size=400,
+        chunk_overlap=10,
         length_function=len
         )        
     
-    chunks = text_splitter.split_documents(text)
+    chunks = text_splitter.split_documents(doc_object)
+    # Realmente este objeto llamado chunks son documents objects cerados a partir del document object padre pasado copmo argumento 
+    # al metodo .split_documents() del objeto de la clase RecursiveCharacterTextSplitter. Este objeto te genera esos "sub doc objects" o chunks en funcion
+    # de lo que le hayas pasado al constructor en la instancia de la clase RecursiveCharacterTextSplitter.
+    print("chunks : ", chunks)
+    print("chunks size: ", len(chunks))
 
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
         )
-    """    
-    Chroma.from_documents(
-        chunks,
-        embeddings,   
-        client=chroma_client,
+    
+    # from_documents es un classmethod de clase Chroma que es un modulo de langchain
+    # este classmethod equivale a create_colletion de libreria chromadb solo que generalizado (p ejemplo: le pasa el chroma client y el nombre de la collection a la vez )
+    # docstring classmethod: Create a Chroma vectorstore from a list of documents
+    _chroma_obj_db = Chroma.from_documents(
+        documents = chunks,
+        embedding = embeddings,   
+        client = chroma_client,
         collection_name=INDEX_NAME)
-        """
+    print("Colection info : ", _chroma_obj_db.get().keys())
+    print("Colection info ids len : ", len(_chroma_obj_db.get()["ids"]))
+    print("Colection info : ", _chroma_obj_db.get()["documents"])
+    
+
     return True
