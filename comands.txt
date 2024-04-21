@@ -2,3 +2,6 @@ streamlit run --server.port 8052 app.py
 docker pull chromadb/chroma
 docker run  -p 8000:8000 --name chroma chromadb/chroma
 buscador web local : http://localhost:8000/api/v1
+
+-- llama3 langSmith api key
+ls__fe633ef5a71843baa5d07db00d83cd68
