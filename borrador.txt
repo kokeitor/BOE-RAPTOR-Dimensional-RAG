@@ -1,0 +1,39 @@
+# BOE PDF
+from langchain.document_loaders import PyPDFLoader
+def pdf_loader(pdf):
+    temp_dir = r"C:\Users\Koke\Desktop\MASTER_IA\TFM\proyectoCHROMADB\documentos"
+    pdf_path = os.path.join(temp_dir, pdf)
+    print(pdf_path)
+    loader = PyPDFLoader(pdf_path)
+    return loader.load() 
+    # los document objects tienen como atributos: .page_content [alamcena elk contenido paginas de pdf en tipo str] -- .metadata [dict con keys : "source" value: (ruta del  pdf absoluta), "page" etc]
+    """ 
+    # Prueba para cconocer mejor atributos de objeto document    
+    with open('prueba.txt', "w") as file:
+        for doc in doc_object:
+            file.write(doc.page_content)
+    """
+
+
+    ### text splitter
+    
+"""
+text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    chunk_size=250, chunk_overlap=0
+)
+doc_splits = text_splitter.split_documents(docs_list)
+"""
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=250, chunk_overlap=10, length_function=len
+)
+
+#doc_splits = text_splitter.split_documents(docs_list)
+doc_splits = text_splitter.split_documents(pdf_loader("boe_2.pdf"))
+print(type(doc_splits))
+print((doc_splits))
+
+
+### formateo de list documentos
+# Post-processing
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
