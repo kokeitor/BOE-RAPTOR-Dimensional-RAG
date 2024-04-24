@@ -1,115 +1,66 @@
+import deepl
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import PromptTemplate
+from langchain import hub
+from langchain_core.output_parsers import StrOutputParser
+from langchain_community.chat_models import ChatOllama
+from langchain_core.output_parsers import JsonOutputParser
+from typing_extensions import TypedDict
+from typing import List
+from langchain.schema import Document
 
-import os
-import streamlit as st
 
-import chromadb
-import tempfile
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import PyPDFLoader
-from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceEmbeddings 
+DEEPL_KEY = "f21735bc-db92-4957-8a48-9bed66114a42:fx"  
+LOCAL_LLM = 'llama3'
 
+translator = deepl.Translator(DEEPL_KEY)
 
-FILE_LIST = "archivos.txt"
-INDEX_NAME = 'taller'
-
-chroma_client = chromadb.HttpClient(host='localhost', port=8000)
-
-def save_name_files(path, new_files):
-
-    old_files = load_name_files(path)
-
-    with open(path, "a") as file:
-        for item in new_files:
-            if item not in old_files:
-                file.write(item + "\n")
-                old_files.append(item)
+### Translation function
+def transalate(text :str, target_lang : str = "ES" , verbose : int = 0, mode : str = "LOCAL_LLM") -> str:
     
-    return old_files
+    _target_lang = {
+                        "EN-GB":"British english",
+                        "EN-US":"United States english",
+                        "ES":"Spanish"
+        
+                    }
+    
+    if mode == "DEEPL":
+        result = translator.translate_text(text = text,source_lang = 'ES', target_lang= target_lang)
+        if verbose == 1:
+            print(f"texto :\n{text}")
+            print(f"Traduccion:\n{result.text}")  
+        return result.text
+    else:
+        if mode == "GPT":
+            llm_for_trl = ChatOpenAI(model_name='gpt-4', temperature = 0 )
+        if mode == "LOCAL_LLM":
+            llm_for_trl = ChatOllama(model=LOCAL_LLM, temperature=0)
+        
+        transalation_prompt = PromptTemplate(
+                        template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant for translation into spanish language. \n
+                        Use the target specify language to translate the text to that language. \n
+                        The translation must be the most reliable as posible to the spanish text keeping the technicalities and without translating proper names or names of cities or villages. \n
+                        Return the a JSON with a single key 'translation' and no premable or explaination.<|eot_id|><|start_header_id|>user<|end_header_id|>
+                        Text: {text} 
+                        Target language: {target_language} 
+                        Answer: <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+                        input_variables=["text", "target_language"]
+                                        )
+        trl_chain = transalation_prompt | llm_for_trl | JsonOutputParser()
+        
+        return trl_chain.invoke({"text": text , "target_language": _target_lang.get(target_lang,"Spanish")})["translation"]
+    
+    
 
+# Post-processing
+def format_docs(docs : List[Document]) -> str:
+    """Trasnform List[Documents] into str using doc atribute page_content
 
-def load_name_files(path):
+    Args:
+        docs (_type_): _description_
 
-    archivos = []
-    with open(path, "r") as file:
-        for line in file:
-            archivos.append(line.strip())
-
-    return archivos
-
-
-def clean_files(path):
-    with open(path, "w") as file:
-        pass
-    chroma_client.delete_collection(name=INDEX_NAME)
-    collection  = chroma_client.create_collection(
-        name=INDEX_NAME,
-        metadata={"hnsw:space": "l2"} # l2 is the default
-    )
-
-    return True
-
-
-def text_to_chromadb(pdf):
-
-    temp_dir = tempfile.TemporaryDirectory()
-    temp_filepath = os.path.join(temp_dir.name, pdf.name)
-    with open(temp_filepath, "wb") as f:
-        f.write(pdf.getvalue())
-
-    loader = PyPDFLoader(temp_filepath)
-    doc_object = loader.load() 
-    # los document objects tienen como atributos: .page_content [alamcena elk contenido paginas de pdf en tipo str] -- .metadata [dict con keys : "source" value: (ruta del  pdf absoluta), "page" etc]
-    """ 
-    # Prueba para cconocer mejor atributos de objeto document    
-    with open('prueba.txt', "w") as file:
-        for doc in doc_object:
-            file.write(doc.page_content)
+    Returns:
+        _type_: _description_
     """
-
-    with st.spinner(f'Creando embedding fichero: {pdf.name}'):
-        create_embeddings(pdf.name, doc_object)
-    st.success('Embedding creado!', icon="✅")
-    return True
-
-
-def create_embeddings(file_name, doc_object):
-    print(f"Creando embeddings del archivo: {file_name}")
-
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=400,
-        chunk_overlap=10,
-        length_function=len
-        )        
-    
-    chunks = text_splitter.split_documents(doc_object)
-    # Realmente este objeto llamado chunks son documents objects cerados a partir del document object padre pasado copmo argumento 
-    # al metodo .split_documents() del objeto de la clase RecursiveCharacterTextSplitter. Este objeto te genera esos "sub doc objects" o chunks en funcion
-    # de lo que le hayas pasado al constructor en la instancia de la clase RecursiveCharacterTextSplitter.
-    print("chunks : ", chunks)
-    print("chunks size: ", len(chunks))
-
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-        )
-    
-    # from_documents es un classmethod de clase Chroma que pertenece a la lib langchain
-    # este classmethod equivale a chroma_client.create_colletion de libreria chromadb solo que de otra forma (p ejemplo: le pasa el chroma client y el nombre de la collection a la vez )
-    # y ademas no solo te crea esa collection en chroma si no que tambien devuelve un obj de la clase Chroma de la libreria langchain
-    # El docstring oficial del classmethod: Create a Chroma vectorstore from a list of documents
-    _chroma_obj_db = Chroma.from_documents(
-                                            documents = chunks,
-                                            embedding = embeddings,   
-                                            client = chroma_client,
-                                            collection_name=INDEX_NAME,
-                                            collection_metadata = None # dict o [deafult] None donde le puedes pasar metadata igual que se hace en el metodo 
-                                                                       # : chroma_client.create_collection en su argumento (que tambien es un dict)
-                                                                       # : "metadata" --- ejemplo metadata={"hnsw:space": "l2"}
-                                            )
-    # nota : Instanciar clase Chroma crea un objeto equivalnete a chroma_client de la libreria chromadb pero usando libreria langchain  
-    print("Colection info : ", _chroma_obj_db.get().keys())
-    print("Colection info ids len : ", len(_chroma_obj_db.get()["ids"]))
-    print("Colection info : ", _chroma_obj_db.get()["documents"])
-    
-
-    return True
+    return "\n\n".join(doc.page_content for doc in docs)
