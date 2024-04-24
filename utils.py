@@ -16,7 +16,7 @@ LOCAL_LLM = 'llama3'
 translator = deepl.Translator(DEEPL_KEY)
 
 ### Translation function
-def transalate(text :str, target_lang : str = "ES" , verbose : int = 0, mode : str = "LOCAL_LLM") -> str:
+def translate(text :str, target_lang : str = "ES" , verbose : int = 0, mode : str = "LOCAL_LLM") -> str:
     
     _target_lang = {
                         "EN-GB":"British english",
