@@ -5,6 +5,7 @@ from  prompts import routing_prompt,grader_prompt,gen_prompt,hallucination_promp
 
 LOCAL_LLM = 'llama3'
 llm = ChatOllama(model=LOCAL_LLM, format="json", temperature=0)
+gen_llm = ChatOllama(model=LOCAL_LLM, temperature=0)
 
 ### Router chain
 router_chain = routing_prompt | llm | JsonOutputParser()
@@ -13,7 +14,7 @@ router_chain = routing_prompt | llm | JsonOutputParser()
 grader_chain = grader_prompt | llm | JsonOutputParser()
 
 ### RAG chain (generation)
-rag_chain = gen_prompt | llm | StrOutputParser()
+rag_chain = gen_prompt | gen_llm | StrOutputParser()
 
 ### Hallucination chain (grader)
 hallucination_chain = hallucination_prompt | llm | JsonOutputParser()
