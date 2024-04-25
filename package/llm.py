@@ -1,5 +1,19 @@
 from langchain.prompts import PromptTemplate
+from langchain_community.chat_models import ChatOllama
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
+from langchain_community.embeddings import GPT4AllEmbeddings 
+from langchain.embeddings import HuggingFaceEmbeddings 
 
+
+### LLM MODElS
+EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+EMBEDDING_MODEL_GPT4 = GPT4AllEmbeddings(model_name ="all‑MiniLM‑L6‑v2.gguf2.f16.gguf")
+LOCAL_LLM = 'llama3'
+llm = ChatOllama(model=LOCAL_LLM, format="json", temperature=0)
+gen_llm = ChatOllama(model=LOCAL_LLM, temperature=0)
+
+
+### PROMPTS 
 routing_prompt_web_search = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
     user question to a vectorstore or web search. Use the vectorstore for questions on spanish BOE documents. \n
@@ -71,3 +85,19 @@ answer_prompt = PromptTemplate(
     input_variables=["generation", "question"],
 )
 
+
+### CHAINS
+### Router chain
+router_chain = routing_prompt | llm | JsonOutputParser()
+
+### Grader chain
+grader_chain = grader_prompt | llm | JsonOutputParser()
+
+### RAG chain (generation)
+rag_chain = gen_prompt | gen_llm | StrOutputParser()
+
+### Hallucination chain (grader)
+hallucination_chain = hallucination_prompt | llm | JsonOutputParser()
+
+### Answer grader
+answer_chain = answer_prompt | llm | JsonOutputParser()
