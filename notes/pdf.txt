@@ -1,0 +1,113 @@
+--- markdown
+
+Núm. 92 Lunes 15 de abril de 2024 Sec. II.A. Pág. 41377
+
+### II. AUTORIDADES Y PERSONAL
+
+#### A. Nombramientos, situaciones e incidencias
+
+MINISTERIO DE SANIDAD
+
+Resolución de 3 de abril de 2024, del Instituto Nacional de Gestión Sanitaria, por la que se nombra personal estatutario fijo en plaza de la categoría de Titulado Especialista en Ciencias de la Salud: Cardiología.
+
+Por Resolución de esta Dirección de 20 de diciembre de 2022 (B.O.E. nº 311 de 28 de diciembre), se convocó proceso selectivo para acceso a la condición de personal estatutario fijo en plaza de la categoría de Titulado Especialista en Ciencias de la Salud: Cardiología.
+
+Una vez finalizado dicho proceso selectivo y comprobado el cumplimiento de los requisitos previstos en la convocatoria por la persona aprobada,
+
+1. Esta Dirección resuelve:
+- Nombrar a la persona que figura en el anexo de la presente Resolución personal estatutario fijo de la categoría de Titulado Especialista en Ciencias de la Salud: Cardiología, indicándose asimismo el destino adjudicado.
+2. De acuerdo con el artículo 114.12, párrafo segundo del Real Decreto-ley 6/2023 (BOE n.º 303 de 19 de diciembre), la toma de posesión se deberá efectuar dentro del plazo de quince días naturales a partir de la publicación de la presente Resolución. Dicho plazo será de un mes cuando suponga cambio de localidad de residencia.
+3. La toma de posesión se llevará a efecto en la Dirección Gerencia del Área Sanitaria de Melilla.
+4. Contra la presente Resolución podrá interponerse, con carácter potestativo, recurso de reposición ante la Dirección del INGESA en el plazo de un mes a contar desde el día siguiente a su publicación o bien recurso contencioso-administrativo, en el plazo de dos meses desde el día siguiente al de su publicación, ante la Sala de lo Contencioso-administrativo del Tribunal Superior de Justicia, de conformidad con lo dispuesto en la Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de las Administraciones Públicas, y en la Ley 29/1998, de 13 de julio, reguladora de la Jurisdicción Contencioso-administrativa.
+
+Madrid, 3 de abril de 2024.–La Directora del Instituto Nacional de Gestión Sanitaria, Belén Hernando Galán.
+
+|DNI|Apellidos y nombre|Destino adjudicado|CIAS|Localidad|
+|---|---|---|---|---|
+|***9549**|Abdeselam Mohamed, Nasiba.|Hospital Comarcal.|***|Melilla.|
+
+cve: BOE-A-2024-7301 Verificable en https://www.boe.es
+
+BOLETÍN OFICIAL DEL ESTADO D. L.: M-1/1958 - ISSN: 0212-033X
+
+
+--- text
+}                  )                             BOLETÍN OFICIAL DEL ESTADO
+Núm. 92                                                                                        Lunes 15 de abril de 2024                                                                                    Sec. II.A.      Pág. 41377
+                                                                    II. AUTORIDADES Y PERSONAL
+                                             A. Nombramientos, situaciones e incidenciasMINISTERIO DE SANIDAD
+                          7301                      Resolución de 3 de abril de 2024, del Instituto Nacional de Gestión Sanitaria,
+                                                    por la que se nombra personal estatutario fijo en plaza de la categoría de
+                                                    Titulado Especialista en Ciencias de la Salud: Cardiología.
+                                   Por Resolución de esta Dirección de 20 de diciembre de 2022 (B.O.E. nº 311 de 28
+                          de diciembre), se convocó proceso selectivo para acceso a la condición de personal
+                          estatutario fijo en plaza de la categoría de Titulado Especialista en Ciencias de la
+                          Salud: Cardiología.
+                                   Una vez finalizado dicho proceso selectivo y comprobado el cumplimiento de los
+                          requisitos previstos en la convocatoria por la persona aprobada,
+                          Primero. Esta Dirección resuelve:
+                                   Nombrar a la persona que figura en el anexo de la presente Resolución personal
+                          estatutario                fijo      de      la      categoría               de       Titulado             Especialista                  en     Ciencias           de       la     Salud:
+                          Cardiología, indicándose asimismo el destino adjudicado.
+                          Segundo. De acuerdo con el artículo 114.12, párrafo segundo del Real Decreto-ley 6/2023
+                          (BOE n.º 303 de 19 de diciembre), la toma de posesión se deberá efectuar dentro del
+                          plazo de quince días naturales a partir de la publicación de la presente Resolución. Dicho
+                          plazo será de un mes cuando suponga cambio de localidad de residencia.
+                                   La toma de posesión se llevará a efecto en la Dirección Gerencia del Área Sanitaria
+                          de Melilla.
+                                   Contra la presente Resolución podrá interponerse, con carácter potestativo, recurso
+                          de reposición ante la Dirección del INGESA en el plazo de un mes a contar desde el día
+                          siguiente a su publicación o bien recurso contencioso-administrativo, en el plazo de dos
+                          meses desde el día siguiente al de su publicación, ante la Sala de lo Contencioso-
+                          administrativo del Tribunal Superior de Justicia, de conformidad con lo dispuesto en la
+                          Ley         39/2015,               de       1      de       octubre,              del       Procedimiento                       Administrativo                Común               de       las
+                          Administraciones                         Públicas,               y    en       la     Ley        29/1998,               de      13       de     julio,    reguladora                 de       la
+                          Jurisdicción Contencioso-administrativa.
+                                   Madrid, 3 de abril de 2024.–La Directora del Instituto Nacional de Gestión Sanitaria,
+                          Belén Hernando Galán.                                                                     ANEXO
+                                     DNI                                  Apellidos y nombre                                                Destino adjudicado                         CIAS           Localidad
+                               ***9549**               Abdeselam Mohamed, Nasiba.                                                    Hospital Comarcal.                                  ***         Melilla.
+                                                                                                                                                                                                                                        cve: BOE-A-2024-7301Verificable en https://www.boe.es
+      https://www.boe.es      
+                                                 BOLETÍN OFICIAL DEL ESTADO                                                                                      D. L.: M-1/1958 - ISSN: 0212-033X
+
+
+-- text con : doc.page_content.replace("\t", '').replace("   ",'')
+
+})  BOLETÍN OFICIAL DEL ESTADO
+Núm. 92 Lunes 15 de abril de 2024Sec. II.A.Pág. 41377
+  II. AUTORIDADES Y PERSONAL
+A. Nombramientos, situaciones e incidenciasMINISTERIO DE SANIDAD
+  7301 Resolución de 3 de abril de 2024, del Instituto Nacional de Gestión Sanitaria,
+ por la que se nombra personal estatutario fijo en plaza de la categoría de
+ Titulado Especialista en Ciencias de la Salud: Cardiología.
+  Por Resolución de esta Dirección de 20 de diciembre de 2022 (B.O.E. nº 311 de 28
+  de diciembre), se convocó proceso selectivo para acceso a la condición de personal
+  estatutario fijo en plaza de la categoría de Titulado Especialista en Ciencias de la
+  Salud: Cardiología.
+  Una vez finalizado dicho proceso selectivo y comprobado el cumplimiento de los
+  requisitos previstos en la convocatoria por la persona aprobada,
+  Primero. Esta Dirección resuelve:
+  Nombrar a la persona que figura en el anexo de la presente Resolución personal
+  estatutario fijodelacategoríade Titulado Especialistaen  Ciencias  de la  Salud:
+  Cardiología, indicándose asimismo el destino adjudicado.
+  Segundo. De acuerdo con el artículo 114.12, párrafo segundo del Real Decreto-ley 6/2023
+  (BOE n.º 303 de 19 de diciembre), la toma de posesión se deberá efectuar dentro del
+  plazo de quince días naturales a partir de la publicación de la presente Resolución. Dicho
+  plazo será de un mes cuando suponga cambio de localidad de residencia.
+  La toma de posesión se llevará a efecto en la Dirección Gerencia del Área Sanitaria
+  de Melilla.
+  Contra la presente Resolución podrá interponerse, con carácter potestativo, recurso
+  de reposición ante la Dirección del INGESA en el plazo de un mes a contar desde el día
+  siguiente a su publicación o bien recurso contencioso-administrativo, en el plazo de dos
+  meses desde el día siguiente al de su publicación, ante la Sala de lo Contencioso-
+  administrativo del Tribunal Superior de Justicia, de conformidad con lo dispuesto en la
+  Ley39/2015,de 1de octubre,  del Procedimiento  Administrativo Comúnde las
+  Administraciones Públicas,y en la  Ley  29/1998,de13 de  julio, reguladora  de la
+  Jurisdicción Contencioso-administrativa.
+  Madrid, 3 de abril de 2024.–La Directora del Instituto Nacional de Gestión Sanitaria,
+  Belén Hernando Galán.ANEXO
+ DNI Apellidos y nombreDestino adjudicado CIAS  Localidad
+ ***9549**Abdeselam Mohamed, Nasiba. Hospital Comarcal. ***Melilla.
+ cve: BOE-A-2024-7301Verificable en https://www.boe.es
+https://www.boe.es BOLETÍN OFICIAL DEL ESTADO  D. L.: M-1/1958 - ISSN: 0212-033X

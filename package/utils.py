@@ -14,10 +14,10 @@ from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from llama_parse import LlamaParse
-from llama_index.core import SimpleDirectoryReader
 from dotenv import load_dotenv
 import time
+from llama_parse import LlamaParse
+from llama_index.core import SimpleDirectoryReader
 
 load_dotenv()
 
@@ -80,18 +80,35 @@ def format_docs(docs : List[Document]) -> str:
 
 
 ### Splitter , Parsers, tokenizers ... tools for processing text
-parser = LlamaParse(
-    api_key = LLAMA_CLOUD_API_KEY,
-    result_type="markdown",  # "markdown" and "text" are available
-    verbose=True
-)
-file_extractor = {".pdf": parser}
-documents = SimpleDirectoryReader("./documentos",file_extractor = file_extractor).load_data()
-print(documents)
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=300, chunk_overlap=10, length_function=len
-)
+def pdf_parser() -> List[Document]:
+    """_summary_
 
+    Returns:
+        List[Document]: _description_
+    """
+    parser = LlamaParse(
+        api_key = LLAMA_CLOUD_API_KEY,
+        result_type="markdown",  # "markdown" and "text" are available
+        verbose=True
+    )
+    file_extractor = {".pdf": parser}
+    reader = SimpleDirectoryReader(
+                                        "./documentos/boe/",
+                                        file_extractor = file_extractor,
+                                        recursive=True, # recursively search in subdirectories
+                                        required_exts = [".pdf"]
+                                        )
+
+    all_docs = reader.load_data() # returns List[llama doc objt] : https://docs.llamaindex.ai/en/v0.10.17/api/llama_index.core.schema.Document.html
+    print("Num docs extracted : ", len(all_docs))
+
+    # Transform into langchain docs
+    lang_chain_docs = []
+    for d in all_docs:
+        print(d.get_type())
+        lang_chain_docs.append(d.to_langchain_format()) 
+        
+    return lang_chain_docs
 
 ### BOE PDF DOWNLOAD TOOL
 def boe_pdfs_downloader(vectorstore, text_splitter):
