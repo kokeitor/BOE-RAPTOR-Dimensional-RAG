@@ -1,0 +1,5 @@
+"""Leyes Orgánicas,Reales Decretos Legislativos,Reales Decretos-leyes,Tratados Internacionales,Leyes Autonómicas,Reglamentos de Carácter General,Reglamentos Normativos AutonómicosNombramientos,
+Situaciones e Incidencias de Personal,Oposiciones y Concursos,Ayudas y Subvenciones,Becas,Cartas de Servicio,Convenios Colectivos,Planes de Estudio,
+Edictos Judiciales,Notificaciones Judiciales,Requisitorias Judiciales,Anuncios de Licitaciones Públicas,Adjudicaciones,Anuncios Oficiales,Anuncios Particulares,Sentencias del Tribunal Constitucional,
+Declaraciones del Tribunal Constitucional,Autos del Tribunal Constitucional,Publicaciones en Otras Lenguas Oficiales,Convenios de Colaboración Interadministrativos ,
+Actos de Órganos Constitucionales,Informes de Interés General,Comunicaciones Oficiales Excepcionales"""
