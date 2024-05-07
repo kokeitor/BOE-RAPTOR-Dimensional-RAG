@@ -89,9 +89,9 @@ clasify_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant specialized in categorizing documents from the Spanish 
     "Boletín Oficial del Estado" (BOE). Your task is to classify the provided text using the specified list of labels. The posible labels are: {list_labels}
     If the text does not clearly fit any of these labels or requires a more general categorization, assign the label "other".
+    Provide the value label as a JSON with a single key 'Label'.
     <|eot_id|><|start_header_id|>user<|end_header_id|>
-    Text: {text} 
-    Label: <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+    Text: {text} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["text","list_labels"],
 )
 
