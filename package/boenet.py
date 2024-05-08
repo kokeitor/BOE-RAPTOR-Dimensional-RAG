@@ -68,29 +68,75 @@ class BOENet(nn.Module):
     
 # Dataset
 class BOEData(Dataset):
-    def __init__(self, path: str) :
+    def __init__(self, path: str, label_field :List[str], text_field : str, f : int = 1  ) :
+        """
+        BOE dataset
+
+        Parameters
+        ----------
+            key word arguments:
+            - f : (int) Importance factor. Is the importance you want to give to the similarity score stablished by the LLM for each label given to each chunk of the text 
+            - ...
+
+        Return
+        -------
+            None
+
+        """
         super().__init__()
         
+        self.f = f # Importance factor
+        
+        self.label_field = label_field
+        self.text_field = text_field
         # raw data in form of df
         self.data = pd.read_csv( filepath_or_buffer = path, delimiter = ',')
         
         # Create samples and target codify labels to train net
-        self._map_labels()
-        self.x = torch.tensor(self.get_embeddings(self.data.loc[:,'text'].to_list()))
-        self.y = torch.tensor(self.data.loc[:,'maped_labels'].values)
+        self.mapping =  self._map_labels()
         
+        if isinstance(self.text_field, str):
+            # Text embedding tensor -> dimension : (num_texts, d_model = 384)
+            self.x = torch.tensor(self._get_embeddings(self.data.loc[:,self.text_field].to_list()))
+        else:
+            raise ValueError('text_field parameter must be str type')
+        
+        # Target tensor -> dimension : (num_texts, unique_labels)
+        self.num_labels = len(self.mapping.keys())
+        self.y = torch.zeros(self.x.shape[0], num_labels)
+        
+        # Fill target vector for each text with the 3 score similarity 
+        for text_index,row in data.iterrows():
+            self.y[text_index,int(row.loc["map_val_label_1"]) - 1] = row.loc["val_score_1"]
+            self.y[text_index,int(row.loc["map_val_label_2"]) - 1] = row.loc["val_score_2"]
+            self.y[text_index,int(row.loc["map_val_label_3"]) - 1] = row.loc["val_score_3"]
+        
+        # Softmax and factor of importance 
+        _soft = nn.Softmax(dim=1)
+        self.y_soft = _soft(self.y * self.f) # softmax by rows (row cte and iter softmax function through colunns) and aplly importance factor
+         
     def __getitem__(self, index):
-        return self.x[index] ,self.y[index]
+        return self.x[index] ,self.y_soft[index]
     def __len__(self):
-        return self.data.shape[0]
+        return self.x.shape , self.y_soft.shape # (num_texts, d_model) (num_texts,unique_labels)
 
     def _map_labels(self):
-        mapping = {}
-        for i,l_i in enumerate(self.data['label'].unique()):
-            mapping[l_i] = i + 1
-        self.data['maped_labels'] = self.data['label'].map(mapping)
+        if isinstance(self.label_field, list):
+            mapping = {}
+            for i_label, label in self.label_field:
+                if isinstance(label, str) 
+                    if i_label == 0:                
+                        for i,l_i in enumerate(self.data[label].unique()):
+                            mapping[l_i] = i + 1
+                    self.data[f'map_{label}'] = self.data[label].map(mapping)
+                else:
+                    raise ValueError(f'label {label} inside List : label_field,  must be the name of a column in the csv file and str type')
+            return mapping
+        else:
+            raise ValueError('label_field parameter must be List[str] ')
+
          
-    def get_embeddings(self,texts):
+    def _get_embeddings(self,texts):
         response = requests.post(api_url, headers=headers, json={"inputs": texts, "options":{"wait_for_model":True}})
         self.embeddings = response.json()
         return response.json()
