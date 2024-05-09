@@ -10,6 +10,8 @@ import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import requests
 
+from typing import List, Tuple, Dict, Optional
+
 
 # MODULE CLASS DOCU:
 """nn.Module :
@@ -124,7 +126,7 @@ class BOEData(Dataset):
         if isinstance(self.label_field, list):
             mapping = {}
             for i_label, label in self.label_field:
-                if isinstance(label, str) 
+                if isinstance(label, str):
                     if i_label == 0:                
                         for i,l_i in enumerate(self.data[label].unique()):
                             mapping[l_i] = i + 1
