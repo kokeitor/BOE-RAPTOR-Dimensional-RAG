@@ -1,23 +1,27 @@
 {
-    "parser": {
-      "directory_path": "/path/to/files",
-      "file_type": ".pdf",
-      "recursive_parser": true,
-      "result_type": "markdown",
-      "verbose": true,
-      "api_key": "your_api_key_here"
-    },
-    "splitter": {
-      "chunk_size": 200,
-      "embedding_model": "EMBEDDING_MODEL",
-      "tokenizer_model": "default_tokenizer_model",
-      "threshold": 75,
-      "max_tokens": 500,
-      "verbose": 0,
-      "buffer_size": 3,
-      "max_big_chunks": 4,
-      "splitter_mode": "CUSTOM",
-      "embedding_for_research": "HG",
-      "score_threshold_for_research": 0.82
-    }
+  "parser": {
+    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\documentos\\boe\\dias\\2024\\04\\17",
+    "file_type": ".pdf",
+    "recursive_parser": true,
+    "result_type": "markdown",
+    "verbose": true
+  },
+  "splitter": {
+    "chunk_size": 200,
+    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures",
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
+    "threshold": 75,
+    "max_tokens": 500,
+    "verbose": 1,
+    "buffer_size": 3,
+    "max_big_chunks": 4,
+    "splitter_mode": "CUSTOM"
+
+  },
+  "storer": {
+    "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset",
+    "file_name":"train",
+    "file_format": "csv"
   }
+}
