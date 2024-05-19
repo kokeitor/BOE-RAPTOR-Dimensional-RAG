@@ -3,3 +3,4 @@
 /notes
 /data
 /.env
+__pycache__/

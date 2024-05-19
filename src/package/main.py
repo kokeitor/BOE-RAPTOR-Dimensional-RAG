@@ -10,9 +10,10 @@ from langgraph.graph import END, StateGraph
 from src.package.module.db import db_conexion
 
 ### env keys
+load_dotenv()
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-load_dotenv()
+
 
 
 

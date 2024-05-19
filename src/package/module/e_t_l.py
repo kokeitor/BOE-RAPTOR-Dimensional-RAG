@@ -34,9 +34,16 @@ from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv
 
 ### env keys
+load_dotenv()
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-load_dotenv()
+os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
+os.environ["TAVILY_API_KEY"] = os.getenv('TAVILY_API_KEY')
+os.environ["LLAMA_CLOUD_API_KEY"] = os.getenv('LLAMA_CLOUD_API_KEY')
+os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+
 
 if __name__ =='__main__':
     print('hola')
