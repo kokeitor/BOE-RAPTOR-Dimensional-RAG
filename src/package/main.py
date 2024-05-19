@@ -3,11 +3,11 @@ from dotenv import load_dotenv
 from typing_extensions import TypedDict
 from typing import List
 from chains import router_chain,grader_chain, rag_chain, hallucination_chain,answer_chain
-from package.utils import translate,format_docs
+from src.package.utils.utils import translate,format_docs
 from langchain.schema import Document
 from tqdm import tqdm
 from langgraph.graph import END, StateGraph
-from package.db import db_conexion
+from src.package.module.db import db_conexion
 
 ### env keys
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'

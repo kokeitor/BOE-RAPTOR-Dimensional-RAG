@@ -1,0 +1,23 @@
+{
+    "parser": {
+      "directory_path": "/path/to/files",
+      "file_type": ".pdf",
+      "recursive_parser": true,
+      "result_type": "markdown",
+      "verbose": true,
+      "api_key": "your_api_key_here"
+    },
+    "splitter": {
+      "chunk_size": 200,
+      "embedding_model": "EMBEDDING_MODEL",
+      "tokenizer_model": "default_tokenizer_model",
+      "threshold": 75,
+      "max_tokens": 500,
+      "verbose": 0,
+      "buffer_size": 3,
+      "max_big_chunks": 4,
+      "splitter_mode": "CUSTOM",
+      "embedding_for_research": "HG",
+      "score_threshold_for_research": 0.82
+    }
+  }

@@ -1,7 +1,7 @@
 from langchain_community.vectorstores import Chroma
 from langchain_pinecone import PineconeVectorStore
 import chromadb
-from package.llm import EMBEDDING_MODEL,EMBEDDING_MODEL_GPT4
+from src.package.module.llm import EMBEDDING_MODEL,EMBEDDING_MODEL_GPT4
 from typing import List,Tuple
 
 INDEX_NAME = "llama3"
