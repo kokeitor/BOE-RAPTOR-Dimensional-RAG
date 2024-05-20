@@ -22,6 +22,7 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_community.chat_models import ChatOllama
 from langchain_openai import ChatOpenAI
+from datetime import datetime, timezone
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,6 +46,11 @@ tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bn
 
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+
+#util functions
+def get_current_utc_date_iso():
+    # Get the current date and time in UTC and format it directly
+    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
 
 class Parser:
@@ -74,26 +80,28 @@ class Processor:
         """PREPROCESS AND ADD METADATA TO EACH DOC"""
 
     def invoke(self, docs: List[Document]) -> List[Document]:
-        self.docs = docs.copy()
-        print(f"NUMERO DE DOCS A ANALIZAR : {len(self.docs)}\n\n")
+
+        print(f"NUMERO DE DOCS A ANALIZAR : {len(docs)}\n\n")
         new_metadata = {}
         titulos = {}
-        self.processed_docs = self.docs.copy()
-        for d_index, d in enumerate(self.processed_docs):
-            new_metadata["fecha_publicacion_boe"] = self._get_date_creation_doc(doc=d)
-            titulos = self._clean_doc(doc=d)
+        new_docs = []
+        self.processed_docs = docs.copy()
+        for _, d in enumerate(self.processed_docs):
+            new_metadata["fecha_publicacion_boe"], new_doc = self._get_date_creation_doc(doc=d)
+            titulos,new_doc = self._clean_doc(doc=new_doc)
             for k, t in titulos.items():
                 new_metadata[k] = t
             new_metadata["pdf_id"] = self._get_id()  # adicion de identificador unico del pdf del que se extrajo dicho doc
-            self._put_metadata(doc=d, new_metadata=new_metadata)
-        return self.processed_docs
+            new_docs.append(self._put_metadata(doc=new_doc, new_metadata=new_metadata))
+        return new_docs
 
     def _get_id(self):
         """generate an unique random id and convert it to str"""
         return str(uuid.uuid4())
 
     def _clean_doc(self, doc: Document) -> Dict:
-        doc_text = doc.page_content
+        doc_clean = doc.copy()
+        doc_text = doc_clean.page_content
         title_1 = r'^##(?!\#).*$'
         title_2 = r'^###(?!\#).*$'
         title_3 = r'^####(?!\#).*$'
@@ -124,7 +132,7 @@ class Processor:
         titles_2 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_2, doc_text, re.MULTILINE)]))
         titles_3 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_3, doc_text, re.MULTILINE)]))
 
-        clean_text = doc.page_content
+        clean_text = doc_clean.page_content
         for pattern in patterns_to_elimiate:
             clean_text = re.sub(pattern, '', clean_text, flags=re.MULTILINE).strip()
 
@@ -134,7 +142,7 @@ class Processor:
         shortlisted_words = [w for w in words if w not in errase_words]
         clean_text = ' '.join(shortlisted_words)
 
-        doc.page_content = clean_text
+        doc_clean.page_content = clean_text
 
         patterns_to_elimiate_tit = [
             r'I',
@@ -159,18 +167,27 @@ class Processor:
             titles_3 = [re.sub(pattern, '', t).strip() for t in titles_3]
             titles_3 = [item for item in titles_3 if item != '']
 
-        return {f"titulo_{i}": t for i, t in enumerate([titles_1, titles_2, titles_3]) if t != []}
+        return {f"titulo_{i}": t for i, t in enumerate([titles_1, titles_2, titles_3]) if t != []} , doc_clean
 
     def _get_date_creation_doc(self, doc: Document):
-        dia_publicacion = doc.metadata["file_path"].split("\\")[-2]
-        mes_publicacion = doc.metadata["file_path"].split("\\")[-3]
-        año_publicacion = doc.metadata["file_path"].split("\\")[-4]
-        doc.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
-        return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
+      doc_copy = doc.copy()
+      print("file_path: ",doc_copy.metadata["file_path"])
+      if '/' in doc_copy.metadata["file_path"]:
+        dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
+        mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
+        año_publicacion = doc_copy.metadata["file_path"].split("/")[-4]
+      elif '\\' in doc_copy.metadata["file_path"]:
+        dia_publicacion = doc_copy.metadata["file_path"].split("\\")[-2]
+        mes_publicacion = doc_copy.metadata["file_path"].split("\\")[-3]
+        año_publicacion = doc_copy.metadata["file_path"].split("\\")[-4]
+      doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
+      return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
 
     def _put_metadata(self, doc: Document, new_metadata: Dict) -> None:
+        new_doc = doc.copy()
         for key in new_metadata.keys():
-            doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
+            new_doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
+        return new_doc
 
 
 class CustomSemanticSplitter:
@@ -287,7 +304,7 @@ class CustomSemanticSplitter:
             chunks.append({'chunk_text': combined_text, 'chunk_metadata': chunk_metadata})
         return chunks
 
-    def _plot_similarity(self, sentences: List[Dict], threshold: int = 75):
+    def _plot_similarity(self, pdf_id : str, sentences: List[Dict], threshold: int = 75):
 
         distances = [x["distance_to_next"] for x in sentences]
         max_distance = np.max(distances)
@@ -317,7 +334,7 @@ class CustomSemanticSplitter:
         plt.title("Chunks Based On Embedding Breakpoints")
         plt.xlabel("Index sentence")
         plt.ylabel("Similarity distance between pairwise sentences")
-        plot_file = os.path.join(self.storage_path, "similarity_plot.png")
+        plot_file = os.path.join(self.storage_path, pdf_id+"_"+"similarity_plot.png")
         plt.savefig(plot_file)
         plt.close()
 
@@ -329,7 +346,7 @@ class CustomSemanticSplitter:
         plt.title("Chunks Based On Embedding Breakpoints")
         plt.ylabel("Similarity distance between pairwise sentences")
         plt.grid(alpha=0.75)
-        plot_file_hist = os.path.join(self.storage_path, "similarity_histogram.png")
+        plot_file_hist = os.path.join(self.storage_path,pdf_id+"_"+"similarity_hist.png")
         plt.savefig(plot_file_hist)
         plt.close()
 
@@ -353,9 +370,9 @@ class CustomSemanticSplitter:
             similarities = self._get_similarity(embeddings=embed_combined_sentences, similarity='COSINE')
             for i, sentence in enumerate(self.sentences):
                 sentence["distance_to_next"] = similarities[i]
-            if self.verbose == 1:
-                self._plot_similarity(sentences=self.sentences, threshold=self.threshold)
             self.chunks = self._get_chunks(sentences=self.sentences, threshold=self.threshold)
+            if self.verbose == 1:
+                self._plot_similarity(sentences=self.sentences, threshold=self.threshold, pdf_id = doc.metadata['pdf_id'])
             docs = self._create_docs(chunks=self.chunks)
             self.spitted_docs += docs
 
@@ -436,6 +453,9 @@ class Storer:
             record.update(doc.metadata)
             records.append(record)
         return pd.DataFrame(records)
+      
+    def _get_id(self) -> str:
+      return str(uuid.uuid4())
 
     def _store_dataframe(self, df: pd.DataFrame, path: str, file_format: str) -> None:
         if file_format == "parquet":
@@ -451,7 +471,7 @@ class Storer:
 
         # Ensure the output directory exists
         os.makedirs(os.path.dirname(self.store_path), exist_ok=True)
-        name_format =  self.file_name +'.'+ self.file_format
+        name_format =  str(get_current_utc_date_iso()) + "_" + self.file_name +'.'+ self.file_format
         df = self._document_to_dataframe(docs)
         full_path = os.path.join(self.store_path, name_format)
         self._store_dataframe(df,full_path, self.file_format)
@@ -502,35 +522,48 @@ class LabelGenerator:
 
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
-        return len(self.tokenizer(text)["input_ids"])
+        try :
+          enc = tiktoken.get_encoding("cl100k_base")
+          num_tokens = len(enc.encode(text))
+        except:
+          num_tokens = len(self.tokenizer(text)["input_ids"])
+        return num_tokens
 
     def invoke(self, docs: List[Document]) -> List[Document]:
-        for i, doc in enumerate(docs):
-            if i >= self.max_samples:
-                break
+      docs_copy = docs.copy()
+      for i, doc in enumerate(docs_copy):
+          if i >= self.max_samples:
+              break
 
-            chunk_text = doc.page_content
-            chunk_tokens = self._get_tokens(text=chunk_text)
-            chunk_len = len(chunk_text)
+          chunk_text = doc.page_content
+          chunk_tokens = self._get_tokens(text=chunk_text)
+          chunk_len = len(chunk_text)
 
-            # Update metadata
-            doc.metadata['num_tokens'] = chunk_tokens
-            doc.metadata['num_caracteres'] = chunk_len
+          # Update metadata
+          doc.metadata['num_tokens'] = chunk_tokens
+          doc.metadata['num_caracteres'] = chunk_len
 
-            # Generate labels
-            generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+          # Generate labels
+          generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+          print("genreation :", generation)
 
-            try:
-                doc.metadata['label_1'] = {'label': generation["Label_1"]["Label"], 'score': generation["Label_1"]["Score"]}
-                doc.metadata['label_2'] = {'label': generation["Label_2"]["Label"], 'score': generation["Label_2"]["Score"]}
-                doc.metadata['label_3'] = {'label': generation["Label_3"]["Label"], 'score': generation["Label_3"]["Score"]}
-            except Exception as e:
-                print("LLM Error message: ", e)
-                doc.metadata['label_1'] = {'label': 'ERROR', 'score': 0}
-                doc.metadata['label_2'] = {'label': 'ERROR', 'score': 0}
-                doc.metadata['label_3'] = {'label': 'ERROR', 'score': 0}
+          try:
+              doc.metadata['label_1_label'] = generation["Label_1"]["Label"]
+              doc.metadata['label_1_score'] = generation["Label_1"]["Score"]
+              doc.metadata['label_2_label'] = generation["Label_2"]["Label"]
+              doc.metadata['label_2_score'] = generation["Label_2"]["Score"]
+              doc.metadata['label_3_label'] = generation["Label_3"]["Label"]
+              doc.metadata['label_3_score'] = generation["Label_3"]["Score"]
+          except Exception as e:
+              print("LLM Error message: ", e)
+              doc.metadata['label_1_label'] = 'ERROR'
+              doc.metadata['label_1_score'] = 0
+              doc.metadata['label_2_label'] = 'ERROR'
+              doc.metadata['label_2_score'] = 0
+              doc.metadata['label_3_label'] = 'ERROR'
+              doc.metadata['label_3_score'] = 0
 
-        return docs
+      return docs
 
 
 class Pipeline:
@@ -540,6 +573,7 @@ class Pipeline:
         self.parser = self._create_parser()
         self.processor = self._create_processor()
         self.splitter = self._create_splitter()
+        self.label_generator = self._create_label_generator()
         self.storer = self._create_storer()
 
     def _parse_config(self) -> Dict:
@@ -567,59 +601,63 @@ class Pipeline:
         splitter_config = self.config.get('splitter', {})
         return Splitter(
             chunk_size=splitter_config.get('chunk_size', 200),
-            embedding_model=self._get_embd_model(embd_model = splitter_config.get('embedding_model', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')),
-            tokenizer_model=self._get_tokenizer(tokenizer_model = splitter_config.get('tokenizer_model', 'LLAMA3')),
+            embedding_model=self._get_embd_model(embd_model=splitter_config.get('embedding_model', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')),
+            tokenizer_model=self._get_tokenizer(tokenizer_model=splitter_config.get('tokenizer_model', 'LLAMA3')),
             threshold=splitter_config.get('threshold', 75),
             max_tokens=splitter_config.get('max_tokens', 500),
             verbose=splitter_config.get('verbose', 0),
             buffer_size=splitter_config.get('buffer_size', 3),
             max_big_chunks=splitter_config.get('max_big_chunks', 4),
             splitter_mode=splitter_config.get('splitter_mode', 'CUSTOM'),
-            storage_path = splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures')
-            
+            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures')
+        )
+
+    def _create_label_generator(self) -> LabelGenerator:
+        label_generator_config = self.config.get('label_generator', {})
+        return LabelGenerator(
+            tokenizer=self._get_tokenizer(tokenizer_model=label_generator_config.get('tokenizer_model', 'GPT35')),
+            labels=label_generator_config.get('labels', LabelGenerator.LABELS),
+            model=label_generator_config.get('model', 'GPT'),
+            max_samples=label_generator_config.get('max_samples', 10)
         )
 
     def _create_storer(self) -> Storer:
         storer_config = self.config.get('storer', {})
         return Storer(
-          store_path = storer_config.get('store_path','C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset'),
-          file_name = storer_config.get('file_name','data'),
-          file_format = storer_config.get('file_format','csv'),
-          )
-        
-    def _get_tokenizer(self, tokenizer_model :str):
+            store_path=storer_config.get('store_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset'),
+            file_name=storer_config.get('file_name', 'data'),
+            file_format=storer_config.get('file_format', 'csv')
+        )
+
+    def _get_tokenizer(self, tokenizer_model: str):
         tokenizers_available = {
-          
-                'GPT35 ' : tiktoken.encoding_for_model("gpt-3.5"),
-                'GPT2' : GPT2Tokenizer.from_pretrained('gpt2'),
-                'LLAMA3' : AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B"),
-                'DEBERTA' : AutoTokenizer.from_pretrained("microsoft/deberta-base"),
-                'ROBERTA' : AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
-          
+            'GPT35': tiktoken.encoding_for_model("gpt-3.5"),
+            'GPT2': GPT2Tokenizer.from_pretrained('gpt2'),
+            'LLAMA3': AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B"),
+            'DEBERTA': AutoTokenizer.from_pretrained("microsoft/deberta-base"),
+            'ROBERTA': AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
         }
-        return tokenizers_available.get(tokenizer_model,AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B") )
-    def _get_embd_model(self, embd_model :str):
+        return tokenizers_available.get(tokenizer_model, AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B"))
+
+    def _get_embd_model(self, embd_model: str):
         embd_available = {
-          
-                'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2' : HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2") # embedding size 384
-          
+            'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2': HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
         }
-        return embd_available.get(embd_model,HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"))
-      
+        return embd_available.get(embd_model, HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"))
 
     async def run(self) -> List[Document]:
         parsed_docs = await self.parser.invoke()
         processed_docs = self.processor.invoke(parsed_docs)
         split_docs = self.splitter.invoke(processed_docs)
-        self.storer.invoke(split_docs)
-        return split_docs
+        labeled_docs = self.label_generator.invoke(split_docs)
+        self.storer.invoke(labeled_docs)
+        return labeled_docs
 
 if __name__ == '__main__':
     import asyncio
-    
+
     pipeline = Pipeline(config_path='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\config\\etl_config.json')
     result = asyncio.run(pipeline.run())
-
 
 
 

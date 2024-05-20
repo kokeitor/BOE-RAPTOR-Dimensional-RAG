@@ -19,9 +19,17 @@
     "splitter_mode": "CUSTOM"
 
   },
+  "label_generator": {
+    "tokenizer_model": "GPT35",
+    "labels": null,
+    "model": "GPT",
+    "max_samples": 10
+  },
   "storer": {
     "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset",
     "file_name":"train",
-    "file_format": "csv"
+    "file_format": "parquet"
   }
 }
+
+
