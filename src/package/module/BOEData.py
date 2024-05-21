@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import sys
 from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
+from datetime import datetime, timezone
 
 print(sys.executable)
 # Load environment variables from .env file
@@ -32,6 +33,11 @@ os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
 os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+
+#util functions
+def get_current_utc_date_iso():
+    # Get the current date and time in UTC and format it directly
+    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
 
 """
@@ -56,6 +62,7 @@ class BOEData(Dataset):
                     path: str, 
                     file_format: str , 
                     labels : List[str] , 
+                    id_field_name :List[str],
                     label_field_name :List[str], 
                     score_field_name :List[str], 
                     text_field_name : str, 
@@ -105,16 +112,23 @@ class BOEData(Dataset):
         self.label_names = label_field_name
         self.score_names = score_field_name
         self.text_name = text_field_name
+        if id_field_name:
+            self.id_field_name = id_field_name
+            self.ids = {k:[] for k in id_field_name}
+            print('ID FIELDS :',self.ids)
+        
         
         self.data = self._get_data(
                             path = self.path, 
                             file_format = self.file_format, 
+                            id_field_name = self.id_field_name,
                             label_names = self.label_names ,
                             score_names = self.score_names,
                             text_name = self.text_name 
                             )
-        print(f"INFORMACION PREVIA ANTES PROCESADO DEL DATA SET : \n\tDATASET SHAPE ORIGINAL: {self.data.shape}")
+        print(f"\nDATASET SHAPE ORIGINAL: {self.data.shape}")
         self.data = self._clean_data(data =self.data)
+        
         # delete column "Unnamed: 0"
         if "Unnamed: 0" in self.data.columns:
           self.data.drop(columns = "Unnamed: 0", inplace = True)
@@ -122,13 +136,9 @@ class BOEData(Dataset):
         # Create samples and target codify labels to train net
         self.mapping =  self._map_labels()
         print('label names mapping : ', self.mapping)
-        #print(self.data.columns)
-        #print(self.data.head(5))
 
-        print(f"\n\tDATASET SHAPE ORIGINAL: {self.data.shape}")
         self.data = self._clean_data(data =self.data)
 
-        
         # x samples
         self.texts  = [str(t) for t in self.data.loc[:,self.text_name].to_list()]
         self.x = self._get_x_set(text_name = self.text_name, texts = self.texts, data = self.data, get_embeddings=get_embeddings )
@@ -149,7 +159,7 @@ class BOEData(Dataset):
         return self.data
 
   
-    def _get_data(self,  path :str, file_format :str ,label_names :List[str] , score_names : List[str],text_name : str) -> pd.DataFrame:
+    def _get_data(self,  path :str, file_format :str ,id_field_name  :List[str] , label_names :List[str] , score_names : List[str],text_name : str) -> pd.DataFrame:
         # Check if the directory exists
         if not os.path.isdir(path):
             raise FileNotFoundError(f"The directory {path} does not exist.")
@@ -157,14 +167,16 @@ class BOEData(Dataset):
         # Initialize an empty list to store dataframes
         dataframes = []
         
-        # columns to read
-        if isinstance(text_name, list) and isinstance(label_names, list):
-            columns= text_name + label_names + score_names
-        elif isinstance(text_name, str) and isinstance(label_names, list):
-            columns= [text_name] + label_names+ score_names
-        elif isinstance(text_name, str) and isinstance(label_names, str):
-            columns= [text_name] + [label_names] + [score_names]
-             
+        # columns names list to read (correct type list)
+        text_name = text_name if isinstance(text_name, list) else [text_name]
+        label_names = label_names if isinstance(label_names, list) else [label_names]
+        score_names = score_names if isinstance(score_names, list) else [score_names]
+        id_field_name = id_field_name if isinstance(id_field_name, list) else [id_field_name]
+
+        # Concatenate all columns to read
+        columns = text_name + label_names + score_names + id_field_name
+        print(f"COLUMNAS LEIDAS DE : {path}")
+
         # Loop through all files in the directory
         for file_name in os.listdir(path):
             file_path = os.path.join(path, file_name)
@@ -209,7 +221,7 @@ class BOEData(Dataset):
         if isinstance(self.label_names, list):
             for _,label in enumerate(self.label_names):
               if isinstance(label, str):
-                print(f'UNIQUE LABELS {label} : ',self.data[label].nunique())
+                print(f'UNIQUE LABELS IN{label} : ',self.data[label].nunique())
                 unique_total_labels.extend(self.data[label].unique())
             unique_total_labels = set(unique_total_labels)
             unique_total_mapping = {str(v):int(i) for i,v in enumerate(unique_total_labels) }
@@ -244,7 +256,7 @@ class BOEData(Dataset):
                     x = self._tokenize_texts(texts = texts)
                     return x
                 else:
-                    raise AttributeError('NO TOKENIZER MODEL DEFINED : ')
+                    raise AttributeError('NO TOKENIZER MODEL DEFINED')
         else:
             raise ValueError('text_name parameter must be str type')
     
@@ -276,55 +288,65 @@ class BOEData(Dataset):
       if isinstance(texts , list):
         if self.tokenizer is not None:
             x = self.tokenizer(texts, padding=True, truncation=True,  return_tensors="pt")
-            print(x)
             return x
         else:
           raise ValueError('No tokenizer passed as argument')
     
 
     def _process_dataset(self, dataset) -> dict:
+        
 
-      text = str(dataset["text"]) # aseguramos tipo de dato es str
-      # tokenizacion
-      tokenized = self.tokenizer(text, padding=False, truncation=True)
+        text_name_field = self.text_name if isinstance(self.text_name, str) else None
+        if text_name_field is None:
+            raise AttributeError("Text field name must be str")
+        
+        text = str(dataset[text_name_field]) # aseguramos tipo de dato es str
+        
+        # tokenizacion
+        tokenized = self.tokenizer(text, padding=False, truncation=True)
 
-      # calculo de tokens y caracteres por texto
-      self.tokens.append(len(tokenized["input_ids"]))
-      self.len_texts.append(len(text))
+        # calculo de tokens , caracteres y ids por texto
+        self.tokens.append(len(tokenized["input_ids"]))
+        self.len_texts.append(len(text))
+        for id_i in self.ids.keys():
+            self.ids[id_i].append(dataset[id_i])
 
-      # Adicion de nuevos campos al dataset
-      """
-      tokenized["map_val_label_1"] = self.mapping.get(dataset["val_label_1"], 999)
-      tokenized["map_val_label_2"] = self.mapping.get(dataset["val_label_2"], 999)
-      tokenized["map_val_label_3"] = self.mapping.get(dataset["val_label_3"], 999)
-      """
-      tokenized["labels"]  = torch.zeros(len(self.mapping))
+        # Adicion de nuevos campos al dataset
+        """
+        tokenized["map_val_label_1"] = self.mapping.get(dataset["val_label_1"], 999)
+        tokenized["map_val_label_2"] = self.mapping.get(dataset["val_label_2"], 999)
+        tokenized["map_val_label_3"] = self.mapping.get(dataset["val_label_3"], 999)
+        """
+        tokenized["labels"]  = torch.zeros(len(self.mapping))
 
-      # only using one label:
-      #tokenized["labels"] = self.mapping.get(dataset["val_label_1"], 999)
+        # only using one label:
+        #tokenized["labels"] = self.mapping.get(dataset["val_label_1"], 999)
 
-      # using three labels
-      tokenized["labels"][self.mapping.get(dataset["label_1_label"], None)] = self.f * dataset["label_1_score"]
-      tokenized["labels"][self.mapping.get(dataset["label_2_label"], None)] = self.f * dataset["label_2_score"]
-      tokenized["labels"][self.mapping.get(dataset["label_3_label"], None)] = self.f * dataset["label_3_score"]
-      tokenized["labels"] = torch.softmax(tokenized["labels"], dim = 0)
+        # using three labels
+        tokenized["labels"][self.mapping.get(dataset["label_1_label"], None)] = self.f * dataset["label_1_score"]
+        tokenized["labels"][self.mapping.get(dataset["label_2_label"], None)] = self.f * dataset["label_2_score"]
+        tokenized["labels"][self.mapping.get(dataset["label_3_label"], None)] = self.f * dataset["label_3_score"]
+        tokenized["labels"] = torch.softmax(tokenized["labels"], dim = 0)
 
-      return tokenized
+        return tokenized
 
 
-    def get_dataset(self, split : bool = False, tokenize :bool = True ):
+    def get_hg_dataset(self, split : bool = False, tokenize :bool = True ):
 
         # load original dataset from path
         try:
             if split:
                 # test 20 % train
                 df_train_val, df_test = train_test_split(self.data, test_size=0.2, random_state=42)
-                print(type(df_train_val))
-                print(df_train_val.shape  ,df_test.shape)
+                print('\n---------------------------------------------------')
+                print("Test df shape : ", df_test.shape)
                 # Validation 10% de train
                 df_train, df_val = train_test_split(df_train_val, test_size=0.1, random_state=42)
-                print(df_train.shape ,df_val.shape)
+                print("Train df shape : ", df_train.shape)
+                print("validation df shape : ", df_val.shape)
+                print('---------------------------------------------------\n')
                 
+            
                 dataset = DatasetDict({
                                                     "train": ds.from_pandas(df_train),
                                                     "validation": ds.from_pandas(df_val),
@@ -336,8 +358,7 @@ class BOEData(Dataset):
                                     })
             
             dataset = dataset.remove_columns(["__index_level_0__"])
-            print("self.data columns", self.data.columns)
-            print("datset : ", dataset)
+            print("\nHG DATASET :\n ", dataset)
             #dataset = load_dataset(self.path).remove_columns(["Unnamed: 0"])
         except Exception as e:
             print(e)
@@ -347,58 +368,79 @@ class BOEData(Dataset):
             dataset_tokenize = dataset.map(self._process_dataset, batched=False, remove_columns=self.data.columns.tolist())
         else:
             dataset_tokenize = None
+        print("\nHG DATASET TOKENIZE:\n ", dataset_tokenize)
         return dataset,dataset_tokenize
 
 
-    def get_plots(self):
 
-      # Calculate the number of tokens for each document
-      if self.tokens != [] and self.len_texts != []:
 
-        # Plotting the histogram of token counts
-        plt.figure(figsize=(10, 6))
-        plt.hist(self.tokens, bins=30, color="blue", edgecolor="black", alpha=0.7)
-        plt.title("Histogram of Token Counts")
-        plt.xlabel("Token Count")
-        plt.ylabel("Frequency")
-        plt.grid(axis="y", alpha=0.75)
+    def get_plots(self, dir_path: str, figure_name: str):
+        
+        def addlabels(x, y, text):
+            for i in range(len(x)):
+                plt.annotate(text[i], (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center')
 
-        # Plotting the histogram of characters counts
-        plt.figure(figsize=(10, 6))
-        plt.hist(self.len_texts, bins=30, color="red", edgecolor="black", alpha=0.7)
-        plt.title("Histogram of Character Counts")
-        plt.xlabel("Character Count")
-        plt.ylabel("Frequency")
-        plt.grid(axis="y", alpha=0.75)
+        # Calculate the number of tokens for each document
+        if self.tokens and self.len_texts:
+            
+            # Plotting the histogram of token counts
+            plt.figure(figsize=(10, 6))
+            plt.hist(self.tokens, bins=30, color="blue", edgecolor="black", alpha=0.7)
+            plt.title("Histogram of Token Counts")
+            plt.xlabel("Token Count")
+            plt.ylabel("Frequency")
+            plt.grid(axis="y", alpha=0.75)
+            plot_file = os.path.join(dir_path, get_current_utc_date_iso() + "_" + figure_name + "_" + "token_hist.png")
+            plt.savefig(plot_file)
+            plt.close()
 
-        # Display the histogram
-        plt.show()
+            # Plotting the histogram of characters counts
+            plt.figure(figsize=(10, 6))
+            plt.hist(self.len_texts, bins=30, color="red", edgecolor="black", alpha=0.7)
+            plt.title("Histogram of Character Counts")
+            plt.xlabel("Character Count")
+            plt.ylabel("Frequency")
+            plt.grid(axis="y", alpha=0.75)
+            plot_file = os.path.join(dir_path, get_current_utc_date_iso() + "_" + figure_name + "_" + "character_hist.png")
+            plt.savefig(plot_file)
+            plt.close()
 
-        def addlabels(x,y):
-          for i in range(len(x)):
-              plt.text(i, y[i], y[i], ha = 'center')
+            # Plotting ordered chunk vs num tokens
+            SAMPLE_PLOT_SIZE = min(100, len(self.len_texts))
+            NUM_CHUNKS = np.arange(SAMPLE_PLOT_SIZE)
+            
+            plt.figure(figsize=(10, 6))
+            plt.bar(NUM_CHUNKS, self.tokens[:SAMPLE_PLOT_SIZE], color="blue", alpha=1)
+            addlabels(NUM_CHUNKS, self.tokens[:SAMPLE_PLOT_SIZE], [str(t) for t in self.tokens[:SAMPLE_PLOT_SIZE]])
+            for i,id_i in enumerate(self.id_field_name):
+                plot_id = []
+                for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
+                    plot_id.append(str(id_i)+'-'+str(v))
+                addlabels(NUM_CHUNKS, np.array(self.tokens[:SAMPLE_PLOT_SIZE])*(0.03*(i+1)), plot_id)
+            plt.title("Token counts per chunk index")
+            plt.xlabel("CHUNK index")
+            plt.ylabel("Token counts")
+            plt.grid(axis="y", alpha=0.75)
+            plot_file = os.path.join(dir_path, get_current_utc_date_iso() + "_" + figure_name + "_" + "num_token_per_chunk.png")
+            plt.savefig(plot_file)
+            plt.close()
 
-        # Plotting ordered chunk vs num tokens/len
-        SAMPLE_PLOT_SIZE = 100
-        NUM_CHUNKS = np.arange(0,len(self.len_texts), dtype = int)[0:SAMPLE_PLOT_SIZE]
-        plt.figure(figsize=(10, 6))
-        plt.bar(NUM_CHUNKS, self.tokens[0:SAMPLE_PLOT_SIZE], color="blue", alpha=1)
-        addlabels(NUM_CHUNKS, self.tokens[0:SAMPLE_PLOT_SIZE])
-        plt.title("Token counts per chunk index")
-        plt.xlabel("CHUNK index")
-        plt.ylabel("Token counts")
-        plt.grid(axis="y", alpha=0.75)
+            plt.figure(figsize=(10, 6))
+            plt.bar(NUM_CHUNKS, self.len_texts[:SAMPLE_PLOT_SIZE], color="red", alpha=1)
+            addlabels(NUM_CHUNKS, self.len_texts[:SAMPLE_PLOT_SIZE], [str(t) for t in self.len_texts[:SAMPLE_PLOT_SIZE]])
+            for i,id_i in enumerate(self.id_field_name):
+                plot_id = []
+                for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
+                    plot_id.append(str(id_i)+'-'+str(v))
+                addlabels(NUM_CHUNKS, np.array(self.len_texts[:SAMPLE_PLOT_SIZE])*(0.03*(i+1)), plot_id)
+            plt.title("Character counts per chunk index")
+            plt.xlabel("CHUNK index")
+            plt.ylabel("Character counts")
+            plt.grid(axis="y", alpha=0.75)
+            plot_file = os.path.join(dir_path, get_current_utc_date_iso() + "_" + figure_name + "_" + "num_character_per_chunk.png")
+            plt.savefig(plot_file)
+            plt.close()
 
-        plt.figure(figsize=(10, 6))
-        plt.bar(NUM_CHUNKS, self.len_texts[0:SAMPLE_PLOT_SIZE], color="red", alpha=1)
-        addlabels(NUM_CHUNKS, self.len_texts[0:SAMPLE_PLOT_SIZE])
-        plt.title("Character counts per chunk index")
-        plt.xlabel("CHUNK index")
-        plt.ylabel("Character counts")
-        plt.grid(axis="y", alpha=0.75)
-
-        # Display the histogram
-        plt.show()
 
 
 if __name__ =='__main__':
@@ -411,20 +453,21 @@ if __name__ =='__main__':
     def create_sample_data(path):
         data = {
             "text": [
-                "This is the first document.",
-                "This document is the second document.",
-                "And this is the third one.",
-                "Is this the first document?"
+                "This is the first document. Holalaoallaoalaoa ",
+                "This document is the second document.hrwhrhyrtrty",
+                "And this is the third one.tytrytryrty",
+                "Is this the first document?ttrwytrwytry"
             ],
-            "label_1_label": ["label1", "label2", "label1", "label3"],
+            "label_1_label": ["A", "B", "A", "C"],
             "label_1_score": [0.9, 0.85, 0.8, 0.75],
-            "label_2_label": ["label2", "label3", "label2", "label1"],
+            "label_2_label": ["B", "C", "B", "A"],
             "label_2_score": [0.1, 0.15, 0.2, 0.25],
-            "label_3_label": ["label3", "label1", "label3", "label2"],
-            "label_3_score": [0.0, 0.05, 0.1, 0.0]
+            "label_3_label": ["C", "A", "C", "B"],
+            "label_3_score": [0.0, 0.05, 0.1, 0.0],
+            "pdf_id": [0, 0, 0, 0],
+            "chunk_id":  [0, 1, 2, 3]
         }
         df = pd.DataFrame(data)
-        print("COLUMNAS", df.columns)
         df.to_csv(os.path.join(path, "sample_data.csv"), index=False)
 
     # Ensure the data directory exists
@@ -436,7 +479,8 @@ if __name__ =='__main__':
 
     # Test the BOEData class
     def test_BOEData():
-        labels = ["label1", "label2", "label3"]
+        labels = ["A", "B", "C"]
+        id_field_name = ['pdf_id','chunk_id']
         label_field_name = ["label_1_label", "label_2_label", "label_3_label"]
         score_field_name = ["label_1_score","label_2_score","label_3_score"]
         text_field_name = "text"
@@ -445,6 +489,7 @@ if __name__ =='__main__':
             path=data_dir,
             file_format="csv",
             labels=labels,
+            id_field_name = id_field_name,
             label_field_name=label_field_name,
             score_field_name = score_field_name,
             text_field_name=text_field_name,
@@ -459,19 +504,15 @@ if __name__ =='__main__':
         print(boe_data.df.head())
 
         print("\nData samples (x, y):")
-        for i in range(3):
-            print(f"Sample {i+1}:")
-            print("x:", boe_data[i][0])
-            print("y:", boe_data[i][1])
+        for i in boe_data:
+            print("i:", i)
             print()
         
-        #
-        dataset, dataset_tokenize= boe_data.get_dataset(split = True, tokenize  = True)
-        print(dataset)
-        print(dataset_tokenize)
+        dataset, dataset_tokenize= boe_data.get_hg_dataset(split = True, tokenize  = True)
+
         
-                # Generate plots
-        boe_data.get_plots()
+        # Generate plots
+        boe_data.get_plots(dir_path="C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures", figure_name="prueba")
         
 
     # Run the test
