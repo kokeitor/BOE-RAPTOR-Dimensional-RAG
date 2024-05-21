@@ -162,6 +162,7 @@ if __name__ == '__main__':
     optimizer = BOENet.OptimizerFactory(model) 
     
     print("\n")
+    
 
     for m in model.modules():
         #print(f"\nModule : {m}")
