@@ -1,5 +1,6 @@
 
-# Procesamiento del BOE mediante sistema basado semnatic chunking, RAPTOR Dimensional RAG y agente ó grafo lógico que hace uso de LLAMA3 local
+# Procesamiento del BOE mediante sistema basado semantic chunking, RAPTOR Dimensional RAG y agente ó grafo lógico que hace uso de LLAMA3 en local
+
 ### Proyecto en desarrollo continuo y con origen en el trabajo de fin de master en Inteligencia artificial
 
 🚀 Pilares de la arquitectura
@@ -8,7 +9,8 @@
 2. Extracción, Parseo, Procesamiento, Limpieza, Separcaion [Semmantic chunking] y Carga de los documentos PDFs descargados mediante el uso de pipeline segun archivo de comfiguracion json. 
 3.
 
-## ¿Desglose?
+## Desglose de cada elememto
+...
 
 
 
