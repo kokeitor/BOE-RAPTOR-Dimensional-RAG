@@ -376,10 +376,14 @@ class BOEData(Dataset):
 
     def get_plots(self, dir_path: str, figure_name: str):
         
-        def addlabels(x, y, text):
+        def addlabels(x, y, text, size, rotation):
+            colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+            c =0 
             for i in range(len(x)):
-                plt.annotate(text[i], (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center')
-
+                if c >= len(colors):
+                    c = 0
+                plt.annotate(text[i], (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center', size = size, color = colors[c], rotation = rotation)
+                c += 1
         # Calculate the number of tokens for each document
         if self.tokens and self.len_texts:
             
@@ -411,12 +415,17 @@ class BOEData(Dataset):
             
             plt.figure(figsize=(10, 6))
             plt.bar(NUM_CHUNKS, self.tokens[:SAMPLE_PLOT_SIZE], color="blue", alpha=1)
-            addlabels(NUM_CHUNKS, self.tokens[:SAMPLE_PLOT_SIZE], [str(t) for t in self.tokens[:SAMPLE_PLOT_SIZE]])
+            addlabels(NUM_CHUNKS, self.tokens[:SAMPLE_PLOT_SIZE], [str(t) for t in self.tokens[:SAMPLE_PLOT_SIZE]], 10, 0)
             for i,id_i in enumerate(self.id_field_name):
                 plot_id = []
                 for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
                     plot_id.append(str(id_i)+'-'+str(v))
-                addlabels(NUM_CHUNKS, np.array(self.tokens[:SAMPLE_PLOT_SIZE])*(0.03*(i+1)), plot_id)
+                addlabels(
+                            x = NUM_CHUNKS, 
+                            y = np.full(len(self.tokens[:SAMPLE_PLOT_SIZE]), np.max(self.tokens[:SAMPLE_PLOT_SIZE]))*(0.2*(i+1)), 
+                            text = plot_id, 
+                            size = 5, 
+                            rotation = 30)
             plt.title("Token counts per chunk index")
             plt.xlabel("CHUNK index")
             plt.ylabel("Token counts")
@@ -427,12 +436,17 @@ class BOEData(Dataset):
 
             plt.figure(figsize=(10, 6))
             plt.bar(NUM_CHUNKS, self.len_texts[:SAMPLE_PLOT_SIZE], color="red", alpha=1)
-            addlabels(NUM_CHUNKS, self.len_texts[:SAMPLE_PLOT_SIZE], [str(t) for t in self.len_texts[:SAMPLE_PLOT_SIZE]])
+            addlabels(NUM_CHUNKS, self.len_texts[:SAMPLE_PLOT_SIZE], [str(t) for t in self.len_texts[:SAMPLE_PLOT_SIZE]], 10, 0)
             for i,id_i in enumerate(self.id_field_name):
                 plot_id = []
                 for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
                     plot_id.append(str(id_i)+'-'+str(v))
-                addlabels(NUM_CHUNKS, np.array(self.len_texts[:SAMPLE_PLOT_SIZE])*(0.03*(i+1)), plot_id)
+                addlabels(
+                            x = NUM_CHUNKS, 
+                            y = np.full(len(self.len_texts[:SAMPLE_PLOT_SIZE]), np.max(self.tokens[:SAMPLE_PLOT_SIZE]))*(0.2*(i+1)), 
+                            text = plot_id, 
+                            size = 5, 
+                            rotation = 30)
             plt.title("Character counts per chunk index")
             plt.xlabel("CHUNK index")
             plt.ylabel("Character counts")
@@ -448,6 +462,7 @@ if __name__ =='__main__':
     import pandas as pd
     import torch
     from transformers import AutoTokenizer
+    import re
 
     # Generate sample data
     def create_sample_data(path):
@@ -471,7 +486,7 @@ if __name__ =='__main__':
         df.to_csv(os.path.join(path, "sample_data.csv"), index=False)
 
     # Ensure the data directory exists
-    data_dir = "data"
+    data_dir = "data/boedataset"
     os.makedirs(data_dir, exist_ok=True)
 
     # Create sample data
@@ -479,15 +494,29 @@ if __name__ =='__main__':
 
     # Test the BOEData class
     def test_BOEData():
+        LABELS = """Leyes Orgánicas,Reales Decretos y Reales Decretos-Leyes,Tratados y Convenios Internacionales,Leyes de Comunidades Autónomas,Reglamentos y Normativas Generales,
+        Nombramientos y Ceses,Promociones y Situaciones Especiales,Convocatorias y Resultados de Oposiciones,Anuncios de Concursos y Adjudicaciones de Plazas,
+        Ayudas, Subvenciones y Becas,Convenios Colectivos y Cartas de Servicio,Planes de Estudio y Normativas Educativas,Convenios Internacionales y Medidas Especiales,
+        Edictos y Notificaciones Judiciales,Procedimientos y Citaciones Judiciales,Licitaciones y Adjudicaciones Públicas,Avisos y Notificaciones Oficiales,
+        Anuncios Comerciales y Convocatorias Privadas,Sentencias y Autos del Tribunal Constitucional,Orden de Publicaciones y Sumarios,Publicaciones por Órgano Emisor,
+        Jerarquía y Autenticidad de Normativas,Publicaciones en Lenguas Cooficiales,Interpretaciones y Documentos Oficiales,Informes y Comunicaciones de Interés General,
+        Documentos y Estrategias Nacionales,Medidas de Emergencia y Seguridad Nacional,Anuncios de Regulaciones Específicas,Normativas Temporales y Urgentes,
+        Medidas y Políticas Sectoriales,Todos los Tipos de Leyes (Nacionales y Autonómicas),Todos los Tipos de Decretos (Legislativos y no Legislativos),
+        Convocatorias y Resultados Generales (Empleo y Educación),Anuncios y Avisos (Oficiales y Privados),
+        Judicial y Procedimientos Legales,Sentencias y Declaraciones Judiciales,Publicaciones Multilingües y Cooficiales,Informes y Estrategias de Política,
+        Emergencias Nacionales y Medidas Excepcionales,Documentos y Comunicaciones Específicas"""
         labels = ["A", "B", "C"]
+        labels = [re.sub("\n", '', l).strip() for l in LABELS.split(',')]
         id_field_name = ['pdf_id','chunk_id']
         label_field_name = ["label_1_label", "label_2_label", "label_3_label"]
         score_field_name = ["label_1_score","label_2_score","label_3_score"]
         text_field_name = "text"
-        
+        print(labels)
+        print(len(labels))
+
         boe_data = BOEData(
             path=data_dir,
-            file_format="csv",
+            file_format="parquet",
             labels=labels,
             id_field_name = id_field_name,
             label_field_name=label_field_name,
@@ -498,22 +527,18 @@ if __name__ =='__main__':
             get_embeddings=False,
             embedding_model='sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
         )
+
         
         print("Dataset shape:", boe_data.df.shape)
         print("Sample data:")
         print(boe_data.df.head())
 
-        print("\nData samples (x, y):")
-        for i in boe_data:
-            print("i:", i)
-            print()
         
         dataset, dataset_tokenize= boe_data.get_hg_dataset(split = True, tokenize  = True)
 
         
         # Generate plots
         boe_data.get_plots(dir_path="C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures", figure_name="prueba")
-        
-
+    
     # Run the test
     test_BOEData()
