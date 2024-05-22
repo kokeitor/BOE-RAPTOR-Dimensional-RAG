@@ -9,8 +9,20 @@ from torch.utils.data.dataset import ConcatDataset
 import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
 import requests
-
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+from torch.utils.data.dataset import ConcatDataset
+import requests
 from typing import List, Tuple, Dict, Optional
+from datasets import load_dataset, DatasetDict
+from transformers.integrations import TensorBoardCallback
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoConfig, EarlyStoppingCallback
+from sklearn.metrics import f1_score
+from datasets import Dataset as ds
+import sys
+from dotenv import load_dotenv
+from sklearn.model_selection import train_test_split
+from datetime import datetime, timezone
 
 
 # MODULE CLASS DOCU:
@@ -28,13 +40,41 @@ self.sub_module = nn.Linear(...)"""
 
 
 ### API KEYS"
-HUG_API_KEY = "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"
-os.environ['HF_TOKEN'] = HUG_API_KEY
+
+print(sys.executable)
+# Load environment variables from .env file
+load_dotenv()
+
+# Set environment variables
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
+os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
+os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
+os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+
+#util functions
+def get_current_utc_date_iso():
+    # Get the current date and time in UTC and format it directly
+    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+
+
+"""
+BERT_TOKENIZER = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
+ROBERTA_TOKENIZER = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
+
+# Embedding model
+EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 # Request to create embeddings
+
 model_id = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
 headers = {"Authorization": f"Bearer {HUG_API_KEY}"}
+"""
+
 
 
 class BOENet(nn.Module):
@@ -68,80 +108,7 @@ class BOENet(nn.Module):
         return torch.optim.Adam(model.parameters(), lr=lr, betas=betas, eps=eps)
 
     
-# Dataset
-class BOEData(Dataset):
-    def __init__(self, path: str, label_field :List[str], text_field : str, f : int = 1  ) :
-        """
-        BOE dataset
 
-        Parameters
-        ----------
-            key word arguments:
-            - f : (int) Importance factor. Is the importance you want to give to the similarity score stablished by the LLM for each label given to each chunk of the text 
-            - ...
-
-        Return
-        -------
-            None
-
-        """
-        super().__init__()
-        
-        self.f = f # Importance factor
-        
-        self.label_field = label_field
-        self.text_field = text_field
-        # raw data in form of df
-        self.data = pd.read_csv( filepath_or_buffer = path, delimiter = ',')
-        
-        # Create samples and target codify labels to train net
-        self.mapping =  self._map_labels()
-        
-        if isinstance(self.text_field, str):
-            # Text embedding tensor -> dimension : (num_texts, d_model = 384)
-            self.x = torch.tensor(self._get_embeddings(self.data.loc[:,self.text_field].to_list()))
-        else:
-            raise ValueError('text_field parameter must be str type')
-        
-        # Target tensor -> dimension : (num_texts, unique_labels)
-        self.num_labels = len(self.mapping.keys())
-        self.y = torch.zeros(self.x.shape[0], num_labels)
-        
-        # Fill target vector for each text with the 3 score similarity 
-        for text_index,row in data.iterrows():
-            self.y[text_index,int(row.loc["map_val_label_1"]) - 1] = row.loc["val_score_1"]
-            self.y[text_index,int(row.loc["map_val_label_2"]) - 1] = row.loc["val_score_2"]
-            self.y[text_index,int(row.loc["map_val_label_3"]) - 1] = row.loc["val_score_3"]
-        
-        # Softmax and factor of importance 
-        _soft = nn.Softmax(dim=1)
-        self.y_soft = _soft(self.y * self.f) # softmax by rows (row cte and iter softmax function through colunns) and aplly importance factor
-         
-    def __getitem__(self, index):
-        return self.x[index] ,self.y_soft[index]
-    def __len__(self):
-        return self.x.shape , self.y_soft.shape # (num_texts, d_model) (num_texts,unique_labels)
-
-    def _map_labels(self):
-        if isinstance(self.label_field, list):
-            mapping = {}
-            for i_label, label in self.label_field:
-                if isinstance(label, str):
-                    if i_label == 0:                
-                        for i,l_i in enumerate(self.data[label].unique()):
-                            mapping[l_i] = i + 1
-                    self.data[f'map_{label}'] = self.data[label].map(mapping)
-                else:
-                    raise ValueError(f'label {label} inside List : label_field,  must be the name of a column in the csv file and str type')
-            return mapping
-        else:
-            raise ValueError('label_field parameter must be List[str] ')
-
-         
-    def _get_embeddings(self,texts):
-        response = requests.post(api_url, headers=headers, json={"inputs": texts, "options":{"wait_for_model":True}})
-        self.embeddings = response.json()
-        return response.json()
 
             
     

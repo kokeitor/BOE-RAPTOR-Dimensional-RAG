@@ -20,7 +20,6 @@ from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
 from datetime import datetime, timezone
 
-print(sys.executable)
 # Load environment variables from .env file
 load_dotenv()
 
@@ -377,13 +376,14 @@ class BOEData(Dataset):
     def get_plots(self, dir_path: str, figure_name: str):
         
         def addlabels(x, y, text, size, rotation):
-            colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
-            c =0 
+            colors = ['g', 'r', 'c', 'm', 'y', 'k']  # Removed 'b' (blue) from the list
+            c = 0 
             for i in range(len(x)):
                 if c >= len(colors):
                     c = 0
-                plt.annotate(text[i], (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center', size = size, color = colors[c], rotation = rotation)
+                plt.annotate(text[i], (x[i], y[i]), textcoords="offset points", xytext=(0,10), ha='center', size=size, color=colors[c], rotation=rotation)
                 c += 1
+
         # Calculate the number of tokens for each document
         if self.tokens and self.len_texts:
             
@@ -419,13 +419,13 @@ class BOEData(Dataset):
             for i,id_i in enumerate(self.id_field_name):
                 plot_id = []
                 for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
-                    plot_id.append(str(id_i)+'-'+str(v))
+                    plot_id.append('#'+ str(id_i)+':'+str(v))
                 addlabels(
                             x = NUM_CHUNKS, 
-                            y = np.full(len(self.tokens[:SAMPLE_PLOT_SIZE]), np.max(self.tokens[:SAMPLE_PLOT_SIZE]))*(0.2*(i+1)), 
+                            y = np.full(len(self.tokens[:SAMPLE_PLOT_SIZE]), np.max(self.tokens[:SAMPLE_PLOT_SIZE]))*(0.1*(i+1)), 
                             text = plot_id, 
-                            size = 5, 
-                            rotation = 30)
+                            size = 6, 
+                            rotation = 40)
             plt.title("Token counts per chunk index")
             plt.xlabel("CHUNK index")
             plt.ylabel("Token counts")
@@ -440,13 +440,13 @@ class BOEData(Dataset):
             for i,id_i in enumerate(self.id_field_name):
                 plot_id = []
                 for v in self.ids[id_i][:SAMPLE_PLOT_SIZE]:
-                    plot_id.append(str(id_i)+'-'+str(v))
+                    plot_id.append('#'+ str(id_i)+':'+str(v))
                 addlabels(
                             x = NUM_CHUNKS, 
                             y = np.full(len(self.len_texts[:SAMPLE_PLOT_SIZE]), np.max(self.tokens[:SAMPLE_PLOT_SIZE]))*(0.2*(i+1)), 
                             text = plot_id, 
-                            size = 5, 
-                            rotation = 30)
+                            size = 6, 
+                            rotation = 40)
             plt.title("Character counts per chunk index")
             plt.xlabel("CHUNK index")
             plt.ylabel("Character counts")
