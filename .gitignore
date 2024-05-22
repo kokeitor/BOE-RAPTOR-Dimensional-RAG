@@ -3,3 +3,4 @@
 /data
 .env
 /__pycache__
+/src/package/__pycache__
