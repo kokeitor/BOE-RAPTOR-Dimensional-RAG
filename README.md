@@ -1,8 +1,7 @@
 
-# Procesamiento del BOE mediante sistema basado semantic chunking, RAPTOR Dimensional RAG y agente ó grafo lógico que hace uso de LLAMA3 en local
+# Procesamiento del BOE mediante sistema basado semantic chunking, RAPTOR Dimensional RAG y agente ó grafo lógico que hace uso de LLM LLAMA3 para generación de texto
 
-## Proyecto en desarrollo continuo y con origen en el trabajo de fin de master en Inteligencia artificial
-
+## 🚀 Proyecto en desarrollo continuo 
 ### Descripcion del proyecto, introducción y contexto del proyecto
 
 - Título del proyecto: Procesamiento del BOE mediante una arquitectura compuesta por un sistema de RAG y en un agente basado en un modelo grande de lenguaje (LLM).
@@ -48,7 +47,7 @@ Devlin, J., Chang, M.-W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of
 
 ### Desglose de cada elememto
 
-🚀 Detalles de la arquitectura
+- Detalles de la arquitectura
 
 1. Herramienta de descarga local mediante libreria request de los PDFs BOE que esten entre dos fechas especificadas como parametro. 
 2. Extracción, Parseo, Procesamiento, Limpieza, Separacaion [Semmantic chunking] y Carga de los documentos PDFs descargados mediante el uso de pipeline segun archivo de comfiguracion json. 
