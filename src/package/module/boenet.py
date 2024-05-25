@@ -23,6 +23,7 @@ import sys
 from dotenv import load_dotenv
 from sklearn.model_selection import train_test_split
 from datetime import datetime, timezone
+import json 
 
 
 # MODULE CLASS DOCU:
@@ -40,8 +41,6 @@ self.sub_module = nn.Linear(...)"""
 
 
 ### API KEYS"
-
-print(sys.executable)
 # Load environment variables from .env file
 load_dotenv()
 
@@ -60,24 +59,26 @@ def get_current_utc_date_iso():
     # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
+# MODELS
+MODEL_NAME = "microsoft/deberta-base"
+MODEL_NAME_2 = "PlanTL-GOB-ES/roberta-base-bne"
 
-"""
+
 BERT_TOKENIZER = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
 ROBERTA_TOKENIZER = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
 
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-# Request to create embeddings
-
+# Request to create embeddings: hg api
 model_id = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
-headers = {"Authorization": f"Bearer {HUG_API_KEY}"}
-"""
+headers = {"Authorization": f"Bearer {os.getenv('HUG_API_KEY')}"}
 
 
 
-class BOENet(nn.Module):
+
+class BoeNetVanilla(nn.Module):
     def __init__(self, d_model :int , boe_labels : int) -> None:
        super().__init__()
        self.d_model = d_model # (384)
@@ -108,10 +109,125 @@ class BOENet(nn.Module):
         return torch.optim.Adam(model.parameters(), lr=lr, betas=betas, eps=eps)
 
     
-
-
-            
+class BoeNet:
     
+    def __init__(self,model_conf_path : str):
+        self.config_path = model_conf_path
+        self.config = self._parse_config()
+        self.model_name = self._get_model_name()
+        self.model_tokenizer = self._get_tokenizer()
+        self.model_config = self._get_model_config()
+        self.model = self._get_model()
+        self.metrics = self._get_metrics()
+        self.train_args = self._get_training_args()
+
+    def _parse_config(self) -> Dict:
+        if not os.path.exists(self.config_path):
+            raise FileNotFoundError(f"Config file not found at {self.config_path}")
+        with open(self.config_path, 'r') as file:
+            config = json.load(file)
+        return config
+    
+    def _get_model_name(self):
+        model = self.config.get("model", {})
+        model_name = model.get("name",None)
+        if model_name is None:
+            raise ValueError("Model name not defined in the model config file")
+        return model_name
+    
+    def _get_model_config(self):
+        problem = self.config.get("problem", {})
+        self.labels = problem.get("labels_to_pred",None)
+        if self.labels is None:
+            raise ValueError("Labels to predict not defined in the model config file")
+        self.id2label = {i:lab for lab, i in self.labels}
+        self.label2id = {lab:i for lab, i in self.labels}
+        try:
+            return AutoConfig.from_pretrained(
+                                                    pretrained_model_name_or_path = self.model_name, 
+                                                    num_labels=len(self.labels), 
+                                                    id2label=self.id2label
+                                            )
+        except Exception as e:
+            print(f"Error in get Config Model method : {e}")
+            
+    def _get_model(self):
+        try :
+            return AutoModelForSequenceClassification.from_pretrained(self.model_name, config=self.model_config)
+        except Exception as e:
+            print(f"Error in get Model method : {e}")
+
+    def _get_tokenizer(self):
+        try:
+            return AutoTokenizer.from_pretrained(self.model_name)
+        except Exception as e:
+            print(f"Error in get tokenizer method : {e}")
+            
+    def _get_metrics(self):
+        metrics = self.config.get("metrics", {})
+        if metrics is not {}:
+            self.opt_metric = metrics["optimize"]
+        else:
+            self.opt_metric = ""
+        return metrics
+    
+    def _get_training_args(self):
+        training_args = self.config.get("training_args", {})
+        return TrainingArguments(
+                                    training_args.get("dir_path","./MODEL/DEFAULT"), # nombre del modelo (se crea un directorio con este nombre)
+                                    evaluation_strategy = training_args.get("evaluation_strategy","epoch"), # evaluamos y guardamos en cada época.
+                                    report_to=training_args.get("report_to","tensorboard"), # reportar a tensorboard para poder ver luego el progreso del entrenamiento.
+                                    save_strategy = training_args.get("save_strategy","epoch"), # guardamos también en cada época un checkpoint del modelo.
+                                    learning_rate= training_args.get("learning_rate",3e-05), # learning rate que usamos en el Adam Optimizer.
+                                    per_device_train_batch_size=training_args.get("per_device_train_batch_size",20), # tamaño de batch en entrenamiento.
+                                    per_device_eval_batch_size=training_args.get("per_device_eval_batch_size",32), # tamaño de batch en evaluación.
+                                    num_train_epochs=training_args.get("num_train_epochs",100), #  número de épocas para entrenar
+                                    weight_decay=training_args.get("weight_decay",0.01), # weight decay en el adam optimizer
+                                    adam_epsilon=training_args.get("adam_epsilon",1e-08), # valor para el parámetro epsilon de adam.
+                                    load_best_model_at_end=training_args.get("load_best_model_at_end",True), # Si queremos cargar o no el mejor modelo (el checkpoint del modelo que mejor rendimiento tiene) al finalizar el entrenamiento, en caso de haber empeorado en algún momento del entrenamiento.
+                                    metric_for_best_model=training_args.get("metric_for_best_model",self.opt_metric), # métrica para escoger el mejor modelo.
+                                    gradient_accumulation_steps=training_args.get("gradient_accumulation_steps",10), # número de pasos en los que acumular gradiente.
+                                    warmup_ratio=training_args.get("warmup_ratio",0.03), # este es el porcentaje de los pasos de entrenamiento que vamos a hacer "warmup", es decir, que vamos a ir subiendo el learning rate desde casi 0 hasta el learning rate escogido.
+                                    fp16=training_args.get("fp16",True) # para activar la precisión mixta. NOTE: Si estáis en google colab con T4 como GPU, en lugar de `bf16_True` usa `fp16=True`
+                                )
+        
+    def _get_trainer(self, dataset :Dataset):
+        trainer = self.config.get("trainer", {})
+        callbacks_args =  trainer.get("callbacks",None)
+        early_stopping_args = callbacks_args.get("EarlyStoppingCallback",None)
+        try: 
+            train_set = dataset["train"]
+        except Exception as e:
+            print(f"Error in getting train dataset : {e}")
+        try:
+            val_set = dataset["validation"]
+        except Exception as e:
+            print(f"Error in getting val dataset : {e}")
+            
+        return Trainer(
+                        model=self.model,
+                        args=self.train_args,
+                        train_dataset=train_set,
+                        eval_dataset=val_set,
+                        tokenizer=self._get_tokenizer,
+                        compute_metrics=self.compute_metrics,
+                        callbacks=[
+                                    EarlyStoppingCallback(
+                                                                early_stopping_patience = early_stopping_args.get("early_stopping_patience",3), 
+                                                                early_stopping_threshold =  early_stopping_args.get("early_stopping_threshold",0.0)
+                                                            ), 
+                                    TensorBoardCallback
+                                    ]
+                        )
+    def train(self,dataset : Dataset):
+        self.trainer = self._get_trainer(dataset)
+        self.trainer.train()
+    def predict(self,dataset: Dataset):
+        try:
+            return self.trainer.evaluate(dataset["test"])
+        except Exception as e:
+            print(f"Error in predict method : {e}")
+        
 
 if __name__ == '__main__':
     
