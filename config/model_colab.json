@@ -4,14 +4,11 @@
           },
   "problem" : {
                 "labels_to_pred" : [
-                                    "label_1",
-                                    "label_2",
-                                    ""
+                                    "biased",
+                                    "non-biased"
                                     ]
   },
   "trainer":{
-              "train_dataset":"",
-              "eval_dataset":"",
               "callbacks":{
                             "EarlyStoppingCallback": {
                                                         "early_stopping_patience":3,
@@ -24,15 +21,15 @@
   "metrics": {
               "type": 
                     {
-                    "f1": {"compute": true, "method": ["micro", "macro", "weighted"]},
-                    "recall": {"compute": true, "method": ["micro", "macro", "weighted"]},
+                    "f1": {"compute": true, "method": ["micro", "macro", "weighted","binary"]},
+                    "recall": {"compute": true, "method": ["micro", "macro", "weighted","binary"]},
                     "MulticlassAccuracy": {"compute": true, "method": ["micro", "macro", "None"]},
-                    "precision":{"compute": true, "method": ["micro", "macro", "weighted"]}
+                    "precision":{"compute": true, "method": ["micro", "macro", "weighted","binary"]}
                     },
-                "optimize": {"name":"f1 micro"}
+                "optimize": {"name":"f1_micro"}
               },
   "training_args": {
-                    "dir_path" : "./BOE-CLASSIFIER-DEBERTA",
+                    "dir_path" : "drive/MyDrive/proyectoCHROMADB/training/CLASSIFIER-DEBERTA",
                     "evaluation_strategy" : "epoch", 
                     "report_to":"tensorboard", 
                     "save_strategy" : "epoch",

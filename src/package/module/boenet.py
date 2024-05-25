@@ -1,29 +1,21 @@
 import torch.nn as nn
-import torch 
+import torch
 from torch.utils.data import Dataset, DataLoader
-import numpy as np
-from sklearn import datasets
-import matplotlib.pyplot as plt
-import pandas as pd
-from torch.utils.data.dataset import ConcatDataset
 import os
-from langchain_community.embeddings import HuggingFaceEmbeddings
-import requests
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data.dataset import ConcatDataset
-import requests
-from typing import List, Tuple, Dict, Optional
-from datasets import load_dataset, DatasetDict
-from transformers.integrations import TensorBoardCallback
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoConfig, EarlyStoppingCallback
-from sklearn.metrics import f1_score
-from datasets import Dataset as ds
-import sys
-from dotenv import load_dotenv
-from sklearn.model_selection import train_test_split
+import json
+import numpy as np
+import pandas as pd
 from datetime import datetime, timezone
-import json 
+from transformers import (
+    AutoTokenizer, AutoModelForSequenceClassification, Trainer, TrainingArguments, AutoConfig, EarlyStoppingCallback
+)
+from transformers.integrations import TensorBoardCallback
+from transformers import EvalPrediction
+from sklearn.metrics import f1_score, recall_score, precision_score
+from torcheval.metrics import MulticlassAccuracy
+from dotenv import load_dotenv
+from typing import Dict, List, Tuple
+from datasets import DatasetDict, load_dataset
 
 
 # MODULE CLASS DOCU:
@@ -32,15 +24,9 @@ Base class for all neural network modules.
 
 Your models should also subclass this class.
 
-Modules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes: 
+Modules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes:
 self.sub_module = nn.Linear(...)"""
 
-# Iterate along all de modules inside a network class or model class. Notice that LinearRegression module has inside a linear layer "module" or only linear layer
-# note that the atribute name : self.linear will define the string "linear" to refer to that layer inside a module
-# this will be useful when ,inside a class module, there are several layers
-
-
-### API KEYS"
 # Load environment variables from .env file
 load_dotenv()
 
@@ -54,71 +40,20 @@ os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
-#util functions
+# Util functions
 def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
-# MODELS
-MODEL_NAME = "microsoft/deberta-base"
-MODEL_NAME_2 = "PlanTL-GOB-ES/roberta-base-bne"
-
-
-BERT_TOKENIZER = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")
-ROBERTA_TOKENIZER = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
-
-# Embedding model
-EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
-
-# Request to create embeddings: hg api
-model_id = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
-headers = {"Authorization": f"Bearer {os.getenv('HUG_API_KEY')}"}
-
-
-
-
-class BoeNetVanilla(nn.Module):
-    def __init__(self, d_model :int , boe_labels : int) -> None:
-       super().__init__()
-       self.d_model = d_model # (384)
-       self.boe_labels = boe_labels # (?)
-       
-       # Arquitecture 
-       # (batch, 384)
-       self.l_1 = nn.Linear(in_features= self.d_model, out_features = 700, bias = True)
-       self.tan_h = nn.Tanh()
-       self.drop_1 = nn.Dropout(p = 0.2)
-       self.l_2 = nn.Linear(in_features= 700, out_features = 1200, bias = True)
-       self.Relu = nn.ReLU()
-       self.drop_2 = nn.Dropout(p = 0.3)
-       # (batch, 10)
-       self.l_3 = nn.Linear(in_features=  1200 , out_features = self.boe_labels, bias = True)
-       
-    def forward(self,x):
-        h = self.drop_1(self.tan_h(self.l_1(x)))
-        h = self.drop_2(self.Relu(self.l_2(h)))
-        return self.l_3(h)
-    
-    @staticmethod
-    def LossFactory():
-        return nn.CrossEntropyLoss()
-    
-    @staticmethod
-    def OptimizerFactory(model, lr : float = 0.001 , betas : tuple = (0.9, 0.999), eps: float =1e-08):
-        return torch.optim.Adam(model.parameters(), lr=lr, betas=betas, eps=eps)
-
-    
 class BoeNet:
     
-    def __init__(self,model_conf_path : str):
+    def __init__(self, model_conf_path: str):
         self.config_path = model_conf_path
         self.config = self._parse_config()
         self.model_name = self._get_model_name()
         self.model_tokenizer = self._get_tokenizer()
         self.model_config = self._get_model_config()
         self.model = self._get_model()
-        self.metrics = self._get_metrics()
+        self.compute_metric_f = self._get_metrics()
         self.train_args = self._get_training_args()
 
     def _parse_config(self) -> Dict:
@@ -130,169 +65,188 @@ class BoeNet:
     
     def _get_model_name(self):
         model = self.config.get("model", {})
-        model_name = model.get("name",None)
+        model_name = model.get("name", None)
         if model_name is None:
             raise ValueError("Model name not defined in the model config file")
         return model_name
     
     def _get_model_config(self):
         problem = self.config.get("problem", {})
-        self.labels = problem.get("labels_to_pred",None)
+        self.labels = problem.get("labels_to_pred", None)
         if self.labels is None:
             raise ValueError("Labels to predict not defined in the model config file")
-        self.id2label = {i:lab for lab, i in self.labels}
-        self.label2id = {lab:i for lab, i in self.labels}
+        self.id2label = {i: lab for i, lab in enumerate(self.labels)}
+        self.label2id = {lab: i for i, lab in enumerate(self.labels)}
         try:
             return AutoConfig.from_pretrained(
-                                                    pretrained_model_name_or_path = self.model_name, 
-                                                    num_labels=len(self.labels), 
-                                                    id2label=self.id2label
-                                            )
+                pretrained_model_name_or_path=self.model_name,
+                num_labels=len(self.labels),
+                id2label=self.id2label,
+                label2id=self.label2id
+            )
         except Exception as e:
-            print(f"Error in get Config Model method : {e}")
+            raise ValueError(f"Error in get Config Model method: {e}")
             
     def _get_model(self):
-        try :
+        try:
             return AutoModelForSequenceClassification.from_pretrained(self.model_name, config=self.model_config)
         except Exception as e:
-            print(f"Error in get Model method : {e}")
+            raise ValueError(f"Error in get Model method: {e}")
 
     def _get_tokenizer(self):
         try:
             return AutoTokenizer.from_pretrained(self.model_name)
         except Exception as e:
-            print(f"Error in get tokenizer method : {e}")
+            raise ValueError(f"Error in get tokenizer method: {e}")
             
     def _get_metrics(self):
         metrics = self.config.get("metrics", {})
-        if metrics is not {}:
-            self.opt_metric = metrics["optimize"]
-        else:
-            self.opt_metric = ""
-        return metrics
+        self.metrics_to_compute = {metric: details["method"] for metric, details in metrics["type"].items() if details["compute"]}
+        self.opt_metric = metrics.get("optimize", "")
+        return self._get_compute_metric_f(metrics=self.metrics_to_compute)
+    
+    def _get_compute_metric_f(self, metrics: Dict[str, List[str]]):
+        master_metric_mapper = {
+            "f1_macro": f1_score,
+            "f1_weighted": f1_score,
+            "f1_binary": f1_score,
+            "MulticlassAccuracy_micro": MulticlassAccuracy(average='micro', num_classes=4, k=1),
+            "MulticlassAccuracy_macro": MulticlassAccuracy(average='macro', num_classes=4, k=1),
+            "MulticlassAccuracy_None": MulticlassAccuracy(average=None, num_classes=4, k=1),
+            "recall_micro": recall_score,
+            "recall_macro": recall_score,
+            "recall_weighted": recall_score,
+            "recall_binary": recall_score,
+            "precision_micro": precision_score,
+            "precision_macro": precision_score,
+            "precision_weighted": precision_score,
+            "precision_binary": precision_score
+        }
+        self._metric_obj = {}
+        for metric, methods in metrics.items():
+            for method in methods:
+                key_name = metric + "_" + method
+                metric_obj = master_metric_mapper.get(key_name, None)
+                if metric_obj is not None:
+                    self._metric_obj[key_name] = metric_obj
+        
+        def compute_metrics(pred: EvalPrediction):
+            predictions, labels = pred
+            predictions = torch.tensor(predictions)
+            labels = torch.tensor(labels)
+
+            pred_label = torch.argmax(predictions, dim=1)
+            true_label = torch.argmax(labels, dim=1)
+
+            metric_results = {}
+            for m_name, metric in self._metric_obj.items():
+                metric_name, method = m_name.rsplit('_', 1)
+                if metric_name in ["f1", "precision", "recall"]:
+                    metric_results[m_name] = metric(y_true=true_label, y_pred=pred_label, average=method)
+                elif metric_name == "MulticlassAccuracy":
+                    metric.update(pred_label, true_label)
+                    metric_results[m_name] = metric.compute()
+            
+            cross_entropy_loss_f = nn.CrossEntropyLoss()
+            loss = cross_entropy_loss_f(predictions, labels)
+            metric_results["Train Cross entropy loss"] = loss.item()
+            metric_results["Inverse Train Cross entropy loss"] = 1 / loss.item()
+
+            return metric_results
+        return compute_metrics
     
     def _get_training_args(self):
         training_args = self.config.get("training_args", {})
         return TrainingArguments(
-                                    training_args.get("dir_path","./MODEL/DEFAULT"), # nombre del modelo (se crea un directorio con este nombre)
-                                    evaluation_strategy = training_args.get("evaluation_strategy","epoch"), # evaluamos y guardamos en cada época.
-                                    report_to=training_args.get("report_to","tensorboard"), # reportar a tensorboard para poder ver luego el progreso del entrenamiento.
-                                    save_strategy = training_args.get("save_strategy","epoch"), # guardamos también en cada época un checkpoint del modelo.
-                                    learning_rate= training_args.get("learning_rate",3e-05), # learning rate que usamos en el Adam Optimizer.
-                                    per_device_train_batch_size=training_args.get("per_device_train_batch_size",20), # tamaño de batch en entrenamiento.
-                                    per_device_eval_batch_size=training_args.get("per_device_eval_batch_size",32), # tamaño de batch en evaluación.
-                                    num_train_epochs=training_args.get("num_train_epochs",100), #  número de épocas para entrenar
-                                    weight_decay=training_args.get("weight_decay",0.01), # weight decay en el adam optimizer
-                                    adam_epsilon=training_args.get("adam_epsilon",1e-08), # valor para el parámetro epsilon de adam.
-                                    load_best_model_at_end=training_args.get("load_best_model_at_end",True), # Si queremos cargar o no el mejor modelo (el checkpoint del modelo que mejor rendimiento tiene) al finalizar el entrenamiento, en caso de haber empeorado en algún momento del entrenamiento.
-                                    metric_for_best_model=training_args.get("metric_for_best_model",self.opt_metric), # métrica para escoger el mejor modelo.
-                                    gradient_accumulation_steps=training_args.get("gradient_accumulation_steps",10), # número de pasos en los que acumular gradiente.
-                                    warmup_ratio=training_args.get("warmup_ratio",0.03), # este es el porcentaje de los pasos de entrenamiento que vamos a hacer "warmup", es decir, que vamos a ir subiendo el learning rate desde casi 0 hasta el learning rate escogido.
-                                    fp16=training_args.get("fp16",True) # para activar la precisión mixta. NOTE: Si estáis en google colab con T4 como GPU, en lugar de `bf16_True` usa `fp16=True`
-                                )
+            training_args.get("dir_path", "./MODEL/DEFAULT"),
+            evaluation_strategy=training_args.get("evaluation_strategy", "epoch"),
+            report_to=training_args.get("report_to", "tensorboard"),
+            save_strategy=training_args.get("save_strategy", "epoch"),
+            learning_rate=training_args.get("learning_rate", 3e-05),
+            per_device_train_batch_size=training_args.get("per_device_train_batch_size", 20),
+            per_device_eval_batch_size=training_args.get("per_device_eval_batch_size", 32),
+            num_train_epochs=training_args.get("num_train_epochs", 3),  # Ajustado para tiempos de prueba
+            weight_decay=training_args.get("weight_decay", 0.01),
+            adam_epsilon=training_args.get("adam_epsilon", 1e-08),
+            load_best_model_at_end=training_args.get("load_best_model_at_end", True),
+            metric_for_best_model=training_args.get("metric_for_best_model", self.opt_metric),
+            gradient_accumulation_steps=training_args.get("gradient_accumulation_steps", 10),
+            warmup_ratio=training_args.get("warmup_ratio", 0.03),
+            fp16=training_args.get("fp16", True)
+        )
         
-    def _get_trainer(self, dataset :Dataset):
-        trainer = self.config.get("trainer", {})
-        callbacks_args =  trainer.get("callbacks",None)
-        early_stopping_args = callbacks_args.get("EarlyStoppingCallback",None)
-        try: 
-            train_set = dataset["train"]
-        except Exception as e:
-            print(f"Error in getting train dataset : {e}")
-        try:
-            val_set = dataset["validation"]
-        except Exception as e:
-            print(f"Error in getting val dataset : {e}")
-            
+    def _get_trainer(self, dataset: DatasetDict):
+        trainer_config = self.config.get("trainer", {})
+        callbacks_args = trainer_config.get("callbacks", {})
+        early_stopping_args = callbacks_args.get("EarlyStoppingCallback", {})
+        
         return Trainer(
-                        model=self.model,
-                        args=self.train_args,
-                        train_dataset=train_set,
-                        eval_dataset=val_set,
-                        tokenizer=self._get_tokenizer,
-                        compute_metrics=self.compute_metrics,
-                        callbacks=[
-                                    EarlyStoppingCallback(
-                                                                early_stopping_patience = early_stopping_args.get("early_stopping_patience",3), 
-                                                                early_stopping_threshold =  early_stopping_args.get("early_stopping_threshold",0.0)
-                                                            ), 
-                                    TensorBoardCallback
-                                    ]
-                        )
-    def train(self,dataset : Dataset):
+            model=self.model,
+            args=self.train_args,
+            train_dataset=dataset["train"],
+            eval_dataset=dataset["validation"],
+            tokenizer=self.model_tokenizer,
+            compute_metrics=self.compute_metric_f,
+            callbacks=[
+                EarlyStoppingCallback(
+                    early_stopping_patience=early_stopping_args.get("early_stopping_patience", 3),
+                    early_stopping_threshold=early_stopping_args.get("early_stopping_threshold", 0.0)
+                ),
+                TensorBoardCallback()
+            ]
+        )
+    
+    def train(self, dataset: DatasetDict):
         self.trainer = self._get_trainer(dataset)
         self.trainer.train()
-    def predict(self,dataset: Dataset):
+    
+    def predict(self, dataset: DatasetDict):
         try:
             return self.trainer.evaluate(dataset["test"])
         except Exception as e:
-            print(f"Error in predict method : {e}")
-        
+            raise ValueError(f"Error in predict method: {e}")
+
+def create_synthetic_dataset(num_samples=1000):
+    from datasets import Dataset as HFDataset  # Import necesario para evitar conflicto de nombre
+    # Definimos algunas palabras comunes para generar los textos
+    words = ["the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "and", "runs", "away"]
+    labels = ["label1", "label2", "label3", "label4"]
+    
+    # Generamos textos aleatorios
+    texts = [" ".join(np.random.choice(words, size=10)) for _ in range(num_samples)]
+    
+    # Generamos etiquetas aleatorias
+    y = np.random.choice(labels, size=num_samples)
+    
+    # Creamos un DataFrame
+    df = pd.DataFrame({"text": texts, "label": y})
+    
+    # Convertimos el DataFrame a un Dataset de HuggingFace
+    dataset = HFDataset.from_pandas(df)
+    
+    # Dividimos el dataset en train, validation y test
+    train_testvalid = dataset.train_test_split(test_size=0.3)
+    test_valid = train_testvalid['test'].train_test_split(test_size=0.5)
+    
+    # Creamos un DatasetDict
+    dataset_dict = DatasetDict({
+        'train': train_testvalid['train'],
+        'validation': test_valid['train'],
+        'test': test_valid['test']
+    })
+    
+    return dataset_dict
+
 
 if __name__ == '__main__':
-    
-    # instanciar capa y crear modelo
-    model = BOENet(d_model  = 384 , boe_labels = 10)
-    
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print("Cuda available: ",torch.cuda.is_available())
-    model.to(device)
-    
-    # loss class
-    loss = BOENet.LossFactory() 
-    
-    # crea optimizer para prescendir de actualizacion de pesos a mano
-    optimizer = BOENet.OptimizerFactory(model) 
-    
-    print("\n")
-    
 
-    for m in model.modules():
-        #print(f"\nModule : {m}")
-        pass
+    synthetic_dataset = create_synthetic_dataset()
+    original_dataset = load_dataset("argilla/twitter-genderbias")
+    config_path = 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\config\\model.json' 
+    boenet = BoeNet(config_path)
+    boenet.train(original_dataset)
+    results = boenet.predict(original_dataset)
+    print(results)
 
-    # iterate along all the parameters inside a module ( a module can have a lot of layers with their parameters)
-    for p in model.named_parameters(prefix='', recurse=True, remove_duplicate=True):
-        #print(f"\nParameter : {p}")
-        pass
-        
-    docs = [
-        'hola que tal esto es un ejemplo',
-        'hola ejemplo 2'
-    ]
-    
-    embedding = [
-        np.random.rand(384),
-        np.random.rand(384)
-        
-    ]
-    labels = [
-        'label 1',
-        'label 2'
-    ]
-    data = {
-        'text':docs ,
-        'label': labels,
-    }
-    df_data = pd.DataFrame(data = data)
-    df_data.to_csv(path_or_buf='./Data_BOE/filename.csv')
-    print(df_data.head(10))
-    
-    data = BOEData(path = './Data_BOE/filename.csv')
-    print(len(data))
-    print((data.x.shape))
-    print((data.x[0,:].shape))
-    
-    BATCH_SIZE = 2
-    train_loader = torch.utils.data.DataLoader(dataset = data, batch_size = BATCH_SIZE, shuffle = True)
-    test_loader = torch.utils.data.DataLoader(dataset = data, batch_size = BATCH_SIZE, shuffle = False)
-    print(data.data["text"])
-    print(data.data["label"])
-    for i,(x,y)in enumerate(train_loader):
-        print(i, x.shape, y.shape)
-        print(y)
-    
-    
 
-    
-    
+
