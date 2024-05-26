@@ -330,7 +330,7 @@ class BOEData(Dataset):
         return tokenized
 
 
-    def get_hg_dataset(self, split : bool = False, tokenize :bool = True ):
+    def get_hg_dataset(self, split : bool = False, tokenize :bool = True ) -> Tuple[Dataset]:
 
         # load original dataset from path
         try:

@@ -20,6 +20,10 @@ from datasets import DatasetDict, load_dataset
 import datasets as ds
 
 
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+
+# The rest of your code, such as model and training setup
+
 # MODULE CLASS DOCU:
 """nn.Module :
 Base class for all neural network modules.
@@ -443,6 +447,9 @@ class BoeNet:
     
     def train(self, dataset: DatasetDict):
         self.trainer = self._get_trainer(dataset)
+        # Check if TensorBoardCallback is already in the list of callbacks
+        if not any(isinstance(callback, TensorBoardCallback) for callback in self.trainer.callback_handler.callbacks):
+            self.trainer.add_callback(TensorBoardCallback())
         self.trainer.train()
     
     def predict(self, dataset: DatasetDict):
@@ -479,7 +486,8 @@ def create_synthetic_dataset(tokenizer, num_samples=1000):
     train_testvalid['train'] = train_testvalid['train'].map(lambda x: {'label': label2id[x['label']]})
     test_valid['train'] = test_valid['train'].map(lambda x: {'label': label2id[x['label']]})
     test_valid['test'] = test_valid['test'].map(lambda x: {'label': label2id[x['label']]})
-    
+    print(label2id)
+
     # Create a DatasetDict
     dataset_dict = DatasetDict({
         'train': train_testvalid['train'],
@@ -493,7 +501,7 @@ def create_synthetic_dataset(tokenizer, num_samples=1000):
         
         # Add labels
         tokenized["labels"] = dataset["label"]
-        
+
         return tokenized
 
     # Tokenize the datasets
@@ -504,16 +512,16 @@ def create_synthetic_dataset(tokenizer, num_samples=1000):
 if __name__ == '__main__':
     
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(device)
+    print("device used :" , device)
     
     config_path = 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\config\\model.json' 
     boenet = BoeNet(config_path)
     
     synthetic_dataset = create_synthetic_dataset(tokenizer =boenet.model_tokenizer )
-    print(synthetic_dataset)
+    print(synthetic_dataset["train"]["labels"])
     boenet.train(synthetic_dataset)
     results = boenet.predict(synthetic_dataset)
-    print(results)
+
 
 
 
