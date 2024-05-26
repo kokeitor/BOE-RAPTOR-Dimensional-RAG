@@ -46,7 +46,8 @@
                     "metric_for_best_model":"Inverse Train Cross entropy loss",
                     "gradient_accumulation_steps": 10, 
                     "warmup_ratio":0.03,
-                    "fp16":true 
+                    "fp16_full_eval":false,
+                    "fp16":false
                   }
 }
 
