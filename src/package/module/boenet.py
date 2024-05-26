@@ -445,18 +445,13 @@ class BoeNet:
             ]
         )
     
-    def train(self, dataset: DatasetDict):
+    def trainer(self, dataset: DatasetDict):
         self.trainer = self._get_trainer(dataset)
         # Check if TensorBoardCallback is already in the list of callbacks
         if not any(isinstance(callback, TensorBoardCallback) for callback in self.trainer.callback_handler.callbacks):
             self.trainer.add_callback(TensorBoardCallback())
-        self.trainer.train()
-    
-    def predict(self, dataset: DatasetDict):
-        try:
-            return self.trainer.evaluate(dataset["test"])
-        except Exception as e:
-            raise ValueError(f"Error in predict method: {e}")
+        return self.trainer
+
         
         
 
@@ -510,7 +505,7 @@ def create_synthetic_dataset(tokenizer, num_samples=1000):
     return dataset_tokenize
 
 if __name__ == '__main__':
-    
+    """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("device used :" , device)
     
@@ -519,8 +514,25 @@ if __name__ == '__main__':
     
     synthetic_dataset = create_synthetic_dataset(tokenizer =boenet.model_tokenizer )
     print(synthetic_dataset["train"]["labels"])
-    boenet.train(synthetic_dataset)
-    results = boenet.predict(synthetic_dataset)
+    boe_trainer = boenet.trainer(synthetic_dataset)
+    boe_trainer.train()
+    boe_trainer.evaluate(synthetic_dataset["test"])
+    """
+    
+    print(f"PyTorch version: {torch.__version__}")
+    print(f"CUDA available: {torch.cuda.is_available()}")
+    print(f"CUDA version: {torch.version.cuda}")
+    print(f"Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")
+    print(torch.cuda.get_arch_list())
+
+    # sys, library info
+    print("Operating System:", os.name)
+    print("Platform:", sys.platform)
+    print("Current Working Directory:", os.getcwd())
+    print("Environment Variables:", os.environ)
+    print("Python Version:", sys.version)
+    print("Command-line arguments:", sys.argv)
+    print(ds.__version__)
 
 
 
