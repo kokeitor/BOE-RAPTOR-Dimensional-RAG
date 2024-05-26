@@ -17,6 +17,7 @@ from torcheval.metrics import MulticlassAccuracy
 from dotenv import load_dotenv
 from typing import Dict, List, Tuple
 from datasets import DatasetDict, load_dataset
+import datasets as ds
 
 
 # MODULE CLASS DOCU:
@@ -449,53 +450,56 @@ class BoeNet:
             return self.trainer.evaluate(dataset["test"])
         except Exception as e:
             raise ValueError(f"Error in predict method: {e}")
+        
+        
 
-def create_synthetic_dataset(tokenizer , num_samples=1000):
-    tokenizer = tokenizer
-    from datasets import Dataset as HFDataset  # Import necesario para evitar conflicto de nombre
-    # Definimos algunas palabras comunes para generar los textos
+def create_synthetic_dataset(tokenizer, num_samples=1000):
+    # Define some common words to generate texts
     words = ["the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "and", "runs", "away"]
     labels = ["label1", "label2", "label3", "label4"]
     
-    # Generamos textos aleatorios
+    # Generate random texts
     texts = [" ".join(np.random.choice(words, size=10)) for _ in range(num_samples)]
     
-    # Generamos etiquetas aleatorias
+    # Generate random labels
     y = np.random.choice(labels, size=num_samples)
     
-    # Creamos un DataFrame
+    # Create a DataFrame
     df = pd.DataFrame({"text": texts, "label": y})
     
-    # Convertimos el DataFrame a un Dataset de HuggingFace
-    dataset = HFDataset.from_pandas(df)
+    # Convert the DataFrame to a HuggingFace Dataset
+    dataset = ds.Dataset.from_pandas(df)
     
-    # Dividimos el dataset en train, validation y test
+    # Split the dataset into train, validation, and test
     train_testvalid = dataset.train_test_split(test_size=0.3)
     test_valid = train_testvalid['test'].train_test_split(test_size=0.5)
     
-    # Creamos un DatasetDict
+    # Map string labels to integers
+    label2id = {label: i for i, label in enumerate(labels)}
+    train_testvalid['train'] = train_testvalid['train'].map(lambda x: {'label': label2id[x['label']]})
+    test_valid['train'] = test_valid['train'].map(lambda x: {'label': label2id[x['label']]})
+    test_valid['test'] = test_valid['test'].map(lambda x: {'label': label2id[x['label']]})
+    
+    # Create a DatasetDict
     dataset_dict = DatasetDict({
         'train': train_testvalid['train'],
         'validation': test_valid['train'],
         'test': test_valid['test']
     })
     
-    def _process_dataset(dataset) -> dict:
-        label_f_name = 'label'
-        text_f_name = 'text'
-        text = str(dataset[text_f_name]) # aseguramos tipo de dato es str
+    def _process_dataset(dataset):
+        # Tokenize the text
+        tokenized = tokenizer(dataset['text'], padding="max_length", truncation=True)
         
-        # tokenizacion
-        tokenized = tokenizer(text, padding=False, truncation=True)
-
-        # labels
-        tokenized["labels"] = dataset[label_f_name]
-
+        # Add labels
+        tokenized["labels"] = dataset["label"]
+        
         return tokenized
 
-    dataset_tokenize = dataset.map(_process_dataset, batched=False, remove_columns=df.columns.tolist())
+    # Tokenize the datasets
+    dataset_tokenize = dataset_dict.map(_process_dataset, batched=True, remove_columns=["text", "label"])
+    
     return dataset_tokenize
-
 
 if __name__ == '__main__':
     
