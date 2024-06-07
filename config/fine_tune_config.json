@@ -1,0 +1,68 @@
+{
+    "DataTrainingArguments":
+                        {
+                            "dataset_name": "koke143/boeset_labelled",
+                            "dataset_config_name": "None",
+                            "do_regression": false,
+                            "text_column_names": "text",
+                            "text_column_delimiter": " ",
+                            "train_split_name": "train",
+                            "validation_split_name": "validation",
+                            "test_split_name": "test",
+                            "remove_splits": "None",
+                            "remove_columns": "None",
+                            "label_column_name": "label",
+                            "max_seq_length": 128,
+                            "overwrite_cache": false,
+                            "pad_to_max_length": true,
+                            "shuffle_train_dataset": true,
+                            "shuffle_seed": 42,
+                            "max_train_samples": "None",
+                            "max_eval_samples": "None",
+                            "max_predict_samples": "None",
+                            "metric_name": "f1",
+                            "train_file": "None",
+                            "validation_file": "None",
+                            "test_file": "None"
+                        },
+                
+                             
+
+    "ModelArguments":{
+                        "model_name_or_path": "microsoft/deberta-v3-base",
+                        "config_name": "None",
+                        "tokenizer_name": "None",
+                        "cache_dir": "./models/pretrained",
+                        "use_fast_tokenizer": true,
+                        "model_revision": "main",
+                        "token": "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",
+                        "trust_remote_code": false,
+                        "ignore_mismatched_sizes": false
+                    },
+      
+    "training_args": {
+                        "dir_path" : "./models/checkpoint",
+                        "evaluation_strategy" : "epoch", 
+                        "report_to":"tensorboard", 
+                        "save_strategy" : "epoch",
+                        "learning_rate":3e-05, 
+                        "per_device_train_batch_size":4, 
+                        "per_device_eval_batch_size":2,
+                        "num_train_epochs":10, 
+                        "weight_decay":0.01,
+                        "adam_epsilon":1e-08,
+                        "load_best_model_at_end":true, 
+                        "metric_for_best_model":"f1",
+                        "gradient_accumulation_steps": 1, 
+                        "warmup_ratio":0.03,
+                        "fp16_full_eval":false,
+                        "fp16":true
+                        }
+
+    
+
+        
+
+
+}
+

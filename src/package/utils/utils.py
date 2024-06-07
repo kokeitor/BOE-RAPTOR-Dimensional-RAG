@@ -19,16 +19,18 @@ import time
 from llama_parse import LlamaParse
 from llama_index.core import SimpleDirectoryReader
 
+# Load environment variables from .env file
 load_dotenv()
 
-
-DEEPL_KEY = "f21735bc-db92-4957-8a48-9bed66114a42:fx"  
+# Set environment variables
+os.environ['DEEPL_KEY'] = os.getenv('DEEPL_KEY')
+os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 LOCAL_LLM = 'llama3'
 
 
 
 ### TRANSLATION TOOL
-translator = deepl.Translator(DEEPL_KEY)
+translator = deepl.Translator(os.getenv('DEEPL_KEY'))
 def translate(text :str, target_lang : str = "ES" , verbose : int = 0, mode : str = "LOCAL_LLM") -> str:
     
     _target_lang = {
@@ -87,7 +89,7 @@ def pdf_parser() -> List[Document]:
         List[Document]: _description_
     """
     parser = LlamaParse(
-        api_key = LLAMA_CLOUD_API_KEY,
+        api_key = os.getenv('LLAMA_CLOUD_API_KEY'),
         result_type="markdown",  # "markdown" and "text" are available
         verbose=True
     )
@@ -109,6 +111,65 @@ def pdf_parser() -> List[Document]:
         lang_chain_docs.append(d.to_langchain_format()) 
         
     return lang_chain_docs
+
+
+
+def doc_to_vectordb(db : list, docs : list, translation :bool = False):
+    for db_i in db:
+        if translation:
+            for doc_i in docs:
+                doc_i.page_content = translate(
+                                                text = doc_i.page_content, 
+                                                verbose = 0,
+                                                target_lang = "EN-GB",
+                                                mode = 'LOCAL_LLM'
+                                                )
+                print(docs)
+        db_i.add_documents(documents = docs)
+"""
+usage:
+doc_to_vectordb(
+            db = [vectorstore],
+            docs = text_splitter.split_documents(documents = loader.load()), # .load() -> List[Document] // .split_documents() -> List[Document]
+            translation = False
+            ) 
+"""
+
+
+def execution_time(func : callable = None):
+    """
+    Funcion decoradora que calcula el tiempo de ejecucion de la funcion que esta decorando
+    Parameters
+    ----------
+        - func : (callable) funcion a decorar
+    return
+    ------
+        - wrapper : (callable) funcion "envoltorio2 que agrega la funcionalidad del calculo de tiempo de ejecucion
+    """
+    def wrapper(*args, **kwargs):
+        start_execution = time.time()
+        return_func = func(*args,**kwargs)
+        end_execution = time.time()
+        print(f'Exexcution time of {func.__name__} {end_execution - start_execution}')
+        return return_func
+    return wrapper
+
+
+########## sucio ###########
+
+import os
+import requests
+from datetime import datetime, timedelta
+import xml.etree.ElementTree as ET
+from langchain.document_loaders import PyPDFLoader
+from dotenv import load_dotenv
+from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
+from dataclasses import dataclass, field
+from pydantic import BaseModel
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 ### BOE PDF DOWNLOAD TOOL
 def boe_pdfs_downloader(vectorstore, text_splitter):
@@ -205,36 +266,3 @@ def descargar_pdf(url_base, url_pdf, ruta_destino):
     else:
         print(f'Error al descargar {url_completa}: {respuesta.status_code}')
 
-
-
-def doc_to_vectordb(db : list, docs : list, translation :bool = False):
-    for db_i in db:
-        if translation:
-            for doc_i in docs:
-                doc_i.page_content = translate(
-                                                text = doc_i.page_content, 
-                                                verbose = 0,
-                                                target_lang = "EN-GB",
-                                                mode = 'LOCAL_LLM'
-                                                )
-                print(docs)
-        db_i.add_documents(documents = docs)
-
-
-def execution_time(func : callable = None):
-    """
-    Funcion decoradora que calcula el tiempo de ejecucion de la funcion que esta decorando
-    Parameters
-    ----------
-        - func : (callable) funcion a decorar
-    return
-    ------
-        - wrapper : (callable) funcion "envoltorio2 que agrega la funcionalidad del calculo de tiempo de ejecucion
-    """
-    def wrapper(*args, **kwargs):
-        start_execution = time.time()
-        return_func = func(*args,**kwargs)
-        end_execution = time.time()
-        print(f'Exexcution time of {func.__name__} {end_execution - start_execution}')
-        return return_func
-    return wrapper
