@@ -3,11 +3,10 @@ import requests
 from requests import Response
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
-from langchain.document_loaders import PyPDFLoader
 from dotenv import load_dotenv
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import logging
 
 # Load environment variables from .env file
@@ -19,7 +18,7 @@ class WebDownloadData(BaseModel):
     fecha_desde: str
     fecha_hasta: str
     batch: int
-    dw_files_paths: Optional[List[str]] = None
+    dw_files_paths: List[str] = Field(default_factory=list)
 
 
 ### BOE PDF DOWNLOAD TOOL
@@ -129,12 +128,15 @@ class Downloader:
 
 if __name__ == "__main__":
     data = WebDownloadData(
-        web_url='https://boe.es',
-        local_dir='./documentos',
-        fecha_desde='2024-04-15',
-        fecha_hasta='2024-04-15',
-        batch=10,
-    )
-    
+                            web_url='https://boe.es',
+                            local_dir='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data',
+                            fecha_desde='2024-04-15',
+                            fecha_hasta='2024-04-15',
+                            batch=10
+                        )
+    print(data.model_dump())
     downloader = Downloader(information=data)
     downloader.download()
+    print(data.model_dump())
+    
+    
