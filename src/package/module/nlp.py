@@ -18,6 +18,7 @@ from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+from dataclasses import dataclass, Field
 import matplotlib.pyplot as plt
 import seaborn as sns
 import logging
@@ -53,121 +54,7 @@ def get_current_utc_date_iso():
     # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
-class Processor:
-    def __init__(self):
-        """PREPROCESS AND ADD METADATA TO EACH DOC"""
 
-    def invoke(self, docs: List[Document]) -> List[Document]:
-
-        print(f"NUMERO DE DOCS A ANALIZAR : {len(docs)}\n\n")
-        new_metadata = {}
-        titulos = {}
-        new_docs = []
-        self.processed_docs = docs.copy()
-        for _, d in enumerate(self.processed_docs):
-            new_metadata["fecha_publicacion_boe"], new_doc = self._get_date_creation_doc(doc=d)
-            titulos,new_doc = self._clean_doc(doc=new_doc)
-            for k, t in titulos.items():
-                new_metadata[k] = t
-            new_metadata["pdf_id"] = self._get_id()  # adicion de identificador unico del pdf del que se extrajo dicho doc
-            new_docs.append(self._put_metadata(doc=new_doc, new_metadata=new_metadata))
-        return new_docs
-
-    def _get_id(self):
-        """generate an unique random id and convert it to str"""
-        return str(uuid.uuid4())
-
-    def _clean_doc(self, doc: Document) -> Dict:
-        doc_clean = doc.copy()
-        doc_text = doc_clean.page_content
-        title_1 = r'^##(?!\#).*$'
-        title_2 = r'^###(?!\#).*$'
-        title_3 = r'^####(?!\#).*$'
-
-        patterns_to_elimiate = [
-            title_1,
-            title_2,
-            title_3,
-            r'^.*Verificable en https://www\.boe\.es.*$\n?',
-            r'BOLETÍN OFICIAL DEL ESTADO',
-            r'^.*Núm.*$\n?',
-            r'^.*ISSN.*$\n?',
-            r'^.*Sec.*$\n?',
-            r'^.*cve:*$\n?',
-            r'cve: BOE-[A-Z]-\d{4}-\d{4}',
-            r'https://www.boe.es',
-            r'cve: BOE-[A-Z]-\d{4}-\d{4}',
-            r'Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
-            r'## Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
-            r'BOLETÍN OFICIAL DEL ESTADO',
-            r'Lunes \d+ de abril de \d{4}', 
-            r'ISSN: \d{4}-\d{3}[XD]'
-        ]
-
-        not_include_titles = [r'BOLETÍN OFICIAL DEL ESTADO', r'ANEXO', r'\b([A-Z]|I{1,2})\.']
-
-        titles_1 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_1, doc_text, re.MULTILINE)]))
-        titles_2 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_2, doc_text, re.MULTILINE)]))
-        titles_3 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_3, doc_text, re.MULTILINE)]))
-
-        clean_text = doc_clean.page_content
-        for pattern in patterns_to_elimiate:
-            clean_text = re.sub(pattern, '', clean_text, flags=re.MULTILINE).strip()
-
-        errase_words = ['BOLETÍN', 'OFICIAL', 'DEL', 'ESTADO', 'CONSEJO',
-                        'GENERAL', 'DEL', 'PODER', 'JUDICIAL', 'cve', 'Núm', 'ISSN:', 'Pág.', 'Sec.', '### Primero.', '### Segundo.']
-        words = clean_text.split(" ")
-        shortlisted_words = [w for w in words if w not in errase_words]
-        clean_text = ' '.join(shortlisted_words)
-
-        doc_clean.page_content = clean_text
-
-        patterns_to_elimiate_tit = [
-            r'I',
-            r'II',
-            r'III',
-            r'Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
-            r'## Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
-            r'BOLETÍN OFICIAL DEL ESTADO',
-            r'BOLETÍN OFCAL DEL ESTADO',
-            r'ANEXO',
-            r'\b([A-Z]|I{1,2})\.',
-            r'. DSPOSCONES GENERALES',
-            r'Núm. 92 Lunes 15 de abril de 2024 Sec. . Pág. 41278',
-            r'MNSTERO DE ASUNTOS EXTERORES, UNÓN EUROPEA Y COOPERACÓN'
-        ]
-
-        for pattern in patterns_to_elimiate_tit:
-            titles_1 = [re.sub(pattern, '', t).strip() for t in titles_1]
-            titles_1 = [item for item in titles_1 if item != '']
-            titles_2 = [re.sub(pattern, '', t).strip() for t in titles_2]
-            titles_2 = [item for item in titles_2 if item != '']
-            titles_3 = [re.sub(pattern, '', t).strip() for t in titles_3]
-            titles_3 = [item for item in titles_3 if item != '']
-
-        return {f"titulo_{i}": t for i, t in enumerate([titles_1, titles_2, titles_3]) if t != []} , doc_clean
-
-    def _get_date_creation_doc(self, doc: Document):
-      doc_copy = doc.copy()
-      logger.info(f"file_path: {doc_copy.metadata['file_path']}")
-      if '/' in doc_copy.metadata["file_path"]:
-        dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
-        mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
-        año_publicacion = doc_copy.metadata["file_path"].split("/")[-4]
-      elif '\\' in doc_copy.metadata["file_path"]:
-        dia_publicacion = doc_copy.metadata["file_path"].split("\\")[-2]
-        mes_publicacion = doc_copy.metadata["file_path"].split("\\")[-3]
-        año_publicacion = doc_copy.metadata["file_path"].split("\\")[-4]
-      doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
-      return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
-
-    def _put_metadata(self, doc: Document, new_metadata: Dict) -> None:
-        new_doc = doc.copy()
-        for key in new_metadata.keys():
-            new_doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
-        return new_doc
-    
-    
 @dataclass
 class TextPreprocess:
     """Class for text preprocess"""
@@ -202,9 +89,12 @@ class TextPreprocess:
                                     r'[\uff66-\uff9f]'   # Half-width Katakana
                                     )
     task : str
-    corpus : List[str]
+    docs : List[Document]
     spc_caracters : Optional[List[str]] = field(default_factory=list)
     data : Optional[pd.DataFrame] = None
+    
+    def __post__init(self):
+        self.corpus = [d.page_content for d in self.docs]
     
     def del_stopwords(self, lang: str) -> 'TextPreprocess':
         empty_words = set(stopwords.words(lang))
@@ -415,8 +305,167 @@ class TextPreprocess:
         terms = tfidf_vectorizador.get_feature_names_out()
         return pd.DataFrame(data=X.toarray(), columns=terms, index=self.corpus)
 
+@dataclass()
+class BoeProcessor(TextPreprocess):
+    """BOE PREPROCESS DOC AND ADD METADATA TO EACH DOC"""
+
+    def invoke(self, docs: Optional[List[Document]] =None) -> List[Document]:
+
+        logger.info(f"NUMERO DE DOCS A ANALIZAR : {len(docs)}\n\n")
+        new_metadata = {}
+        titulos = {}
+        new_docs = []
+        if docs is None:
+            logger.info(f"Procesando documentos boe en {self.__name__}")
+            self.processed_docs = self.docs.copy()
+        else:
+            logger.warning(f"Los documentos BOE en {self.__name__} han sido cambiados en el metodo invoke")
+            self.processed_docs = docs.copy()
+        for _, d in enumerate(self.processed_docs):
+            new_metadata["fecha_publicacion_boe"], new_doc = self._get_date_creation_doc(doc=d)
+            titulos,new_doc = self._clean_doc(doc=new_doc)
+            for k, t in titulos.items():
+                new_metadata[k] = t
+            new_metadata["pdf_id"] = self._get_id()  # adicion de identificador unico del pdf del que se extrajo dicho doc
+            new_docs.append(self._put_metadata(doc=new_doc, new_metadata=new_metadata))
+        return new_docs
+
+    def _get_id(self):
+        """generate an unique random id and convert it to str"""
+        return str(uuid.uuid4())
+
+    def _clean_doc(self, doc: Document) -> Tuple[Dict, Document]:
+        """
+        Clean the document by removing specific patterns and extracting titles.
+        
+        Args:
+            doc (Document): The document to be cleaned.
+
+        Returns:
+            Tuple[Dict, Document]: A dictionary of titles and the cleaned document.
+        """
+        doc_clean = doc.copy()
+        doc_text = doc_clean.page_content
+
+        titles = self._extract_titles(doc_text)
+        clean_text = self._remove_patterns(doc_text)
+
+        doc_clean.page_content = clean_text
+        return titles, doc_clean
+
+    def _extract_titles(self, text: str) -> Dict:
+        """
+        Extract titles from the document text using predefined patterns.
+        
+        Args:
+            text (str): The document text to extract titles from.
+
+        Returns:
+            Dict: A dictionary of extracted titles.
+        """
+        title_1 = r'^##(?!\#).*$'
+        title_2 = r'^###(?!\#).*$'
+        title_3 = r'^####(?!\#).*$'
+
+        titles_1 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_1, text, re.MULTILINE)]))
+        titles_2 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_2, text, re.MULTILINE)]))
+        titles_3 = list(set([re.sub(r'#', '', t).strip() for t in re.findall(title_3, text, re.MULTILINE)]))
+
+        patterns_to_eliminate_titles = [
+            r'I', r'II', r'III',
+            r'Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+',
+            r'## Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+',
+            r'BOLETÍN OFICIAL DEL ESTADO', r'BOLETÍN OFCAL DEL ESTADO', r'ANEXO',
+            r'\b([A-Z]|I{1,2})\.', r'. DSPOSCONES GENERALES',
+            r'Núm. 92 Lunes 15 de abril de 2024 Sec. . Pág. 41278',
+            r'MNSTERO DE ASUNTOS EXTERORES, UNÓN EUROPEA Y COOPERACÓN'
+        ]
+
+        titles_1 = self._clean_titles(titles_1, patterns_to_eliminate_titles)
+        titles_2 = self._clean_titles(titles_2, patterns_to_eliminate_titles)
+        titles_3 = self._clean_titles(titles_3, patterns_to_eliminate_titles)
+
+        return {f"titulo_{i}": t for i, t in enumerate([titles_1, titles_2, titles_3]) if t}
+
+    def _clean_titles(self, titles: List[str], patterns: List[str]) -> List[str]:
+        """
+        Clean the titles by removing specific patterns.
+        
+        Args:
+            titles (List[str]): The list of titles to be cleaned.
+            patterns (List[str]): The patterns to remove from the titles.
+
+        Returns:
+            List[str]: The cleaned titles.
+        """
+        for pattern in patterns:
+            titles = [re.sub(pattern, '', t).strip() for t in titles]
+            titles = [t for t in titles if t]
+        return titles
+
+    def _remove_patterns(self, text: str) -> str:
+        """
+        Remove specific patterns from the document text.
+        
+        Args:
+            text (str): The document text to clean.
+
+        Returns:
+            str: The cleaned text.
+        """
+        patterns_to_eliminate = [
+            r'^##(?!\#).*$',
+            r'^###(?!\#).*$',
+            r'^####(?!\#).*$',
+            r'^.*Verificable en https://www\.boe\.es.*$\n?',
+            r'BOLETÍN OFICIAL DEL ESTADO',
+            r'^.*Núm.*$\n?',
+            r'^.*ISSN.*$\n?',
+            r'^.*Sec.*$\n?',
+            r'^.*cve:*$\n?',
+            r'cve: BOE-[A-Z]-\d{4}-\d{4}',
+            r'https://www.boe.es',
+            r'cve: BOE-[A-Z]-\d{4}-\d{4}',
+            r'Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
+            r'## Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
+            r'BOLETÍN OFICIAL DEL ESTADO',
+            r'Lunes \d+ de abril de \d{4}', 
+            r'ISSN: \d{4}-\d{3}[XD]'
+        ]
+
+        clean_text = text
+        for pattern in patterns_to_eliminate:
+            clean_text = re.sub(pattern, '', clean_text, flags=re.MULTILINE).strip()
+
+        erase_words = ['BOLETÍN', 'OFICIAL', 'DEL', 'ESTADO', 'CONSEJO',
+                       'GENERAL', 'DEL', 'PODER', 'JUDICIAL', 'cve', 'Núm', 'ISSN:', 'Pág.', 'Sec.', '### Primero.', '### Segundo.']
+        words = clean_text.split(" ")
+        shortlisted_words = [w for w in words if w not in erase_words]
+        clean_text = ' '.join(shortlisted_words)
+
+        return clean_text
+
+    def _get_date_creation_doc(self, doc: Document):
+      doc_copy = doc.copy()
+      logger.info(f"file_path: {doc_copy.metadata['file_path']}")
+      if '/' in doc_copy.metadata["file_path"]:
+        dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
+        mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
+        año_publicacion = doc_copy.metadata["file_path"].split("/")[-4]
+      elif '\\' in doc_copy.metadata["file_path"]:
+        dia_publicacion = doc_copy.metadata["file_path"].split("\\")[-2]
+        mes_publicacion = doc_copy.metadata["file_path"].split("\\")[-3]
+        año_publicacion = doc_copy.metadata["file_path"].split("\\")[-4]
+      doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
+      return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
+
+    def _put_metadata(self, doc: Document, new_metadata: Dict) -> None:
+        new_doc = doc.copy()
+        for key in new_metadata.keys():
+            new_doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
+        return new_doc
     
-               
+    
 
 
 
