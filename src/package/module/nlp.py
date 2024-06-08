@@ -20,6 +20,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import matplotlib.pyplot as plt
 import seaborn as sns
+import logging
+
 
 # NLP
 nltk.download('stopwords')
@@ -41,12 +43,15 @@ os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
 
+# Logging configuration
+logger = logging.getLogger("nlp_module_logger")  # Child logger [for this module]
+# LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
+
+
 #util functions
 def get_current_utc_date_iso():
     # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
-
-
 
 class Processor:
     def __init__(self):
@@ -144,7 +149,7 @@ class Processor:
 
     def _get_date_creation_doc(self, doc: Document):
       doc_copy = doc.copy()
-      print("file_path: ",doc_copy.metadata["file_path"])
+      logger.info(f"file_path: {doc_copy.metadata['file_path']}")
       if '/' in doc_copy.metadata["file_path"]:
         dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
         mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
@@ -370,7 +375,7 @@ class TextPreprocess:
         try:
             X = vectorizador.fit_transform(self.corpus)
         except UnicodeDecodeError as e:
-            print(f"Error: characters not of the given encoding -> {e}")
+            logger.exception(f"Error: characters not of the given encoding -> {e}")
             return pd.DataFrame()
 
         nombres_caracteristicas = vectorizador.get_feature_names_out()
@@ -404,7 +409,7 @@ class TextPreprocess:
         try:
             X = tfidf_vectorizador.fit_transform(self.corpus)
         except UnicodeDecodeError as e:
-            print(f"Error: characters not of the given encoding -> {e}")
+            logger.exception(f"Error: characters not of the given encoding -> {e}")
             return pd.DataFrame()
 
         terms = tfidf_vectorizador.get_feature_names_out()

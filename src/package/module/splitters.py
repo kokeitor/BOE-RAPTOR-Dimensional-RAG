@@ -15,16 +15,11 @@ from langchain.schema import Document
 from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
-from llama_parse import LlamaParse
-from llama_index.core import SimpleDirectoryReader
-import nest_asyncio  # only for Jupyter notebook
-from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_community.chat_models import ChatOllama
-from langchain_openai import ChatOpenAI
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
+import logging
+
 
 
 # Load environment variables from .env file
@@ -49,6 +44,11 @@ tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bn
 
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+
+# Logging configuration
+logger = logging.getLogger("splitters_module_logger")  # Child logger [for this module]
+# LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
+
 
 #util functions
 def get_current_utc_date_iso():

@@ -1,6 +1,6 @@
 {
   "parser": {
-    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\documentos\\boe\\dias\\2024\\04\\17",
+    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\documentos\\boe\\dias\\2024\\04\\15",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
@@ -28,7 +28,7 @@
   "storer": {
     "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset",
     "file_name":"train",
-    "file_format": "parquet"
+    "file_format": "csv"
   }
 }
 

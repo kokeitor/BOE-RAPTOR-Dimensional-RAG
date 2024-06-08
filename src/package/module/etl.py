@@ -1,32 +1,31 @@
 import os
 import json
-import re
 import uuid
-import torch
 import tiktoken
-import numpy as np
+import asyncio
 import pandas as pd
-import torch.nn as nn
-import matplotlib.pyplot as plt
+import logging
+import logging.config
+import logging.handlers
 from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
 from langchain.schema import Document
 from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
-from llama_parse import LlamaParse
-from llama_index.core import SimpleDirectoryReader
-import nest_asyncio  # only for Jupyter notebook
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_community.chat_models import ChatOllama
 from langchain_openai import ChatOpenAI
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
-
+import splitters
+import parsers
+import nlp
 
 
 # Load environment variables from .env file
 load_dotenv()
+
 
 # Set environment variables
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
@@ -38,6 +37,7 @@ os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
+
 # Tokenizers
 TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
 tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
@@ -45,36 +45,29 @@ TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
 tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
 tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
 
+
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-#util functions
+
+# Logging configuration
+logger = logging.getLogger("ETL_module_logger")  # Child logger [for this module]
+# LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
+
+def setup_logging() -> None:
+    """
+    Function to get root parent configuration logger.
+    Child logger will pass info, debugs... log objects to parent's root logger handlers
+    """
+    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("../../../config/loggers"), "etl.json")
+    with open(CONFIG_LOGGER_FILE) as f:
+        content = json.load(f)
+    logging.config.dictConfig(content)
+
+# util functions
 def get_current_utc_date_iso():
     # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
-
-
-class Parser:
-    def __init__(self, directory_path: str, file_type: str = ".pdf", recursive_parser: bool = True, result_type: str = "markdown", verbose: bool = True, api_key: str = os.getenv('LLAMA_CLOUD_API_KEY')):
-        self.path = directory_path
-        self.parser = LlamaParse(
-            api_key=api_key,
-            result_type=result_type,  # "markdown" and "text" are available
-            verbose=verbose
-        )
-
-        self.reader = SimpleDirectoryReader(
-            input_dir=self.path,
-            file_extractor={file_type: self.parser},
-            recursive=recursive_parser,  # recursively search in subdirectories
-            required_exts=[file_type]
-        )
-
-    async def invoke(self) -> List[Document]:
-        self.llama_parsed_docs = await self.reader.aload_data()  # returns List[llama doc objt]
-        self.lang_parsed_docs = [d.to_langchain_format() for d in self.llama_parsed_docs]
-        return self.lang_parsed_docs
-
 
 
 class Storer:
@@ -102,6 +95,7 @@ class Storer:
         elif file_format == "feather":
             df.to_feather(path)
         else:
+            logger.exception(f"ValueError : Unsupported file format: {file_format}")
             raise ValueError(f"Unsupported file format: {file_format}")
 
     def invoke(self, docs: List[Document]) -> None:
@@ -109,6 +103,7 @@ class Storer:
         # Ensure the output directory exists
         os.makedirs(os.path.dirname(self.store_path), exist_ok=True)
         name_format =  str(get_current_utc_date_iso()) + "_" + self.file_name +'.'+ self.file_format
+        
         df = self._document_to_dataframe(docs)
         full_path = os.path.join(self.store_path, name_format)
         self._store_dataframe(df,full_path, self.file_format)
@@ -153,6 +148,7 @@ class LabelGenerator:
 
         self.model = models.get(self.model_label, None)
         if self.model is None:
+            logger.exception("AttributeError : Model Name not correct")
             raise AttributeError("Model Name not correct")
 
         self.chain = self.prompt | self.model | JsonOutputParser()
@@ -160,47 +156,51 @@ class LabelGenerator:
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
         try :
-          enc = tiktoken.get_encoding("cl100k_base")
-          num_tokens = len(enc.encode(text))
-        except:
-          num_tokens = len(self.tokenizer(text)["input_ids"])
+            enc = tiktoken.get_encoding("cl100k_base")
+            num_tokens = len(enc.encode(text))
+        except Exception as e:
+            num_tokens = len(self.tokenizer(text)["input_ids"])
+            logger.exception(f"{e}")
         return num_tokens
 
     def invoke(self, docs: List[Document]) -> List[Document]:
-      docs_copy = docs.copy()
-      for i, doc in enumerate(docs_copy):
-          if i >= self.max_samples:
-              break
+        
+        docs_copy = docs.copy()
+        
+        for i, doc in enumerate(docs_copy):
+            if i >= self.max_samples:
+                logger.warning(f"Reached max samples : {self.max_samples} parameter while generating labels")
+                break
 
-          chunk_text = doc.page_content
-          chunk_tokens = self._get_tokens(text=chunk_text)
-          chunk_len = len(chunk_text)
+            chunk_text = doc.page_content
+            chunk_tokens = self._get_tokens(text=chunk_text)
+            chunk_len = len(chunk_text)
 
-          # Update metadata
-          doc.metadata['num_tokens'] = chunk_tokens
-          doc.metadata['num_caracteres'] = chunk_len
+            # Update metadata
+            doc.metadata['num_tokens'] = chunk_tokens
+            doc.metadata['num_caracteres'] = chunk_len
 
-          # Generate labels
-          generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
-          print("genreation :", generation)
+            # Generate labels
+            generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+            logger.info(f"Generating labels with model : {self.model_label} using tokenizer : {self.tokenizer}")
 
-          try:
-              doc.metadata['label_1_label'] = generation["Label_1"]["Label"]
-              doc.metadata['label_1_score'] = generation["Label_1"]["Score"]
-              doc.metadata['label_2_label'] = generation["Label_2"]["Label"]
-              doc.metadata['label_2_score'] = generation["Label_2"]["Score"]
-              doc.metadata['label_3_label'] = generation["Label_3"]["Label"]
-              doc.metadata['label_3_score'] = generation["Label_3"]["Score"]
-          except Exception as e:
-              print("LLM Error message: ", e)
-              doc.metadata['label_1_label'] = 'ERROR'
-              doc.metadata['label_1_score'] = 0
-              doc.metadata['label_2_label'] = 'ERROR'
-              doc.metadata['label_2_score'] = 0
-              doc.metadata['label_3_label'] = 'ERROR'
-              doc.metadata['label_3_score'] = 0
+            try:
+                doc.metadata['label_1_label'] = generation["Label_1"]["Label"]
+                doc.metadata['label_1_score'] = generation["Label_1"]["Score"]
+                doc.metadata['label_2_label'] = generation["Label_2"]["Label"]
+                doc.metadata['label_2_score'] = generation["Label_2"]["Score"]
+                doc.metadata['label_3_label'] = generation["Label_3"]["Label"]
+                doc.metadata['label_3_score'] = generation["Label_3"]["Score"]
+            except Exception as e:
+                doc.metadata['label_1_label'] = 'ERROR'
+                doc.metadata['label_1_score'] = 0
+                doc.metadata['label_2_label'] = 'ERROR'
+                doc.metadata['label_2_score'] = 0
+                doc.metadata['label_3_label'] = 'ERROR'
+                doc.metadata['label_3_score'] = 0
+                logger.exception(f"LLM Error message:  : {e}")
 
-      return docs
+        return docs
 
 
 class Pipeline:
@@ -220,9 +220,9 @@ class Pipeline:
             config = json.load(file)
         return config
 
-    def _create_parser(self) -> Parser:
+    def _create_parser(self) -> parsers.Parser:
         parser_config = self.config.get('parser', {})
-        return Parser(
+        return parsers.Parser(
             directory_path=parser_config.get('directory_path', ''),
             file_type=parser_config.get('file_type', '.pdf'),
             recursive_parser=parser_config.get('recursive_parser', True),
@@ -231,12 +231,12 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self) -> Processor:
-        return Processor()
+    def _create_processor(self) -> nlp.Processor:
+        return nlp.Processor()
 
-    def _create_splitter(self) -> Splitter:
+    def _create_splitter(self) -> splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
-        return Splitter(
+        return splitters.Splitter(
             chunk_size=splitter_config.get('chunk_size', 200),
             embedding_model=self._get_embd_model(embd_model=splitter_config.get('embedding_model', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')),
             tokenizer_model=self._get_tokenizer(tokenizer_model=splitter_config.get('tokenizer_model', 'LLAMA3')),
@@ -290,15 +290,14 @@ class Pipeline:
         self.storer.invoke(labeled_docs)
         return labeled_docs
     
+
+def main() -> None:
     
+    setup_logging()
 
-if __name__ == '__main__':
-    import asyncio
-
-    pipeline = Pipeline(config_path='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\config\\etl_config.json')
+    ETL_CONFIG_PATH = os.path.join(os.path.abspath("../../../config/etl"),"etl.json")
+    pipeline = Pipeline(config_path=ETL_CONFIG_PATH)
     result = asyncio.run(pipeline.run())
-
-
 
     text = """ En este apartado se valorará, en su caso, el grado reconocido como personal
     funcionario de carrera en otras Administraciones Públicas o en la Sociedad Estatal de
@@ -342,3 +341,7 @@ if __name__ == '__main__':
     result = pipeline.run()
     
     """
+    
+
+if __name__ == '__main__':
+    main()
