@@ -213,7 +213,6 @@ class Pipeline:
         self.config_path = config_path
         self.config = self._parse_config()
         self.parser = self._create_parser()
-        self.processor = self._create_processor()
         self.splitter = self._create_splitter()
         self.label_generator = self._create_label_generator()
         self.storer = self._create_storer()
@@ -236,8 +235,8 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self) -> nlp.BoeProcessor:
-        return nlp.BoeProcessor()
+    def _create_processor(self,docs) -> nlp.BoeProcessor:
+        return nlp.BoeProcessor(docs=docs)
 
     def _create_splitter(self) -> splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
@@ -288,8 +287,9 @@ class Pipeline:
         return embd_available.get(embd_model, HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"))
 
     async def run(self) -> List[Document]:
-        parsed_docs = await self.parser.invoke()
-        processed_docs = self.processor.invoke(parsed_docs)
+        self.parsed_docs = await self.parser.invoke()
+        self.processor = self._create_processor(task = "classification", docs=self.parsed_docs)
+        processed_docs = self.processor.invoke()
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
