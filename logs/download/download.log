@@ -1,0 +1,42 @@
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:15+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:16+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7298.pdf HTTP/1.1" 200 208985
+[INFO|download|L146] 2024-06-08T12:47:16+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7298.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:16+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:16+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7299.pdf HTTP/1.1" 200 191000
+[INFO|download|L146] 2024-06-08T12:47:16+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7299.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:16+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:16+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7300.pdf HTTP/1.1" 200 191201
+[INFO|download|L146] 2024-06-08T12:47:16+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7300.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:16+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:17+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7301.pdf HTTP/1.1" 200 198465
+[INFO|download|L146] 2024-06-08T12:47:17+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7301.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:17+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:17+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7302.pdf HTTP/1.1" 200 199420
+[INFO|download|L146] 2024-06-08T12:47:17+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7302.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:17+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:17+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7303.pdf HTTP/1.1" 200 199091
+[INFO|download|L146] 2024-06-08T12:47:17+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7303.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:17+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:18+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7304.pdf HTTP/1.1" 200 200538
+[INFO|download|L146] 2024-06-08T12:47:18+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7304.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:18+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:18+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7305.pdf HTTP/1.1" 200 200576
+[INFO|download|L146] 2024-06-08T12:47:18+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7305.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:18+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:18+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7306.pdf HTTP/1.1" 200 199396
+[INFO|download|L146] 2024-06-08T12:47:18+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7306.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:18+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:19+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7307.pdf HTTP/1.1" 200 198881
+[INFO|download|L146] 2024-06-08T12:47:19+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7307.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:19+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:19+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7308.pdf HTTP/1.1" 200 190908
+[INFO|download|L146] 2024-06-08T12:47:19+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7308.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:19+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:20+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7309.pdf HTTP/1.1" 200 215350
+[INFO|download|L146] 2024-06-08T12:47:20+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7309.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:20+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:20+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7310.pdf HTTP/1.1" 200 193521
+[INFO|download|L146] 2024-06-08T12:47:20+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7310.pdf
+[DEBUG|connectionpool|L1052] 2024-06-08T12:47:20+0200: Starting new HTTPS connection (1): boe.es:443
+[DEBUG|connectionpool|L546] 2024-06-08T12:47:20+0200: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7311.pdf HTTP/1.1" 200 206648
+[INFO|download|L146] 2024-06-08T12:47:20+0200: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7311.pdf
