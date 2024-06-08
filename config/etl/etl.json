@@ -1,6 +1,6 @@
 {
   "parser": {
-    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\documentos\\boe\\dias\\2024\\04\\15",
+    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\documentos\\boe\\dias\\2024\\04\\15",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
@@ -8,7 +8,7 @@
   },
   "splitter": {
     "chunk_size": 200,
-    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures",
+    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures",
     "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
     "threshold": 75,
@@ -26,7 +26,7 @@
     "max_samples": 10
   },
   "storer": {
-    "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset",
+    "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boedataset",
     "file_name":"train",
     "file_format": "csv"
   }

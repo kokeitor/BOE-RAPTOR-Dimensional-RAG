@@ -21,6 +21,10 @@ from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 import splitters
 import parsers
 import nlp
+import warnings
+
+# Suppress the specific FutureWarning
+warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
 
 
 # Load environment variables from .env file
@@ -60,6 +64,7 @@ def setup_logging() -> None:
     Child logger will pass info, debugs... log objects to parent's root logger handlers
     """
     CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("../../../config/loggers"), "etl.json")
+    
     with open(CONFIG_LOGGER_FILE) as f:
         content = json.load(f)
     logging.config.dictConfig(content)
@@ -231,8 +236,8 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self) -> nlp.Processor:
-        return nlp.Processor()
+    def _create_processor(self) -> nlp.BoeProcessor:
+        return nlp.BoeProcessor()
 
     def _create_splitter(self) -> splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
@@ -246,7 +251,7 @@ class Pipeline:
             buffer_size=splitter_config.get('buffer_size', 3),
             max_big_chunks=splitter_config.get('max_big_chunks', 4),
             splitter_mode=splitter_config.get('splitter_mode', 'CUSTOM'),
-            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures')
+            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures')
         )
 
     def _create_label_generator(self) -> LabelGenerator:
@@ -261,7 +266,7 @@ class Pipeline:
     def _create_storer(self) -> Storer:
         storer_config = self.config.get('storer', {})
         return Storer(
-            store_path=storer_config.get('store_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\boedataset'),
+            store_path=storer_config.get('store_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boedataset'),
             file_name=storer_config.get('file_name', 'data'),
             file_format=storer_config.get('file_format', 'csv')
         )
