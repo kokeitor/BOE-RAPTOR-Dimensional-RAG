@@ -2,7 +2,7 @@ from langchain.prompts import PromptTemplate
 from langchain_community.chat_models import ChatOllama
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
 from langchain_community.embeddings import GPT4AllEmbeddings 
-from langchain.embeddings import HuggingFaceEmbeddings 
+from langchain_huggingface import HuggingFaceEmbeddings
 
 
 ### LLM MODElS

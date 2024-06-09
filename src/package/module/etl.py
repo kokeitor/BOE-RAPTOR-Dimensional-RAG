@@ -50,8 +50,6 @@ TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
 tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
 TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
 tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
-tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
-
 
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
@@ -68,7 +66,7 @@ def setup_logging() -> None:
     """
     CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("../../../config/loggers"), "etl.json")
     
-    with open(CONFIG_LOGGER_FILE) as f:
+    with open(CONFIG_LOGGER_FILE, encoding='utf-8') as f:
         content = json.load(f)
     logging.config.dictConfig(content)
 
@@ -223,7 +221,7 @@ class Pipeline:
     def _parse_config(self) -> Dict:
         if not os.path.exists(self.config_path):
             raise FileNotFoundError(f"Config file not found at {self.config_path}")
-        with open(self.config_path, 'r') as file:
+        with open(self.config_path, encoding='utf-8') as file:
             config = json.load(file)
         return config
 
@@ -324,7 +322,8 @@ class Pipeline:
             buffer_size=splitter_config.get('buffer_size', 3),
             max_big_chunks=splitter_config.get('max_big_chunks', 4),
             splitter_mode=splitter_config.get('splitter_mode', 'CUSTOM'),
-            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures')
+            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures'),
+            min_initial_chunk_len=splitter_config.get('min_initial_chunk_len',50)
         )
 
     def _create_label_generator(self) -> LabelGenerator:
@@ -373,11 +372,17 @@ class Pipeline:
         plt.title(f"Most frequent {num_tokens} tokens/terms in corpus using bow raw method")
         plt.grid()
         plt.savefig(path, format='png')
+        plt.close()
         
     def run(self) -> List[Document]:
         self.parsed_docs = self.parser.invoke()
         self.processor = self._create_processor(docs=self.parsed_docs)
         processed_docs = self.processor.invoke()
+        logger.info(f"Number of processed_docs {len(processed_docs)}")
+        try:
+            logger.info(f"Type of processed_docs[0] {type(processed_docs[0])}")
+        except:
+            pass
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)

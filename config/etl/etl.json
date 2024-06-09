@@ -1,51 +1,52 @@
 {
   "parser": {
-    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\documentos\\boe\\dias\\2024\\04\\15",
+    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
     "verbose": true
   },
   "splitter": {
-    "chunk_size": 200,
-    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\splitter",
-    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
-    "threshold": 75,
-    "max_tokens": 500,
-    "verbose": 1,
-    "buffer_size": 3,
-    "max_big_chunks": 4,
-    "splitter_mode": "CUSTOM"
-
+              "chunk_size": 200,
+              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\splitter",
+              "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+              "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
+              "threshold": 75,
+              "max_tokens": 500,
+              "verbose": 1,
+              "buffer_size": 3,
+              "max_big_chunks": 10,
+              "splitter_mode": "CUSTOM",
+              "min_initial_chunk_len":50
   },
   "TextPreprocess": {
                       "spc_caracters": [
                                           "!", "@", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
                                           "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".",
-                                          "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__"
+                                          "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__","BOLETÍN", "OFICIAL",
+                                           "DEL", "ESTADO", "CONSEJO", "GENERAL", "DEL", "PODER", "JUDICIAL", "cve", "Núm",
+                                            "ISSN:", "Pág.", "Sec.", "### Primero.", "### Segundo."
                                       ],
                       "task_name": "classification",
                       "methods": {
                                   "del_stopwords": {
-                                                    "apply":true,
+                                                    "apply":false,
                                                       "lang": "Spanish"
                                                   },
-                                  "del_urls": {"apply":true},
-                                  "del_html": {"apply":true},
-                                  "del_emojis": {"apply":true},
-                                  "del_special": {"apply":true},
-                                  "del_digits": {"apply":true},
-                                  "del_chinese_japanese": {"apply":true},
-                                  "del_extra_spaces": {"apply":true},
-                                  "get_lower": {"apply":true},
-                                  "get_alfanumeric": {"apply":true},
-                                  "stem": {"apply":true},
-                                  "lemmatize": {"apply":true},
+                                  "del_urls": {"apply":false},
+                                  "del_html": {"apply":false},
+                                  "del_emojis": {"apply":false},
+                                  "del_special": {"apply":false},
+                                  "del_digits": {"apply":false},
+                                  "del_chinese_japanese": {"apply":false},
+                                  "del_extra_spaces": {"apply":false},
+                                  "get_lower": {"apply":false},
+                                  "get_alfanumeric": {"apply":false},
+                                  "stem": {"apply":false},
+                                  "lemmatize": {"apply":false},
                                   "custom_del": {
                                                   "apply":true,
-                                                  "text_field_name": "str",
-                                                  "delete": true,
+                                                  "delete": false,
                                                   "plot": true,
                                                   "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text"
                                                 },

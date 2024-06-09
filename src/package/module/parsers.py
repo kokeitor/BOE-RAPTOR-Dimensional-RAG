@@ -6,6 +6,7 @@ from typing import Dict, List, Union, Optional
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.embeddings import GPT4AllEmbeddings
+from langchain_community.chat_message_histories import ChatMessageHistory
 from llama_parse import LlamaParse
 from llama_index.core import SimpleDirectoryReader
 from datetime import datetime, timezone
@@ -33,7 +34,6 @@ TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
 tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
 TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
 tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
-tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bne")
 
 
 # Embedding model

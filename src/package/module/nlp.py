@@ -18,7 +18,9 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from langchain_community.chat_message_histories import ChatMessageHistory
 import logging
+from copy import deepcopy
 
 # Load environment variables from .env file
 load_dotenv()
@@ -306,43 +308,52 @@ class BoeProcessor(TextPreprocess):
     """BOE PREPROCESS DOC AND ADD METADATA TO EACH DOC"""
 
     def invoke(self, docs: Optional[List[Document]] = None) -> List[Document]:
-        new_metadata = {}
-        titulos = {}
         new_docs = []
         
         if docs is None:
             logger.info("Transformando en 'Document' los textos BOE preprocesados")
-            self.processed_docs = self.reconstruct_docs(corpus=self.corpus, metadata=self.metadata)
+            self.processed_docs = self.reconstruct_docs(corpus=self.corpus, metadata_list=self.metadata)
         else:
             logger.warning(f"Los documentos BOE en {self} han sido cambiados en el metodo invoke")
-            self.processed_docs = docs.copy()
+            self.processed_docs = deepcopy(docs)
             
         logger.info(f"NUMERO DE DOCS A ANALIZAR : {len(self.processed_docs)}")
-        for _, d in enumerate(self.processed_docs):
-            new_metadata["fecha_publicacion_boe"], new_doc = self._get_date_creation_doc(doc=d)
-            titulos, new_doc = self._clean_doc(doc=new_doc)
-            for k, t in titulos.items():
-                new_metadata[k] = t
+        for i, doc in enumerate(self.processed_docs):
+            new_metadata = {}
+            new_metadata["fecha_publicacion_boe"], doc = self._get_date_creation_doc(doc=doc)
+            doc = self.get_del_patrones(doc=doc)
+            # titles, doc = self._clean_doc(doc=doc)
+            # new_metadata.update(titles)
             new_metadata["pdf_id"] = self._get_id()  # Adición de identificador único del pdf del que se extrajo dicho doc
-            new_docs.append(self._put_metadata(doc=new_doc, new_metadata=new_metadata))
-        return new_docs
+            new_docs.append(self._put_metadata(doc=doc, new_metadata=new_metadata))
+            logger.info(f"Update metadata of doc {i} :  {doc.metadata}")
+            logger.info(f"Char len of doc {i} : {len(doc.page_content)}")
+            logger.info(f"Page_conetnt of doc {i} : {len(doc.page_content)}")
+            
+        logger.info(f"Number of docs after invoke BoeProcessor : {len(new_docs)}")
+        
+        # check to avoid empty docs returned
+        flag = True if (isinstance(new_docs,list) or isinstance(new_docs,Document)) and len(new_docs) > 0 else False
+        if flag:
+            return new_docs
+        else:
+            logger.exception("After preprocessing -> new docs list empty")
+            raise ValueError("After preprocessing -> new docs lisr empty")
 
-    def reconstruct_docs(self, corpus: List[str], metadata: List[str]) -> List[Document]:
+    def reconstruct_docs(self, corpus: List[str], metadata_list: List[str]) -> List[Document]:
         docs = []
-        i = 0
-        for text, metadata in zip(corpus, metadata):
-            i += 1
-            logger.info(f"Page_content len for doc {i}: {len(text)}")
-            logger.info(f"Page_content 100 first characters for doc {i}: {text[0:99]}")
-            logger.info(f"Metadata for doc {i}: {metadata}")
+        for i, (text, metadata) in enumerate(zip(corpus, metadata_list)):
+            logger.debug(f"Page_content len for doc {i+1} : {len(text)}")
+            logger.debug(f"Page_content 100 first characters for doc {i+1} : {text[0:99]}")
+            logger.debug(f"Metadata for doc {i+1}: {metadata}")
             docs.append(Document(page_content=text, metadata=metadata))
         return docs
-            
-    def _get_id(self):
+
+    def _get_id(self) -> str:
         """Generate a unique random id and convert it to str"""
         return str(uuid.uuid4())
 
-    def _clean_doc(self, doc: Document) -> Tuple[Dict, Document]:
+    def _clean_doc(self, doc: Document) -> Tuple[Dict[str, str], Document]:
         """
         Clean the document by removing specific patterns and extracting titles.
         
@@ -350,9 +361,9 @@ class BoeProcessor(TextPreprocess):
             doc (Document): The document to be cleaned.
 
         Returns:
-            Tuple[Dict, Document]: A dictionary of titles and the cleaned document.
+            Tuple[Dict[str, str], Document]: A dictionary of titles and the cleaned document.
         """
-        doc_clean = doc.copy()
+        doc_clean = deepcopy(doc)
         doc_text = doc_clean.page_content
 
         titles = self._extract_titles(doc_text)
@@ -361,7 +372,7 @@ class BoeProcessor(TextPreprocess):
         doc_clean.page_content = clean_text
         return titles, doc_clean
 
-    def _extract_titles(self, text: str) -> Dict:
+    def _extract_titles(self, text: str) -> Dict[str, str]:
         """
         Extract titles from the document text using predefined patterns.
         
@@ -369,7 +380,7 @@ class BoeProcessor(TextPreprocess):
             text (str): The document text to extract titles from.
 
         Returns:
-            Dict: A dictionary of extracted titles.
+            Dict[str, str]: A dictionary of extracted titles.
         """
         title_1 = r'^##(?!\#).*$'
         title_2 = r'^###(?!\#).*$'
@@ -393,7 +404,7 @@ class BoeProcessor(TextPreprocess):
         titles_2 = self._clean_titles(titles_2, patterns_to_eliminate_titles)
         titles_3 = self._clean_titles(titles_3, patterns_to_eliminate_titles)
 
-        return {f"titulo_{i}": t for i, t in enumerate([titles_1, titles_2, titles_3]) if t}
+        return {f"titulo_{i}": t for i, t in enumerate(titles_1 + titles_2 + titles_3) if t}
 
     def _clean_titles(self, titles: List[str], patterns: List[str]) -> List[str]:
         """
@@ -411,17 +422,58 @@ class BoeProcessor(TextPreprocess):
             titles = [t for t in titles if t]
         return titles
 
-    def _remove_patterns(self, text: str) -> str:
+    def get_del_patrones(self, doc : Document) -> Tuple[str,dict]:
         """
-        Remove specific patterns from the document text.
-        
+        ...
         Args:
             text (str): The document text to clean.
 
         Returns:
             str: The cleaned text.
         """
-        patterns_to_eliminate = [
+    
+        # text
+        text = doc.page_content
+        
+        # Dictionary to store detected patterns
+        metadata = {
+            'orden': [],
+            'real_decreto': [],
+            'ministerios': []
+        }
+        
+        # Define patterns
+        order_pattern = r'Orden [A-Z]+/\d{3,4}/\d{4}'
+        resolution_pattern = r'Real Decreto \d+/\d{4}'
+        date_pattern = r'\d{1,2} de [a-zA-Z]+ de \d{4}'
+        ministerial_pattern = r'El Ministro de [\w\s,]+, [A-ZÁÉÍÓÚÑ ]+'
+        
+        # Store and remove order numbers
+        orders = re.findall(order_pattern, text)
+        metadata['orden'].extend(orders)
+        # text = re.sub(order_pattern, '', text)
+        
+        # Store and remove resolution numbers
+        resolutions = re.findall(resolution_pattern, text)
+        metadata['real_decreto'].extend(resolutions)
+        # text = re.sub(resolution_pattern, '', text)
+        
+        # Store and remove dates
+        dates = re.findall(date_pattern, text)
+        #metadata['fecha'].extend(dates)
+        text = re.sub(date_pattern, '', text)
+        
+        # Store and remove ministerial references
+        ministers = re.findall(ministerial_pattern, text)
+        metadata['ministerios'].extend(ministers)
+        #text = re.sub(ministerial_pattern, '', text)
+        
+        # Remove page headers and footers
+        text = re.sub(r'BOLETÍN OFICIAL DEL ESTADO', '', text)
+        text = re.sub(r'Núm. \d+ [a-zA-Z]+ \d{1,2} de [a-zA-Z]+ de \d{4} Sec. [I|II]\.[A-Z]\. Pág\. \d+', '', text)
+        
+        # Remove URLs and references to online resources
+        patterns2del = [
             r'^##(?!\#).*$',
             r'^###(?!\#).*$',
             r'^####(?!\#).*$',
@@ -438,23 +490,21 @@ class BoeProcessor(TextPreprocess):
             r'## Núm. \d+ [A-Za-z]+ \d+ de [A-Za-z]+ de \d{4} Sec. [A-Z]+\. Pág\. \d+', 
             r'BOLETÍN OFICIAL DEL ESTADO',
             r'Lunes \d+ de abril de \d{4}', 
-            r'ISSN: \d{4}-\d{3}[XD]'
+            r'ISSN: \d{4}-\d{3}[XD]',
+            r'cv\se:\sB\sO\sE-\sA-\s\d{4}-\d+\sVe\srif\sic\sab\sle\se\sn\sht\stp\ss://\sw\sw\w\.boe\.es',
+            r'D\. L\.: M-\d+/\d{4} - ISSN: \d{4}-\d{4}'
         ]
+        
+        for p in patterns2del: 
+            text = re.sub(r'https://www\.boe\.es', '', text)
+        
+        doc.page_content = text
+        new_doc = self._put_metadata(doc=doc, new_metadata=metadata)
+        
+        return new_doc
 
-        clean_text = text
-        for pattern in patterns_to_eliminate:
-            clean_text = re.sub(pattern, '', clean_text, flags=re.MULTILINE).strip()
-
-        erase_words = ['BOLETÍN', 'OFICIAL', 'DEL', 'ESTADO', 'CONSEJO',
-                       'GENERAL', 'DEL', 'PODER', 'JUDICIAL', 'cve', 'Núm', 'ISSN:', 'Pág.', 'Sec.', '### Primero.', '### Segundo.']
-        words = clean_text.split(" ")
-        shortlisted_words = [w for w in words if w not in erase_words]
-        clean_text = ' '.join(shortlisted_words)
-
-        return clean_text
-
-    def _get_date_creation_doc(self, doc: Document):
-        doc_copy = doc.copy()
+    def _get_date_creation_doc(self, doc: Document) -> Tuple[str, Document]:
+        doc_copy = deepcopy(doc)
         logger.info(f"file_path: {doc_copy.metadata['file_path']}")
         if '/' in doc_copy.metadata["file_path"]:
             dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
@@ -467,10 +517,10 @@ class BoeProcessor(TextPreprocess):
         doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
         return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
 
-    def _put_metadata(self, doc: Document, new_metadata: Dict) -> None:
-        new_doc = doc.copy()
-        for key in new_metadata.keys():
-            new_doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
+    def _put_metadata(self, doc: Document, new_metadata: Dict[str, str]) -> Document:
+        new_doc = deepcopy(doc)
+        for key, value in new_metadata.items():
+            new_doc.metadata[key] = value
         return new_doc
 
 

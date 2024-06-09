@@ -10,13 +10,14 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, ClassVar
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from datetime import datetime, timezone
+from langchain_community.chat_message_histories import ChatMessageHistory
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 import logging
@@ -58,6 +59,7 @@ def get_current_utc_date_iso():
 
 
 class CustomSemanticSplitter:
+    MIN_INITIAL_LONG_CHUNKS : int = 5
     def __init__(
                  self, 
                  embedding_model = EMBEDDING_MODEL, 
@@ -67,7 +69,8 @@ class CustomSemanticSplitter:
                  verbose: int = 0, 
                  max_tokens: int = 500, 
                  max_big_chunks: int = 3,
-                 storage_path : str = "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures"):
+                 storage_path : str = "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures",
+                 min_initial_chunk_len : int = 50):
 
         self.buffer_size = buffer_size
         self.tokenizer = tokenizer
@@ -78,17 +81,33 @@ class CustomSemanticSplitter:
         self.threshold = threshold
         self.namespace_id = uuid.NAMESPACE_DNS
         self.storage_path = storage_path
+        self.min_initial_chunk_len = min_initial_chunk_len
 
     def _prepare_texts(self, doc: Document) -> List[Dict]:
+        
         text = doc.page_content
         self._metadata = doc.metadata.copy()
-        # Splitting the text on '.', '?', and '!'
-        sentence_list = re.split(r'(?<=[.?!])\s+', text)
-        # Split on \n
-        #sentence_list = re.split(r'\n', text)
-        # Split on \n\n
-        #sentence_list = re.split(r'\n\n', text)
-        return [{'sentence': d, 'index': i} for i, d in enumerate(sentence_list)]
+        
+        logger.info(f"Texto para splitear : {text}")
+        
+        # Iterate splitter until we get initial len chunks reach a minimum size
+        # split patterns the text on : Level 1 on '.', '?', and '!' - Level 2 on \n - Level 3 on \n\n
+        split_patterns = [r'(?<=[.?!])\s+',r'\n',r'\n\n']
+        for split_level,s_pattern in enumerate(split_patterns):
+            sentence_list = re.split(s_pattern, text)
+            short_sentences = 0
+            for sentence in sentence_list:
+                if len(sentence) < self.min_initial_chunk_len:
+                    short_sentences +=1
+            if short_sentences > CustomSemanticSplitter.MIN_INITIAL_LONG_CHUNKS:
+                lista = []
+                for i,d in enumerate(sentence_list):
+                    logger.info(f"Level of split pattern used {split_level}")
+                    logger.info(f"CHUNK {i} -> {d}")
+                    lista.append({'sentence': d, 'index': i} )
+                # return [{'sentence': d, 'index': i} for i, d in enumerate(sentence_list)]
+                return lista
+        
 
     def _get_id(self, text: str) -> str:
         return str(uuid.uuid5(self.namespace_id, text))
@@ -116,8 +135,8 @@ class CustomSemanticSplitter:
             sentences[i]['combined_sentence'] = combined_sentence
 
             num_tokens = self._get_tokens(text=combined_sentence)
-            if self.verbose == 2:
-                print('combined_sentence :', i, '// num_tokens : ', num_tokens)
+            
+            logger.info(f'Combined sentence : index : {i} // tokens : {num_tokens} // text : {combined_sentence}' )
             if num_tokens > self.max_tokens:
                 num_sentences_exceed += 1
 
@@ -126,9 +145,11 @@ class CustomSemanticSplitter:
                 self.buffer_size -= 1
                 return self._combine_sentences(sentences_to_combine, buffer_size=self.buffer_size)
             else:
-                raise ValueError(f"Buffer size cannot be reduced below 1")
-
+                logger.critical(f"Min buffer size : 1")
+                return sentences
+            
         return sentences
+
 
     def _get_embeddings(self, sentences_to_embd: List[str]) -> List[float]:
         return self.embedding_model.embed_documents(sentences_to_embd)
@@ -139,13 +160,12 @@ class CustomSemanticSplitter:
         similarity_executer = metrics.get(similarity, None)
         similarity = []
         if similarity_executer is not None:
-            for i in range(0, embedding_tensors.shape[0]):
-                if i < embedding_tensors.shape[0] - 1:
-                    t1 = embedding_tensors[i, :]
-                    t2 = embedding_tensors[i + 1, :]
-                    similarity.append(1.0 - similarity_executer(t1, t2).item())
-                else:
-                    similarity.append(similarity[i - 1])
+            for i in range(embedding_tensors.shape[0] - 1):
+                t1 = embedding_tensors[i, :]
+                t2 = embedding_tensors[i + 1, :]
+                similarity.append(1.0 - similarity_executer(t1, t2).item())
+            if embedding_tensors.shape[0] > 1:
+                similarity.append(similarity[-1])  # Append the last similarity value to avoid out of range error
         return similarity
 
     def _get_chunks(self, sentences: List[dict], threshold: int = 75) -> List[Dict]:
@@ -257,6 +277,7 @@ class Splitter:
                  verbose: int = 0,
                  buffer_size: int = 3,
                  max_big_chunks: int = 4,
+                 min_initial_chunk_len : int = 50,
                  splitter_mode: str = 'CUSTOM'):
         self.embedding_model = embedding_model
         self.chunk_size = chunk_size
@@ -268,6 +289,7 @@ class Splitter:
         self.max_big_chunks = max_big_chunks
         self.splitter_mode = splitter_mode
         self.storage_path = storage_path
+        self.min_initial_chunk_len = min_initial_chunk_len
         self.splitter = self._init_splitter()
 
     def _init_splitter(self):
@@ -295,7 +317,8 @@ class Splitter:
                 tokenizer=self.tokenizer_model,
                 max_tokens=self.max_tokens,
                 max_big_chunks=self.max_big_chunks,
-                storage_path=self.storage_path
+                storage_path=self.storage_path,
+                min_initial_chunk_len=self.min_initial_chunk_len
             )
         }
         return splitter_modes.get(self.splitter_mode)

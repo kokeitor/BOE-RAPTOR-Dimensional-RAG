@@ -1,801 +1,213 @@
-[DEBUG|_trace|L85] 2024-06-09 13:48:12: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:12: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:12 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'd9a87a19-4188-4140-a4ff-48e00478c893'), (b'x-correlation-id', b'6ef393d0-7b8f-49ed-ab25-0aae4ba0b783'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:12: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-7739-4d44-9a7a-ebe44f747d86 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:12: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:13 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'6020'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3230b3cc-1e84-4244-ab2b-a5c3dcd1dd83'), (b'x-correlation-id', b'8bf3afdf-3ec3-413b-b7af-b778d8eccac3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:13: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-7739-4d44-9a7a-ebe44f747d86/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:13: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:13: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:13: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:13: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:14: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:14: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7118090>
-[DEBUG|_trace|L85] 2024-06-09 13:48:14: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBD6D0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B6A2B210>
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:15: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:16 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'049343da-0b7e-4079-8eb4-bf1bd80128ba'), (b'x-correlation-id', b'8ec10562-abf0-43c6-a822-9c23efba94be'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:16: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:16: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:17: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:17: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF5350>
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBD910> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B75E98D0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:19: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:19 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'0f41d6d4-59f2-4f2c-849c-9404c19bb81d'), (b'x-correlation-id', b'8bbca8ee-bad4-4318-a1d9-06440f06631b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:20: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-64de-4726-9e5f-b1065207b0b7 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:20 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'4083'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3cea0e5f-b0e3-473b-9546-b2079627287f'), (b'x-correlation-id', b'f11b5049-988c-4799-8bfd-9c294a5688c3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:20: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-64de-4726-9e5f-b1065207b0b7/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:20: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:20: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:20: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:20: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8A121CB50>
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE720> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF6250>
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:21: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:22: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:22: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:22 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'b3952ecb-0784-431a-be8e-d416846f7a5a'), (b'x-correlation-id', b'b3259c6c-7fc2-4181-bc23-b82964eaa68b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:23: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:23: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:24: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:24: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7072FD0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE4E0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7072D50>
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:25: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'e91eeefc-1275-46b3-99ed-5b8645181613'), (b'x-correlation-id', b'a232ff0a-b4cb-4ff5-ad2d-0c168809ed63'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:26: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-f66b-4e31-aeae-a40f2825bd68 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:26 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'4083'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6115df78-6eb6-4ffb-9eb9-76557ce01bf5'), (b'x-correlation-id', b'ed7c822d-36d7-4b27-9131-fdff88c18412'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:26: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-f66b-4e31-aeae-a40f2825bd68/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:26: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:26: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:26: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:26: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7072790>
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE7B0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B63446D0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:27: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:28: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:28: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:29 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'd07bfb0b-1b6c-416f-98a5-86cd30aab9fe'), (b'x-correlation-id', b'ccd43ae9-24fd-475b-9b8c-63bc818e0363'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:29: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:29: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:30: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:30: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B63D44D0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBF650> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0AA1650>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:31 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'baea7dff-e222-40e8-a471-6871b076a5b2'), (b'x-correlation-id', b'673e17aa-9e07-4341-887b-237a3e69ed25'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:31: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-e8a8-4253-8439-43a232a15a82 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:31: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:31 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'233734'), (b'Connection', b'keep-alive'), (b'x-session-id', b'0b3d4f3f-600c-4734-a3e6-186745733771'), (b'x-correlation-id', b'a172fdff-151e-4e49-aff6-02b9e22915af'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:32: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-e8a8-4253-8439-43a232a15a82/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:32: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:32: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:32: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:32: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B63D4E90>
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE570> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7071790>
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:33: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:34 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3a47db68-05cf-4589-b9c2-c4a148d94a0b'), (b'x-correlation-id', b'513e7a72-1348-4049-9f0a-5696536298cd'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:35: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:35: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:36: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:36: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:38: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:38: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7073910>
-[DEBUG|_trace|L85] 2024-06-09 13:48:38: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE960> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0CAB950>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:38 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6713d7a8-3a70-4917-8873-b23e79aa350e'), (b'x-correlation-id', b'e164df64-e0ca-4ce5-b4f8-ace24bb9c352'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:39: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-d0a2-4321-a6c4-4d59d3a3078d "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:39 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'8463'), (b'Connection', b'keep-alive'), (b'x-session-id', b'33661b90-b8db-4d34-a0da-bb0ac01eb6a3'), (b'x-correlation-id', b'67dae25c-989a-4385-a689-9ee27bb9eed2'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:39: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-d0a2-4321-a6c4-4d59d3a3078d/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:39: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:39: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:39: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:39: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B6346790>
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBF770> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B63D49D0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:40: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:41 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6c24a078-61a0-4c39-80a6-e4d18120eac4'), (b'x-correlation-id', b'0cb9141d-eda6-46b6-9bb5-aa33380f0804'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:42: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:42: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:43: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:43: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B8D95E90>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBE600> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF4ED0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:44 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'53ddd594-09ea-422b-a4c5-592dc37640cd'), (b'x-correlation-id', b'7f196d86-2979-4e9b-9490-d82ff76d7124'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:44: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5410-4fa1-8614-169939e1d159 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:44: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:44 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'12669'), (b'Connection', b'keep-alive'), (b'x-session-id', b'377bcb1b-39ec-4592-add8-2cf9300b1b4c'), (b'x-correlation-id', b'5da17f76-d427-4909-8cdb-209e6e51331b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:45: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5410-4fa1-8614-169939e1d159/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:45: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:45: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:45: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:45: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E89491A350>
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8BC6400E0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B7072A50>
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:46: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:47 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3dcc3db2-d91d-4c8d-b25e-a742a498cf08'), (b'x-correlation-id', b'7ae82802-ed36-42c6-abfc-e31ea2f02abe'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:47: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:47: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:48: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:48: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF4B10>
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8BC640320> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF4BD0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:49: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:49 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'0e96a9c2-dfd0-4d7b-b94b-429dcf958aee'), (b'x-correlation-id', b'b8594b61-c109-4622-9242-788031475fc3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:50: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-4b2f-435f-be93-46d698bd447a "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:50 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'1341'), (b'Connection', b'keep-alive'), (b'x-session-id', b'87c476f9-f111-4a8b-ae2e-a23017c10093'), (b'x-correlation-id', b'4b1cbdba-0542-401a-8f92-d1ad7e226b48'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:50: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-4b2f-435f-be93-46d698bd447a/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:50: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:50: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:50: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:50: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0C6AA90>
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBFDA0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8CCBF63D0>
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:51: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:53 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'5021dd36-532b-4a41-b9d2-6f972ead5d31'), (b'x-correlation-id', b'ffff8aac-bb10-4456-ab29-f5fa9518b25d'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:53: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:53: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:48:54: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:54: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0AA2D10>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBD910> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0AA0E90>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:55 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'1962abfb-6757-4251-86b3-5f15275c50fd'), (b'x-correlation-id', b'82b0406c-8797-4687-9701-f592f3464833'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:55: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-c31f-42d7-844d-af90058b9a9d "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:55: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:55 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'1464'), (b'Connection', b'keep-alive'), (b'x-session-id', b'68312d6c-b140-49c9-8c2d-f1b6fd2d96a6'), (b'x-correlation-id', b'48c4998d-c0a2-4b72-a14a-e74f1bdab9be'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:56: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-c31f-42d7-844d-af90058b9a9d/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:48:56: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:48:56: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:48:56: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8A1205710>
-[DEBUG|_trace|L85] 2024-06-09 13:48:56: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8CCBBFAD0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B8D96E50>
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:57: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:48:59 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'944ce78c-2990-45bf-b290-83bb31510081'), (b'x-correlation-id', b'db3ca19e-48e5-4f45-baa7-a66429eb11fb'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:48:59: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:48:59: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:49:00: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:49:00: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8B70730D0>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001E8BC6407A0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001E8E0BFDE50>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:49:01 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3d876da4-8800-4d81-8795-73e353ad8d2d'), (b'x-correlation-id', b'2fd5dbf1-b9bd-4bcd-a7d3-3f5c5d773bc5'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:49:01: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-eda1-4415-aecf-aed6d16b2022 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:01: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:02: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:49:01 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'886414'), (b'Connection', b'keep-alive'), (b'x-session-id', b'45e0be40-85f0-46e4-adbc-9df94420a3ac'), (b'x-correlation-id', b'afabdeb7-be7a-4ff6-a7dc-d9bd5c0bbcfa'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:49:02: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-eda1-4415-aecf-aed6d16b2022/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:49:02: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:49:03: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:03: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:49:03: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:49:03: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:49:03: close.complete
-[INFO|parsers|L84] 2024-06-09 13:49:07: Parsed num of docs -> 9
-[INFO|etl|L255] 2024-06-09 13:49:07: Configuration of TextPreprocess for task : classification founded
-[DEBUG|etl|L259] 2024-06-09 13:49:07: Trying to preprocess texts --> del_stopwords : {'apply': True, 'lang': 'Spanish'}
-[DEBUG|base|L311] 2024-06-09 13:50:24: > [SimpleDirectoryReader] Total files added: 9
-[INFO|SentenceTransformer|L113] 2024-06-09 13:50:24: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:24: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:26: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:28: https://huggingface.co:443 "GET /api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/revision/main HTTP/1.1" 200 5391
-[INFO|SentenceTransformer|L219] 2024-06-09 13:50:28: Use pytorch device_name: cpu
-[INFO|SentenceTransformer|L113] 2024-06-09 13:50:28: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:28: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:29: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:29: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:29: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:29: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:29: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:30: https://huggingface.co:443 "HEAD /sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:33: https://huggingface.co:443 "GET /api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/revision/main HTTP/1.1" 200 5391
-[INFO|SentenceTransformer|L219] 2024-06-09 13:50:33: Use pytorch device_name: cpu
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:33: https://huggingface.co:443 "HEAD /gpt2/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:34: https://huggingface.co:443 "HEAD /meta-llama/Meta-Llama-3-8B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:35: https://huggingface.co:443 "HEAD /microsoft/deberta-base/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:35: https://huggingface.co:443 "HEAD /PlanTL-GOB-ES/roberta-base-bne/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:35: https://huggingface.co:443 "HEAD /meta-llama/Meta-Llama-3-8B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:36: https://huggingface.co:443 "HEAD /gpt2/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:36: https://huggingface.co:443 "HEAD /meta-llama/Meta-Llama-3-8B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:37: https://huggingface.co:443 "HEAD /microsoft/deberta-base/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:38: https://huggingface.co:443 "HEAD /PlanTL-GOB-ES/roberta-base-bne/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|connectionpool|L546] 2024-06-09 13:50:38: https://huggingface.co:443 "HEAD /meta-llama/Meta-Llama-3-8B/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
-[DEBUG|_config|L80] 2024-06-09 13:50:39: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:39: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 13:50:39: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:39: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|proactor_events|L633] 2024-06-09 13:50:40: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:50:40: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:40: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FB1E61D0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA5760> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FA280890>
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:41: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:42: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:42: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:42 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'543ab0a6-9a84-4aa7-b38f-100bfc4d89ae'), (b'x-correlation-id', b'2d0f9bbc-3eb1-4fb5-a833-77e956b8d5d4'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:43: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:43: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:50:44: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:44: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:44: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152DC25B390>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA6570> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FA355B10>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:44 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'cd9ec758-930b-4af5-b40e-a6fb9131cb5b'), (b'x-correlation-id', b'38b6463e-6d01-4e41-8e31-15066c708d0b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:45: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-a9f4-400e-bcfe-c637d7bdd16f "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:45 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'6020'), (b'Connection', b'keep-alive'), (b'x-session-id', b'147bce2b-10b1-43a4-ac74-22c04148514b'), (b'x-correlation-id', b'2f34820f-8e4d-4e52-a148-3c3a9b1aa93e'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:45: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-a9f4-400e-bcfe-c637d7bdd16f/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:45: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:50:45: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:50:45: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:45: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FA2646D0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA5520> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310D9AED0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:46: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:47 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'be5fac2e-3d62-47ee-852f-3b955b8aced6'), (b'x-correlation-id', b'f27e2af7-5d1d-45bf-b8e7-e20218c53edc'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:48: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:48: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:50:49: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:49: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:49: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:49: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310D9AFD0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:49: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA63C0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310D9A8D0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:49 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'ee2c8cae-b7d9-4eea-aa3b-770b6fa0bc02'), (b'x-correlation-id', b'23b9f73b-477e-4a6c-a8aa-3602f1c2f398'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:50: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-1eb4-448c-a01b-435eae0b4949 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:50 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'4083'), (b'Connection', b'keep-alive'), (b'x-session-id', b'7141da36-810f-43c0-9809-e79a75f3d854'), (b'x-correlation-id', b'dd200402-39bc-4939-a796-7311838d4f82'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:50: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-1eb4-448c-a01b-435eae0b4949/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:50: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:50:50: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:50:50: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:50: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DB7C50>
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA6570> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DACA50>
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:51: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:52 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'c17fe4fc-3936-4343-8fc3-53d3afda9b2e'), (b'x-correlation-id', b'79d2b4f4-65c3-447d-aa5d-3eb3248ea7db'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:52: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:52: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:50:53: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:53: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DB7F50>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA5760> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E21690>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:54 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'e8e8345b-9601-4406-89fb-717148b9a3aa'), (b'x-correlation-id', b'f2f94361-1b4e-43ed-afe0-844620b98d84'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:54: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-21aa-492c-abd0-fb9d351c8fcc "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:54: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:50:56 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'4083'), (b'Connection', b'keep-alive'), (b'x-session-id', b'fe441a40-2837-431a-8cc4-5cd275e64fc0'), (b'x-correlation-id', b'70cb1077-65b8-4bd1-b891-e34776a3c3f3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:50:56: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-21aa-492c-abd0-fb9d351c8fcc/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:50:56: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:50:56: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:50:56: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:50:56: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E235D0>
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA6690> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FA357810>
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:57: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:50:58: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:50:58: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:00 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'135f1a03-64f4-4196-907d-01b851b63edc'), (b'x-correlation-id', b'795a7577-e850-4f4a-93c2-6812c8cd8aef'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:00: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:00: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:51:01: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:01: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E22D90>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA6600> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E14150>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:02 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6d6db52e-15e9-4482-882e-5a4bff4f96b7'), (b'x-correlation-id', b'50cb3f53-48ee-4b6d-8191-dde9c5105260'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:02: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-72a0-461d-9049-e7299ab6c7cf "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:02: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:02 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'233734'), (b'Connection', b'keep-alive'), (b'x-session-id', b'22d364ec-1747-4e67-a91f-065718237c67'), (b'x-correlation-id', b'0e1932cf-589a-45dc-8af9-eb72a0317631'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:03: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-72a0-461d-9049-e7299ab6c7cf/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:03: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:51:03: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:51:03: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:03: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E20250>
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA75C0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E22550>
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:04: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:05 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'66bb6169-faf6-455e-b248-18bec4847864'), (b'x-correlation-id', b'62893820-a256-45cb-80f4-4357c2720f07'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:06: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:06: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:51:07: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:07: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E23E10>
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA6690> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FB1E5F10>
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:07: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:07 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'a0ddaa66-2654-4052-84c7-f53d42221536'), (b'x-correlation-id', b'6bd6b1d7-3e1b-4f6d-9c92-ce442f9af612'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:08: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-8d62-4295-ae6d-5eaa1c0e424e "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:08 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'8463'), (b'Connection', b'keep-alive'), (b'x-session-id', b'a04d85bd-87f3-43bd-a103-1875716a80c4'), (b'x-correlation-id', b'82c4893e-2708-4be2-8286-975a1332df36'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:08: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-8d62-4295-ae6d-5eaa1c0e424e/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:08: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:51:08: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:51:08: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:08: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DADA90>
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA7650> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E22110>
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:09: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:10: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:10: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:10 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'1a5286e2-9b6e-4a9a-b473-53ebdea9f76a'), (b'x-correlation-id', b'eb78fd48-0588-4a97-9dd9-2fd8d6a29b9c'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:11: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:11: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:51:12: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:12: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:12: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:12: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310D9A810>
-[DEBUG|_trace|L85] 2024-06-09 13:51:12: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA67B0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DB6990>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:12 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'8a84c3ec-27c5-414e-86db-f7e586bccbd5'), (b'x-correlation-id', b'8f1dfb65-0d7a-466a-9f33-c7985e543ce3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:13: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5743-4572-94e5-68a2a4600575 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:13 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'12669'), (b'Connection', b'keep-alive'), (b'x-session-id', b'a9c5c4d7-58c5-45f3-b1ce-3f61afdd9f45'), (b'x-correlation-id', b'b9b7898a-ac10-4a40-81d3-af7771aa69f3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:13: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5743-4572-94e5-68a2a4600575/result/markdown "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:13: close.complete
-[DEBUG|proactor_events|L633] 2024-06-09 13:51:13: Using proactor: IocpProactor
-[DEBUG|_config|L80] 2024-06-09 13:51:13: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:13: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015310DACB50>
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA7DA0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x00000152FD4F3350>
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: send_request_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: send_request_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:14: receive_response_headers.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:15 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'3a0684ed-01d4-43e1-a910-55b673ff52f5'), (b'x-correlation-id', b'7e745790-e202-4a00-be9d-f533f9481b51'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:16: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: receive_response_body.started request=<Request [b'POST']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: close.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:16: close.complete
-[DEBUG|_config|L80] 2024-06-09 13:51:17: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 13:51:17: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E17450>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: start_tls.started ssl_context=<ssl.SSLContext object at 0x0000015310DA7E30> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x0000015324E15CD0>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:18 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'32166540-05fe-450f-8258-ef9f8d26c1b5'), (b'x-correlation-id', b'a3497ad7-965d-49dc-b326-da50cf3117f4'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 13:51:18: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-319a-4afb-b90c-25768c74cb3b "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 13:51:18: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 11:51:18 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'1341'), (b'Connection', b'keep-alive'), (b'x-session-id', b'98a2c41f-281c-4bc4-9545-f85fd5452a11'), (b'x-correlation-id', b'015a8357-5b35-4428-8e0f-6db5c13e19a3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1743 // tokens : 44 // text : Criterios desempates. - Clasificaciones resto concursos. Criterios desempates. - Competición calificación: grupos, marcas calificación, número ensayos. 2.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1744 // tokens : 76 // text : - Clasificaciones resto concursos. Criterios desempates. - Competición calificación: grupos, marcas calificación, número ensayos. 2. Asesora atleta entrenamiento competición, analizando reglamento carreras marcha atlética, identificando consecuencias técnicas tácticas mismo comportamiento atleta.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1745 // tokens : 86 // text : Criterios desempates. - Competición calificación: grupos, marcas calificación, número ensayos. 2. Asesora atleta entrenamiento competición, analizando reglamento carreras marcha atlética, identificando consecuencias técnicas tácticas mismo comportamiento atleta. # Carreras marcha atlética: - pista: - Dimensiones mediciones.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1746 // tokens : 89 // text : - Competición calificación: grupos, marcas calificación, número ensayos. 2. Asesora atleta entrenamiento competición, analizando reglamento carreras marcha atlética, identificando consecuencias técnicas tácticas mismo comportamiento atleta. # Carreras marcha atlética: - pista: - Dimensiones mediciones. - Bordillo interior, calles numeración.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1747 // tokens : 78 // text : 2. Asesora atleta entrenamiento competición, analizando reglamento carreras marcha atlética, identificando consecuencias técnicas tácticas mismo comportamiento atleta. # Carreras marcha atlética: - pista: - Dimensiones mediciones. - Bordillo interior, calles numeración. - Calles individuales calle libre.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1748 // tokens : 81 // text : Asesora atleta entrenamiento competición, analizando reglamento carreras marcha atlética, identificando consecuencias técnicas tácticas mismo comportamiento atleta. # Carreras marcha atlética: - pista: - Dimensiones mediciones. - Bordillo interior, calles numeración. - Calles individuales calle libre. Señalización.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1749 // tokens : 51 // text : # Carreras marcha atlética: - pista: - Dimensiones mediciones. - Bordillo interior, calles numeración. - Calles individuales calle libre. Señalización. - Carreras pista cubierta.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1750 // tokens : 60 // text : - Bordillo interior, calles numeración. - Calles individuales calle libre. Señalización. - Carreras pista cubierta. - salida: jueces, salidas calles (individuales curva), voces, tacos, salidas nulas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1751 // tokens : 76 // text : - Calles individuales calle libre. Señalización. - Carreras pista cubierta. - salida: jueces, salidas calles (individuales curva), voces, tacos, salidas nulas. - desarrollo carrera: jueces, incidencias, control vueltas, agua esponjas (a partir 5000 metros).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1752 // tokens : 82 // text : Señalización. - Carreras pista cubierta. - salida: jueces, salidas calles (individuales curva), voces, tacos, salidas nulas. - desarrollo carrera: jueces, incidencias, control vueltas, agua esponjas (a partir 5000 metros). - llegadas cronometraje: - Momento llegada.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1753 // tokens : 96 // text : - Carreras pista cubierta. - salida: jueces, salidas calles (individuales curva), voces, tacos, salidas nulas. - desarrollo carrera: jueces, incidencias, control vueltas, agua esponjas (a partir 5000 metros). - llegadas cronometraje: - Momento llegada. - Determinación orden llegada cronometraje eléctrico, manual tiempo fijo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1754 // tokens : 112 // text : - salida: jueces, salidas calles (individuales curva), voces, tacos, salidas nulas. - desarrollo carrera: jueces, incidencias, control vueltas, agua esponjas (a partir 5000 metros). - llegadas cronometraje: - Momento llegada. - Determinación orden llegada cronometraje eléctrico, manual tiempo fijo. - Determinación tiempos cronometraje eléctrico, cronometraje manual cronometraje chips.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1755 // tokens : 95 // text : - desarrollo carrera: jueces, incidencias, control vueltas, agua esponjas (a partir 5000 metros). - llegadas cronometraje: - Momento llegada. - Determinación orden llegada cronometraje eléctrico, manual tiempo fijo. - Determinación tiempos cronometraje eléctrico, cronometraje manual cronometraje chips. - Eliminatorias, series desempates.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1756 // tokens : 83 // text : - llegadas cronometraje: - Momento llegada. - Determinación orden llegada cronometraje eléctrico, manual tiempo fijo. - Determinación tiempos cronometraje eléctrico, cronometraje manual cronometraje chips. - Eliminatorias, series desempates. - Carreras vallas: - Distancia carrera altura vallas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1757 // tokens : 78 // text : - Determinación orden llegada cronometraje eléctrico, manual tiempo fijo. - Determinación tiempos cronometraje eléctrico, cronometraje manual cronometraje chips. - Eliminatorias, series desempates. - Carreras vallas: - Distancia carrera altura vallas. - vallas: dimensiones colocación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1758 // tokens : 65 // text : - Determinación tiempos cronometraje eléctrico, cronometraje manual cronometraje chips. - Eliminatorias, series desempates. - Carreras vallas: - Distancia carrera altura vallas. - vallas: dimensiones colocación. - Desarrollo carrera.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1759 // tokens : 54 // text : - Eliminatorias, series desempates. - Carreras vallas: - Distancia carrera altura vallas. - vallas: dimensiones colocación. - Desarrollo carrera. --- # Carreras Obstáculos: Obstáculos ría.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1760 // tokens : 49 // text : - Carreras vallas: - Distancia carrera altura vallas. - vallas: dimensiones colocación. - Desarrollo carrera. --- # Carreras Obstáculos: Obstáculos ría. Desarrollo carrera.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1761 // tokens : 42 // text : - vallas: dimensiones colocación. - Desarrollo carrera. --- # Carreras Obstáculos: Obstáculos ría. Desarrollo carrera. # relevos: Distancias.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1762 // tokens : 40 // text : - Desarrollo carrera. --- # Carreras Obstáculos: Obstáculos ría. Desarrollo carrera. # relevos: Distancias. Zonas transferencia prezona.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1763 // tokens : 39 // text : --- # Carreras Obstáculos: Obstáculos ría. Desarrollo carrera. # relevos: Distancias. Zonas transferencia prezona. Calles calle libre.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1764 // tokens : 31 // text : Desarrollo carrera. # relevos: Distancias. Zonas transferencia prezona. Calles calle libre. pista cubierta.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1765 // tokens : 48 // text : # relevos: Distancias. Zonas transferencia prezona. Calles calle libre. pista cubierta. # Carreras carretera campo través: Distancias, itinerarios, mediciones señalización.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1766 // tokens : 49 // text : Zonas transferencia prezona. Calles calle libre. pista cubierta. # Carreras carretera campo través: Distancias, itinerarios, mediciones señalización. Avituallamiento condiciones médicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1767 // tokens : 60 // text : Calles calle libre. pista cubierta. # Carreras carretera campo través: Distancias, itinerarios, mediciones señalización. Avituallamiento condiciones médicas. # marcha atlética: Reglamento: contacto permanente pierna extendida.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1768 // tokens : 78 // text : pista cubierta. # Carreras carretera campo través: Distancias, itinerarios, mediciones señalización. Avituallamiento condiciones médicas. # marcha atlética: Reglamento: contacto permanente pierna extendida. Jueces, avisos, descalificaciones, informaciones, avituallamientos, condiciones médicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1769 // tokens : 82 // text : # Carreras carretera campo través: Distancias, itinerarios, mediciones señalización. Avituallamiento condiciones médicas. # marcha atlética: Reglamento: contacto permanente pierna extendida. Jueces, avisos, descalificaciones, informaciones, avituallamientos, condiciones médicas. # Asesoramiento atleta: 3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1770 // tokens : 100 // text : Avituallamiento condiciones médicas. # marcha atlética: Reglamento: contacto permanente pierna extendida. Jueces, avisos, descalificaciones, informaciones, avituallamientos, condiciones médicas. # Asesoramiento atleta: 3. Asesora atleta entrenamiento competición, analizando reglamento específico concursos pruebas combinadas identificando consecuencias técnicas tácticas mismo comportamiento atleta.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1771 // tokens : 110 // text : # marcha atlética: Reglamento: contacto permanente pierna extendida. Jueces, avisos, descalificaciones, informaciones, avituallamientos, condiciones médicas. # Asesoramiento atleta: 3. Asesora atleta entrenamiento competición, analizando reglamento específico concursos pruebas combinadas identificando consecuencias técnicas tácticas mismo comportamiento atleta. # saltos: # Normas generales saltos verticales: listones.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1772 // tokens : 99 // text : Jueces, avisos, descalificaciones, informaciones, avituallamientos, condiciones médicas. # Asesoramiento atleta: 3. Asesora atleta entrenamiento competición, analizando reglamento específico concursos pruebas combinadas identificando consecuencias técnicas tácticas mismo comportamiento atleta. # saltos: # Normas generales saltos verticales: listones. Cadencia elevación listón.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1773 // tokens : 82 // text : # Asesoramiento atleta: 3. Asesora atleta entrenamiento competición, analizando reglamento específico concursos pruebas combinadas identificando consecuencias técnicas tácticas mismo comportamiento atleta. # saltos: # Normas generales saltos verticales: listones. Cadencia elevación listón. Pérdida derecho continuar.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1774 // tokens : 96 // text : Asesora atleta entrenamiento competición, analizando reglamento específico concursos pruebas combinadas identificando consecuencias técnicas tácticas mismo comportamiento atleta. # saltos: # Normas generales saltos verticales: listones. Cadencia elevación listón. Pérdida derecho continuar. # Normas específicas salto altura: Saltos nulos, zona toma impulso saltómetros.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1775 // tokens : 87 // text : # saltos: # Normas generales saltos verticales: listones. Cadencia elevación listón. Pérdida derecho continuar. # Normas específicas salto altura: Saltos nulos, zona toma impulso saltómetros. # Normas específicas salto pértiga: Saltos nulos, zona toma impulso, saltómetros pértigas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1776 // tokens : 103 // text : Cadencia elevación listón. Pérdida derecho continuar. # Normas específicas salto altura: Saltos nulos, zona toma impulso saltómetros. # Normas específicas salto pértiga: Saltos nulos, zona toma impulso, saltómetros pértigas. # Normas específicas salto longitud: Saltos nulos, zona toma impulso, tabla batida, medición saltos foso caída.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1777 // tokens : 122 // text : Pérdida derecho continuar. # Normas específicas salto altura: Saltos nulos, zona toma impulso saltómetros. # Normas específicas salto pértiga: Saltos nulos, zona toma impulso, saltómetros pértigas. # Normas específicas salto longitud: Saltos nulos, zona toma impulso, tabla batida, medición saltos foso caída. # Normas específicas triple salto: Disposiciones reglamentarias, zona impulso, tabla batida.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1778 // tokens : 131 // text : # Normas específicas salto altura: Saltos nulos, zona toma impulso saltómetros. # Normas específicas salto pértiga: Saltos nulos, zona toma impulso, saltómetros pértigas. # Normas específicas salto longitud: Saltos nulos, zona toma impulso, tabla batida, medición saltos foso caída. # Normas específicas triple salto: Disposiciones reglamentarias, zona impulso, tabla batida. # lanzamientos: # Normas generales lanzamientos: Artefactos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1779 // tokens : 114 // text : # Normas específicas salto pértiga: Saltos nulos, zona toma impulso, saltómetros pértigas. # Normas específicas salto longitud: Saltos nulos, zona toma impulso, tabla batida, medición saltos foso caída. # Normas específicas triple salto: Disposiciones reglamentarias, zona impulso, tabla batida. # lanzamientos: # Normas generales lanzamientos: Artefactos. Círculos lanzamientos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1780 // tokens : 88 // text : # Normas específicas salto longitud: Saltos nulos, zona toma impulso, tabla batida, medición saltos foso caída. # Normas específicas triple salto: Disposiciones reglamentarias, zona impulso, tabla batida. # lanzamientos: # Normas generales lanzamientos: Artefactos. Círculos lanzamientos. Zona caída.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1781 // tokens : 59 // text : # Normas específicas triple salto: Disposiciones reglamentarias, zona impulso, tabla batida. # lanzamientos: # Normas generales lanzamientos: Artefactos. Círculos lanzamientos. Zona caída. Protecciones personales.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1782 // tokens : 45 // text : # lanzamientos: # Normas generales lanzamientos: Artefactos. Círculos lanzamientos. Zona caída. Protecciones personales. Lanzamientos nulos interrupción lanzamiento.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1783 // tokens : 34 // text : Círculos lanzamientos. Zona caída. Protecciones personales. Lanzamientos nulos interrupción lanzamiento. Medición lanzamientos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1784 // tokens : 42 // text : Zona caída. Protecciones personales. Lanzamientos nulos interrupción lanzamiento. Medición lanzamientos. # Normas específicas lanzamiento peso: Normas reglamentarias.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1785 // tokens : 41 // text : Protecciones personales. Lanzamientos nulos interrupción lanzamiento. Medición lanzamientos. # Normas específicas lanzamiento peso: Normas reglamentarias. contenedor.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1786 // tokens : 37 // text : Lanzamientos nulos interrupción lanzamiento. Medición lanzamientos. # Normas específicas lanzamiento peso: Normas reglamentarias. contenedor. peso.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1787 // tokens : 37 // text : Medición lanzamientos. # Normas específicas lanzamiento peso: Normas reglamentarias. contenedor. peso. # Normas específicas lanzamiento disco: disco.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1788 // tokens : 36 // text : # Normas específicas lanzamiento peso: Normas reglamentarias. contenedor. peso. # Normas específicas lanzamiento disco: disco. Jaula.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1789 // tokens : 34 // text : contenedor. peso. # Normas específicas lanzamiento disco: disco. Jaula. # Normas específicas lanzamiento martillo: competición.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1790 // tokens : 35 // text : peso. # Normas específicas lanzamiento disco: disco. Jaula. # Normas específicas lanzamiento martillo: competición. martillo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1791 // tokens : 36 // text : # Normas específicas lanzamiento disco: disco. Jaula. # Normas específicas lanzamiento martillo: competición. martillo. Jaula.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1792 // tokens : 37 // text : Jaula. # Normas específicas lanzamiento martillo: competición. martillo. Jaula. --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1793 // tokens : 45 // text : # Normas específicas lanzamiento martillo: competición. martillo. Jaula. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1794 // tokens : 34 // text : martillo. Jaula. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1795 // tokens : 34 // text : Jaula. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1796 // tokens : 50 // text : --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág. 41347 Normas específicas lanzamiento jabalina: normas reglamentarías.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1797 // tokens : 41 // text : 92 Lunes 15 abril 2024 Sec. I. Pág. 41347 Normas específicas lanzamiento jabalina: normas reglamentarías. jabalina.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1798 // tokens : 51 // text : I. Pág. 41347 Normas específicas lanzamiento jabalina: normas reglamentarías. jabalina. pruebas combinadas: - Pruebas combinadas reconocidas reglamento: - Categorías.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1799 // tokens : 60 // text : Pág. 41347 Normas específicas lanzamiento jabalina: normas reglamentarías. jabalina. pruebas combinadas: - Pruebas combinadas reconocidas reglamento: - Categorías. - Pruebas componen orden deben disputarse.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1800 // tokens : 59 // text : 41347 Normas específicas lanzamiento jabalina: normas reglamentarías. jabalina. pruebas combinadas: - Pruebas combinadas reconocidas reglamento: - Categorías. - Pruebas componen orden deben disputarse. Celebración.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1801 // tokens : 51 // text : jabalina. pruebas combinadas: - Pruebas combinadas reconocidas reglamento: - Categorías. - Pruebas componen orden deben disputarse. Celebración. Normas específicas: - Intervalos participación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1802 // tokens : 53 // text : pruebas combinadas: - Pruebas combinadas reconocidas reglamento: - Categorías. - Pruebas componen orden deben disputarse. Celebración. Normas específicas: - Intervalos participación. - Composición grupos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1803 // tokens : 37 // text : - Pruebas componen orden deben disputarse. Celebración. Normas específicas: - Intervalos participación. - Composición grupos. - Orden competición.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1804 // tokens : 32 // text : Celebración. Normas específicas: - Intervalos participación. - Composición grupos. - Orden competición. - Número intentos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1805 // tokens : 35 // text : Normas específicas: - Intervalos participación. - Composición grupos. - Orden competición. - Número intentos. - Cadencia alturas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1806 // tokens : 34 // text : - Composición grupos. - Orden competición. - Número intentos. - Cadencia alturas. Clasificación: Tablas puntuación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1807 // tokens : 35 // text : - Orden competición. - Número intentos. - Cadencia alturas. Clasificación: Tablas puntuación. Clasificaciones desempates.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1808 // tokens : 64 // text : - Número intentos. - Cadencia alturas. Clasificación: Tablas puntuación. Clasificaciones desempates. Estrategias metodológicas: potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1809 // tokens : 92 // text : - Cadencia alturas. Clasificación: Tablas puntuación. Clasificaciones desempates. Estrategias metodológicas: potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1810 // tokens : 137 // text : Clasificación: Tablas puntuación. Clasificaciones desempates. Estrategias metodológicas: potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento general (vinculado R.A.1).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1811 // tokens : 165 // text : Clasificaciones desempates. Estrategias metodológicas: potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento general (vinculado R.A.1). - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento específico (vinculado R.A.2 R.A.3).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1812 // tokens : 190 // text : Estrategias metodológicas: potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento general (vinculado R.A.1). - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento específico (vinculado R.A.2 R.A.3). recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes reglamento atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1813 // tokens : 216 // text : basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento general (vinculado R.A.1). - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento específico (vinculado R.A.2 R.A.3). recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes reglamento atletismo. Verificable  Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1814 // tokens : 231 // text : continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento general (vinculado R.A.1). - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento específico (vinculado R.A.2 R.A.3). recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes reglamento atletismo. Verificable  Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera alumnado capaz asesorar atleta analizar reglamento general (R.A.1); asesorar entrenamiento competición, analizando reglamento específico (R.A.2 R.A.3).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1815 // tokens : 207 // text : - Supuestos prácticos basados conceptos trabajados asesoramiento atleta competición analizando reglamento específico (vinculado R.A.2 R.A.3). recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes reglamento atletismo. Verificable  Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera alumnado capaz asesorar atleta analizar reglamento general (R.A.1); asesorar entrenamiento competición, analizando reglamento específico (R.A.2 R.A.3). deberá orientar alumnado hacia adquisición trasmisión valores propios éticos, esfuerzo personal innovación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1816 // tokens : 194 // text : recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes reglamento atletismo. Verificable  Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera alumnado capaz asesorar atleta analizar reglamento general (R.A.1); asesorar entrenamiento competición, analizando reglamento específico (R.A.2 R.A.3). deberá orientar alumnado hacia adquisición trasmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1817 // tokens : 214 // text : Verificable  Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera alumnado capaz asesorar atleta analizar reglamento general (R.A.1); asesorar entrenamiento competición, analizando reglamento específico (R.A.2 R.A.3). deberá orientar alumnado hacia adquisición trasmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación módulo vertebran aprendizajes aquellos relacionados revisión reglamento, aplicación comportamiento atleta entrenamiento competición, justificación importancia éste carreras, marcha, concursos pruebas combinadas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1818 // tokens : 166 // text : manera alumnado capaz asesorar atleta analizar reglamento general (R.A.1); asesorar entrenamiento competición, analizando reglamento específico (R.A.2 R.A.3). deberá orientar alumnado hacia adquisición trasmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación módulo vertebran aprendizajes aquellos relacionados revisión reglamento, aplicación comportamiento atleta entrenamiento competición, justificación importancia éste carreras, marcha, concursos pruebas combinadas. --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1819 // tokens : 130 // text : deberá orientar alumnado hacia adquisición trasmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación módulo vertebran aprendizajes aquellos relacionados revisión reglamento, aplicación comportamiento atleta entrenamiento competición, justificación importancia éste carreras, marcha, concursos pruebas combinadas. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1820 // tokens : 103 // text : Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación módulo vertebran aprendizajes aquellos relacionados revisión reglamento, aplicación comportamiento atleta entrenamiento competición, justificación importancia éste carreras, marcha, concursos pruebas combinadas. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1821 // tokens : 83 // text : criterios evaluación módulo vertebran aprendizajes aquellos relacionados revisión reglamento, aplicación comportamiento atleta entrenamiento competición, justificación importancia éste carreras, marcha, concursos pruebas combinadas. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1822 // tokens : 67 // text : --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág. 41348 # Orientaciones específicas enseñanza distancia: características módulo, así orientación mismo posibilita enseñanza pueda ser realizada formato telemático.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1823 // tokens : 69 // text : 92 Lunes 15 abril 2024 Sec. I. Pág. 41348 # Orientaciones específicas enseñanza distancia: características módulo, así orientación mismo posibilita enseñanza pueda ser realizada formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1824 // tokens : 108 // text : I. Pág. 41348 # Orientaciones específicas enseñanza distancia: características módulo, así orientación mismo posibilita enseñanza pueda ser realizada formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1825 // tokens : 110 // text : Pág. 41348 # Orientaciones específicas enseñanza distancia: características módulo, así orientación mismo posibilita enseñanza pueda ser realizada formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1826 // tokens : 155 // text : 41348 # Orientaciones específicas enseñanza distancia: características módulo, así orientación mismo posibilita enseñanza pueda ser realizada formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos cualquiera R.A. módulo. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1827 // tokens : 123 // text : cuyo caso, imprescindible contar plataforma enseñanza virtual. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos cualquiera R.A. módulo. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1828 // tokens : 131 // text : directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos cualquiera R.A. módulo. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A. módulo. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1829 // tokens : 85 // text : módulo. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A. módulo. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1830 // tokens : 131 // text : - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A. módulo. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A. módulo. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1831 // tokens : 86 // text : módulo. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A. módulo. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1832 // tokens : 116 // text : - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A. módulo. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal cualquiera R.A. módulo. - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros estudiantado cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1833 // tokens : 97 // text : módulo. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal cualquiera R.A. módulo. - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros estudiantado cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1834 // tokens : 119 // text : - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal cualquiera R.A. módulo. - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros estudiantado cualquiera R.A. módulo. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1835 // tokens : 73 // text : módulo. - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros estudiantado cualquiera R.A. módulo. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1836 // tokens : 89 // text : - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros estudiantado cualquiera R.A. módulo. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. Módulo específico enseñanza deportiva: Entrenamiento condicional atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1837 // tokens : 139 // text : módulo. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. Módulo específico enseñanza deportiva: Entrenamiento condicional atletismo. Código: MED-ATAT205 # Relación objetivos generales competencias ciclo: formación módulo contribuye alcanzar objetivos generales (a, b, c, d, e, j, k, l, m) competencias (a, b, c, d, e, i, j, k, l, m, n) ciclo final grado medio atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1838 // tokens : 193 // text : - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. Módulo específico enseñanza deportiva: Entrenamiento condicional atletismo. Código: MED-ATAT205 # Relación objetivos generales competencias ciclo: formación módulo contribuye alcanzar objetivos generales (a, b, c, d, e, j, k, l, m) competencias (a, b, c, d, e, i, j, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz dirigir entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios demostrando ejecución correcta ejercicios.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1839 // tokens : 231 // text : módulo. Módulo específico enseñanza deportiva: Entrenamiento condicional atletismo. Código: MED-ATAT205 # Relación objetivos generales competencias ciclo: formación módulo contribuye alcanzar objetivos generales (a, b, c, d, e, j, k, l, m) competencias (a, b, c, d, e, i, j, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz dirigir entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios demostrando ejecución correcta ejercicios. cve: BOE-A-2024-7296 Verificable  # Línea Maestra: módulo organiza formación alumnado alrededor dirección entrenamiento condicional, valorando condición física específica colaborando proceso detección selección talentos deportivos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1840 // tokens : 235 // text : Módulo específico enseñanza deportiva: Entrenamiento condicional atletismo. Código: MED-ATAT205 # Relación objetivos generales competencias ciclo: formación módulo contribuye alcanzar objetivos generales (a, b, c, d, e, j, k, l, m) competencias (a, b, c, d, e, i, j, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz dirigir entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios demostrando ejecución correcta ejercicios. cve: BOE-A-2024-7296 Verificable  # Línea Maestra: módulo organiza formación alumnado alrededor dirección entrenamiento condicional, valorando condición física específica colaborando proceso detección selección talentos deportivos. # Contenidos: 1.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1841 // tokens : 261 // text : Código: MED-ATAT205 # Relación objetivos generales competencias ciclo: formación módulo contribuye alcanzar objetivos generales (a, b, c, d, e, j, k, l, m) competencias (a, b, c, d, e, i, j, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz dirigir entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios demostrando ejecución correcta ejercicios. cve: BOE-A-2024-7296 Verificable  # Línea Maestra: módulo organiza formación alumnado alrededor dirección entrenamiento condicional, valorando condición física específica colaborando proceso detección selección talentos deportivos. # Contenidos: 1. Dirige entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios, demostrando ejecución correcta ejercicios.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1842 // tokens : 185 // text : módulo contiene formación necesaria alumnado capaz dirigir entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios demostrando ejecución correcta ejercicios. cve: BOE-A-2024-7296 Verificable  # Línea Maestra: módulo organiza formación alumnado alrededor dirección entrenamiento condicional, valorando condición física específica colaborando proceso detección selección talentos deportivos. # Contenidos: 1. Dirige entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios, demostrando ejecución correcta ejercicios. - capacidades físicas motoras.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1843 // tokens : 133 // text : cve: BOE-A-2024-7296 Verificable  # Línea Maestra: módulo organiza formación alumnado alrededor dirección entrenamiento condicional, valorando condición física específica colaborando proceso detección selección talentos deportivos. # Contenidos: 1. Dirige entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios, demostrando ejecución correcta ejercicios. - capacidades físicas motoras. Características clasificaciones.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1844 // tokens : 80 // text : # Contenidos: 1. Dirige entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios, demostrando ejecución correcta ejercicios. - capacidades físicas motoras. Características clasificaciones. - capacidades físicas motoras condicionales.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1845 // tokens : 80 // text : Dirige entrenamiento condicional atleta desarrollo, identificando capacidades físicas condicionales depende rendimiento, analizando medios métodos entrenamiento necesarios, demostrando ejecución correcta ejercicios. - capacidades físicas motoras. Características clasificaciones. - capacidades físicas motoras condicionales. - Etapas proceso evolutivo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1846 // tokens : 39 // text : - capacidades físicas motoras. Características clasificaciones. - capacidades físicas motoras condicionales. - Etapas proceso evolutivo. - ontogenia.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1847 // tokens : 38 // text : Características clasificaciones. - capacidades físicas motoras condicionales. - Etapas proceso evolutivo. - ontogenia. intervención fases sensibles.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1848 // tokens : 44 // text : - capacidades físicas motoras condicionales. - Etapas proceso evolutivo. - ontogenia. intervención fases sensibles. --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1849 // tokens : 45 // text : - Etapas proceso evolutivo. - ontogenia. intervención fases sensibles. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1850 // tokens : 39 // text : - ontogenia. intervención fases sensibles. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1851 // tokens : 38 // text : intervención fases sensibles. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1852 // tokens : 49 // text : --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág. 41349 - Criterios organización entrenamiento referidos duración vida deportiva.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1853 // tokens : 42 // text : 92 Lunes 15 abril 2024 Sec. I. Pág. 41349 - Criterios organización entrenamiento referidos duración vida deportiva. - capacidad Velocidad.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1854 // tokens : 70 // text : I. Pág. 41349 - Criterios organización entrenamiento referidos duración vida deportiva. - capacidad Velocidad. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo distintos tipos velocidad categorías federativas sub14, sub16, sub18 sub 20.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1855 // tokens : 73 // text : Pág. 41349 - Criterios organización entrenamiento referidos duración vida deportiva. - capacidad Velocidad. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo distintos tipos velocidad categorías federativas sub14, sub16, sub18 sub 20. - capacidad Resistencia.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1856 // tokens : 104 // text : 41349 - Criterios organización entrenamiento referidos duración vida deportiva. - capacidad Velocidad. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo distintos tipos velocidad categorías federativas sub14, sub16, sub18 sub 20. - capacidad Resistencia. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo resistencia aeróbica anaeróbica distintas categorías federativas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1857 // tokens : 91 // text : - capacidad Velocidad. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo distintos tipos velocidad categorías federativas sub14, sub16, sub18 sub 20. - capacidad Resistencia. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo resistencia aeróbica anaeróbica distintas categorías federativas. - capacidad fuerza.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1858 // tokens : 113 // text : Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo distintos tipos velocidad categorías federativas sub14, sub16, sub18 sub 20. - capacidad Resistencia. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo resistencia aeróbica anaeróbica distintas categorías federativas. - capacidad fuerza. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo fuerza distintas categorías federativas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1859 // tokens : 79 // text : - capacidad Resistencia. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo resistencia aeróbica anaeróbica distintas categorías federativas. - capacidad fuerza. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo fuerza distintas categorías federativas. - capacidad flexibilidad.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1860 // tokens : 95 // text : Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo resistencia aeróbica anaeróbica distintas categorías federativas. - capacidad fuerza. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo fuerza distintas categorías federativas. - capacidad flexibilidad. Aproximación teórica desarrollo ontogénico: - Desarrollo flexibilidad ejercicio.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1861 // tokens : 66 // text : - capacidad fuerza. Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo fuerza distintas categorías federativas. - capacidad flexibilidad. Aproximación teórica desarrollo ontogénico: - Desarrollo flexibilidad ejercicio. Medios metodología aplicación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1862 // tokens : 66 // text : Aproximación teórica desarrollo ontogénico: - Medios métodos desarrollo fuerza distintas categorías federativas. - capacidad flexibilidad. Aproximación teórica desarrollo ontogénico: - Desarrollo flexibilidad ejercicio. Medios metodología aplicación. Métodos entrenamiento.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1863 // tokens : 54 // text : - capacidad flexibilidad. Aproximación teórica desarrollo ontogénico: - Desarrollo flexibilidad ejercicio. Medios metodología aplicación. Métodos entrenamiento. - entrenamiento fuerza: - medios entrenamiento fuerza sobrecarga.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1864 // tokens : 57 // text : Aproximación teórica desarrollo ontogénico: - Desarrollo flexibilidad ejercicio. Medios metodología aplicación. Métodos entrenamiento. - entrenamiento fuerza: - medios entrenamiento fuerza sobrecarga. - medios entrenamiento sobrecarga.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1865 // tokens : 46 // text : Medios metodología aplicación. Métodos entrenamiento. - entrenamiento fuerza: - medios entrenamiento fuerza sobrecarga. - medios entrenamiento sobrecarga. - movimientos básicos halterofilia.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1866 // tokens : 50 // text : Métodos entrenamiento. - entrenamiento fuerza: - medios entrenamiento fuerza sobrecarga. - medios entrenamiento sobrecarga. - movimientos básicos halterofilia. - dos tiempos arrancada.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1867 // tokens : 53 // text : - entrenamiento fuerza: - medios entrenamiento fuerza sobrecarga. - medios entrenamiento sobrecarga. - movimientos básicos halterofilia. - dos tiempos arrancada. - adaptación entrenamiento atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1868 // tokens : 43 // text : - medios entrenamiento sobrecarga. - movimientos básicos halterofilia. - dos tiempos arrancada. - adaptación entrenamiento atletismo. - cargada envión.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1869 // tokens : 38 // text : - movimientos básicos halterofilia. - dos tiempos arrancada. - adaptación entrenamiento atletismo. - cargada envión. - squat.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1870 // tokens : 31 // text : - dos tiempos arrancada. - adaptación entrenamiento atletismo. - cargada envión. - squat. medio squat.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1871 // tokens : 28 // text : - adaptación entrenamiento atletismo. - cargada envión. - squat. medio squat. - medio squat salto.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1872 // tokens : 24 // text : - cargada envión. - squat. medio squat. - medio squat salto. - pectoral.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1873 // tokens : 26 // text : - squat. medio squat. - medio squat salto. - pectoral. - Errores criterios seguridad.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1874 // tokens : 29 // text : medio squat. - medio squat salto. - pectoral. - Errores criterios seguridad. - ejercicios.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1875 // tokens : 31 // text : - medio squat salto. - pectoral. - Errores criterios seguridad. - ejercicios. - entrenamiento circuito.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1876 // tokens : 39 // text : - pectoral. - Errores criterios seguridad. - ejercicios. - entrenamiento circuito. - entrenamiento flexibilidad: - métodos entrenamiento flexibilidad.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1877 // tokens : 45 // text : - Errores criterios seguridad. - ejercicios. - entrenamiento circuito. - entrenamiento flexibilidad: - métodos entrenamiento flexibilidad. - método dinámico, activo pasivo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1878 // tokens : 48 // text : - ejercicios. - entrenamiento circuito. - entrenamiento flexibilidad: - métodos entrenamiento flexibilidad. - método dinámico, activo pasivo. - método estático, activo pasivo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1879 // tokens : 50 // text : - entrenamiento circuito. - entrenamiento flexibilidad: - métodos entrenamiento flexibilidad. - método dinámico, activo pasivo. - método estático, activo pasivo. Verificable  - stretching.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1880 // tokens : 60 // text : - entrenamiento flexibilidad: - métodos entrenamiento flexibilidad. - método dinámico, activo pasivo. - método estático, activo pasivo. Verificable  - stretching. - Facilitación Neuromuscular Propioceptiva (PNF).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1881 // tokens : 64 // text : - método dinámico, activo pasivo. - método estático, activo pasivo. Verificable  - stretching. - Facilitación Neuromuscular Propioceptiva (PNF). - recuperación postural global (RPG) stretching global activo (SGA).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1882 // tokens : 56 // text : - método estático, activo pasivo. Verificable  - stretching. - Facilitación Neuromuscular Propioceptiva (PNF). - recuperación postural global (RPG) stretching global activo (SGA). 2.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1883 // tokens : 85 // text : Verificable  - stretching. - Facilitación Neuromuscular Propioceptiva (PNF). - recuperación postural global (RPG) stretching global activo (SGA). 2. Valora condición física atleta identificando capacidades depende rendimiento entrenamiento competición, aplicando pruebas test campo, analizando resultados test mediante procedimientos estadísticos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1884 // tokens : 89 // text : - Facilitación Neuromuscular Propioceptiva (PNF). - recuperación postural global (RPG) stretching global activo (SGA). 2. Valora condición física atleta identificando capacidades depende rendimiento entrenamiento competición, aplicando pruebas test campo, analizando resultados test mediante procedimientos estadísticos. - condición física corredores marchadores.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1885 // tokens : 81 // text : - recuperación postural global (RPG) stretching global activo (SGA). 2. Valora condición física atleta identificando capacidades depende rendimiento entrenamiento competición, aplicando pruebas test campo, analizando resultados test mediante procedimientos estadísticos. - condición física corredores marchadores. Capacidades condicionales dependen.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1886 // tokens : 77 // text : 2. Valora condición física atleta identificando capacidades depende rendimiento entrenamiento competición, aplicando pruebas test campo, analizando resultados test mediante procedimientos estadísticos. - condición física corredores marchadores. Capacidades condicionales dependen. - Test miden cualidades condicionales carreras velocidad vallas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1887 // tokens : 84 // text : Valora condición física atleta identificando capacidades depende rendimiento entrenamiento competición, aplicando pruebas test campo, analizando resultados test mediante procedimientos estadísticos. - condición física corredores marchadores. Capacidades condicionales dependen. - Test miden cualidades condicionales carreras velocidad vallas. realización, normas, técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1888 // tokens : 66 // text : - condición física corredores marchadores. Capacidades condicionales dependen. - Test miden cualidades condicionales carreras velocidad vallas. realización, normas, técnicas. - Test miden cualidades condicionales medio fondo, fondo, obstáculos marcha atlética.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1889 // tokens : 65 // text : Capacidades condicionales dependen. - Test miden cualidades condicionales carreras velocidad vallas. realización, normas, técnicas. - Test miden cualidades condicionales medio fondo, fondo, obstáculos marcha atlética. realización, normas, técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1890 // tokens : 64 // text : - Test miden cualidades condicionales carreras velocidad vallas. realización, normas, técnicas. - Test miden cualidades condicionales medio fondo, fondo, obstáculos marcha atlética. realización, normas, técnicas. - condición física saltadores.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1891 // tokens : 57 // text : realización, normas, técnicas. - Test miden cualidades condicionales medio fondo, fondo, obstáculos marcha atlética. realización, normas, técnicas. - condición física saltadores. Capacidades condicionales dependen.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1892 // tokens : 63 // text : - Test miden cualidades condicionales medio fondo, fondo, obstáculos marcha atlética. realización, normas, técnicas. - condición física saltadores. Capacidades condicionales dependen. - Test miden cualidades condicionales saltos horizontales.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1893 // tokens : 50 // text : realización, normas, técnicas. - condición física saltadores. Capacidades condicionales dependen. - Test miden cualidades condicionales saltos horizontales. realización, normas, técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1894 // tokens : 53 // text : - condición física saltadores. Capacidades condicionales dependen. - Test miden cualidades condicionales saltos horizontales. realización, normas, técnicas. --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1895 // tokens : 60 // text : Capacidades condicionales dependen. - Test miden cualidades condicionales saltos horizontales. realización, normas, técnicas. --- # BOLETÍN OFICIAL Núm. 92 - Lunes 15 abril 2024 - Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1896 // tokens : 53 // text : - Test miden cualidades condicionales saltos horizontales. realización, normas, técnicas. --- # BOLETÍN OFICIAL Núm. 92 - Lunes 15 abril 2024 - Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1897 // tokens : 41 // text : realización, normas, técnicas. --- # BOLETÍN OFICIAL Núm. 92 - Lunes 15 abril 2024 - Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1898 // tokens : 48 // text : --- # BOLETÍN OFICIAL Núm. 92 - Lunes 15 abril 2024 - Sec. I. Pág. 41350 # Test miden cualidades condicionales salto altura.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1899 // tokens : 43 // text : 92 - Lunes 15 abril 2024 - Sec. I. Pág. 41350 # Test miden cualidades condicionales salto altura. realización, normas técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1900 // tokens : 45 // text : I. Pág. 41350 # Test miden cualidades condicionales salto altura. realización, normas técnicas. # condición física lanzadores atletas pruebas combinadas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1901 // tokens : 51 // text : Pág. 41350 # Test miden cualidades condicionales salto altura. realización, normas técnicas. # condición física lanzadores atletas pruebas combinadas. Capacidades condicionales dependen.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1902 // tokens : 59 // text : 41350 # Test miden cualidades condicionales salto altura. realización, normas técnicas. # condición física lanzadores atletas pruebas combinadas. Capacidades condicionales dependen. # Test miden cualidades condicionales lanzamientos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1903 // tokens : 52 // text : realización, normas técnicas. # condición física lanzadores atletas pruebas combinadas. Capacidades condicionales dependen. # Test miden cualidades condicionales lanzamientos. realización, normas técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1904 // tokens : 58 // text : # condición física lanzadores atletas pruebas combinadas. Capacidades condicionales dependen. # Test miden cualidades condicionales lanzamientos. realización, normas técnicas. # Test miden cualidades condicionales pruebas combinadas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1905 // tokens : 52 // text : Capacidades condicionales dependen. # Test miden cualidades condicionales lanzamientos. realización, normas técnicas. # Test miden cualidades condicionales pruebas combinadas. realización, normas técnicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1906 // tokens : 74 // text : # Test miden cualidades condicionales lanzamientos. realización, normas técnicas. # Test miden cualidades condicionales pruebas combinadas. realización, normas técnicas. # tratamiento estadístico resultados test: - Conceptos estadísticos básicos: media, mediana, moda, desviación típica.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1907 // tokens : 75 // text : realización, normas técnicas. # Test miden cualidades condicionales pruebas combinadas. realización, normas técnicas. # tratamiento estadístico resultados test: - Conceptos estadísticos básicos: media, mediana, moda, desviación típica. - Técnicas básicas representación gráfica resultados.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1908 // tokens : 101 // text : # Test miden cualidades condicionales pruebas combinadas. realización, normas técnicas. # tratamiento estadístico resultados test: - Conceptos estadísticos básicos: media, mediana, moda, desviación típica. - Técnicas básicas representación gráfica resultados. # Colabora proceso detección selección talentos deportivos atletismo analizando características sistemas programas detección selección aplicando técnicas específicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1909 // tokens : 117 // text : realización, normas técnicas. # tratamiento estadístico resultados test: - Conceptos estadísticos básicos: media, mediana, moda, desviación típica. - Técnicas básicas representación gráfica resultados. # Colabora proceso detección selección talentos deportivos atletismo analizando características sistemas programas detección selección aplicando técnicas específicas. - Concepto talento deportivo atletismo: identificación evaluación características técnicas, tácticas, físicas psicológicas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1910 // tokens : 117 // text : # tratamiento estadístico resultados test: - Conceptos estadísticos básicos: media, mediana, moda, desviación típica. - Técnicas básicas representación gráfica resultados. # Colabora proceso detección selección talentos deportivos atletismo analizando características sistemas programas detección selección aplicando técnicas específicas. - Concepto talento deportivo atletismo: identificación evaluación características técnicas, tácticas, físicas psicológicas. - Protocolos selección seguimiento.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1911 // tokens : 121 // text : - Técnicas básicas representación gráfica resultados. # Colabora proceso detección selección talentos deportivos atletismo analizando características sistemas programas detección selección aplicando técnicas específicas. - Concepto talento deportivo atletismo: identificación evaluación características técnicas, tácticas, físicas psicológicas. - Protocolos selección seguimiento. - Recursos materiales humanos: métodos detección temprana talento deportivo atletismo: - Test: protocolos ejecución justificación prueba.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1912 // tokens : 121 // text : # Colabora proceso detección selección talentos deportivos atletismo analizando características sistemas programas detección selección aplicando técnicas específicas. - Concepto talento deportivo atletismo: identificación evaluación características técnicas, tácticas, físicas psicológicas. - Protocolos selección seguimiento. - Recursos materiales humanos: métodos detección temprana talento deportivo atletismo: - Test: protocolos ejecución justificación prueba. - Talla, peso datos antropométricos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1913 // tokens : 95 // text : - Concepto talento deportivo atletismo: identificación evaluación características técnicas, tácticas, físicas psicológicas. - Protocolos selección seguimiento. - Recursos materiales humanos: métodos detección temprana talento deportivo atletismo: - Test: protocolos ejecución justificación prueba. - Talla, peso datos antropométricos. - Batería test generales.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1914 // tokens : 76 // text : - Protocolos selección seguimiento. - Recursos materiales humanos: métodos detección temprana talento deportivo atletismo: - Test: protocolos ejecución justificación prueba. - Talla, peso datos antropométricos. - Batería test generales. - Batería test específicos especialidad sector.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1915 // tokens : 90 // text : - Recursos materiales humanos: métodos detección temprana talento deportivo atletismo: - Test: protocolos ejecución justificación prueba. - Talla, peso datos antropométricos. - Batería test generales. - Batería test específicos especialidad sector. - Criterios tener cuenta respecto captación talentos especialización precoz: - Principios generales.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1916 // tokens : 70 // text : - Talla, peso datos antropométricos. - Batería test generales. - Batería test específicos especialidad sector. - Criterios tener cuenta respecto captación talentos especialización precoz: - Principios generales. - Errores comunes proceso detección talento deportivo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1917 // tokens : 76 // text : - Batería test generales. - Batería test específicos especialidad sector. - Criterios tener cuenta respecto captación talentos especialización precoz: - Principios generales. - Errores comunes proceso detección talento deportivo. - Programas tecnificación atletismo: - Programa nacional programas autonómicos.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1918 // tokens : 118 // text : - Batería test específicos especialidad sector. - Criterios tener cuenta respecto captación talentos especialización precoz: - Principios generales. - Errores comunes proceso detección talento deportivo. - Programas tecnificación atletismo: - Programa nacional programas autonómicos. # Estrategias metodológicas.cve: BOE-A-2024-7296 Verificable  potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1919 // tokens : 141 // text : - Criterios tener cuenta respecto captación talentos especialización precoz: - Principios generales. - Errores comunes proceso detección talento deportivo. - Programas tecnificación atletismo: - Programa nacional programas autonómicos. # Estrategias metodológicas.cve: BOE-A-2024-7296 Verificable  potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1920 // tokens : 173 // text : - Errores comunes proceso detección talento deportivo. - Programas tecnificación atletismo: - Programa nacional programas autonómicos. # Estrategias metodológicas.cve: BOE-A-2024-7296 Verificable  potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos dirección entrenamiento condicional, basados conceptos trabajados, utilizando medios métodos entrenamiento adecuados (vinculado R.A.1).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1921 // tokens : 187 // text : - Programas tecnificación atletismo: - Programa nacional programas autonómicos. # Estrategias metodológicas.cve: BOE-A-2024-7296 Verificable  potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos dirección entrenamiento condicional, basados conceptos trabajados, utilizando medios métodos entrenamiento adecuados (vinculado R.A.1). - Supuestos prácticos valoración condición física específica, basados conceptos trabajados (vinculado R.A.2).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1922 // tokens : 200 // text : # Estrategias metodológicas.cve: BOE-A-2024-7296 Verificable  potenciar motivación significación aprendizaje, trataremos utilizar metodologías activas debidamente contextualizadas. basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos dirección entrenamiento condicional, basados conceptos trabajados, utilizando medios métodos entrenamiento adecuados (vinculado R.A.1). - Supuestos prácticos valoración condición física específica, basados conceptos trabajados (vinculado R.A.2). - Supuestos prácticos detección, selección desarrollo talentos deportivos, basados conceptos trabajados (vinculado R.A.3).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1923 // tokens : 162 // text : basaremos fundamentalmente estructuras aprendizaje cooperativo proyectos resolución problemas prácticos permitan alumnado cumplir rol activo autónomo formación. continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos dirección entrenamiento condicional, basados conceptos trabajados, utilizando medios métodos entrenamiento adecuados (vinculado R.A.1). - Supuestos prácticos valoración condición física específica, basados conceptos trabajados (vinculado R.A.2). - Supuestos prácticos detección, selección desarrollo talentos deportivos, basados conceptos trabajados (vinculado R.A.3). --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1924 // tokens : 141 // text : continuación, recogen estrategias metodológicas pueden ser ayuda personal docente: - Supuestos prácticos dirección entrenamiento condicional, basados conceptos trabajados, utilizando medios métodos entrenamiento adecuados (vinculado R.A.1). - Supuestos prácticos valoración condición física específica, basados conceptos trabajados (vinculado R.A.2). - Supuestos prácticos detección, selección desarrollo talentos deportivos, basados conceptos trabajados (vinculado R.A.3). --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1925 // tokens : 88 // text : - Supuestos prácticos valoración condición física específica, basados conceptos trabajados (vinculado R.A.2). - Supuestos prácticos detección, selección desarrollo talentos deportivos, basados conceptos trabajados (vinculado R.A.3). --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1926 // tokens : 62 // text : - Supuestos prácticos detección, selección desarrollo talentos deportivos, basados conceptos trabajados (vinculado R.A.3). --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1927 // tokens : 65 // text : --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág. 41351 recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes entrenamiento condicional atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1928 // tokens : 110 // text : 92 Lunes 15 abril 2024 Sec. I. Pág. 41351 recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes entrenamiento condicional atletismo. # Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1929 // tokens : 156 // text : I. Pág. 41351 recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes entrenamiento condicional atletismo. # Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera, alumnado capaz dirigir entrenamiento condicional (R.A.1); valorar condición física (R.A.2); colaborar proceso detección, selección desarrollo talentos deportivos según fases madurativas (R.A.3).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1930 // tokens : 182 // text : Pág. 41351 recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes entrenamiento condicional atletismo. # Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera, alumnado capaz dirigir entrenamiento condicional (R.A.1); valorar condición física (R.A.2); colaborar proceso detección, selección desarrollo talentos deportivos según fases madurativas (R.A.3). deberá orientar alumnado hacia adquisición transmisión valores propios éticos, esfuerzo personal innovación.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1931 // tokens : 202 // text : 41351 recomienda utilización medios audiovisuales alumnado pueda visionar desarrollo actividad sirva reflexionar variables relevantes entrenamiento condicional atletismo. # Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera, alumnado capaz dirigir entrenamiento condicional (R.A.1); valorar condición física (R.A.2); colaborar proceso detección, selección desarrollo talentos deportivos según fases madurativas (R.A.3). deberá orientar alumnado hacia adquisición transmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1932 // tokens : 206 // text : # Orientaciones pedagógicas: relación secuenciación contenidos progresión proceso enseñanza través resultados aprendizaje, aconseja impartir módulo respetando orden resultados aprendizaje descritos apartado resultados aprendizaje criterios evaluación. manera, alumnado capaz dirigir entrenamiento condicional (R.A.1); valorar condición física (R.A.2); colaborar proceso detección, selección desarrollo talentos deportivos según fases madurativas (R.A.3). deberá orientar alumnado hacia adquisición transmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación principales módulo vertebran aprendizajes son: analizado fases proceso evolutivo distintas capacidades condicionales (R.A.1.b).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1933 // tokens : 174 // text : manera, alumnado capaz dirigir entrenamiento condicional (R.A.1); valorar condición física (R.A.2); colaborar proceso detección, selección desarrollo talentos deportivos según fases madurativas (R.A.3). deberá orientar alumnado hacia adquisición transmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación principales módulo vertebran aprendizajes son: analizado fases proceso evolutivo distintas capacidades condicionales (R.A.1.b). analizado distintos criterios planificación entrenamiento deportivo fases iniciación tecnificación (R.A.1.d).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1934 // tokens : 174 // text : deberá orientar alumnado hacia adquisición transmisión valores propios éticos, esfuerzo personal innovación. Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación principales módulo vertebran aprendizajes son: analizado fases proceso evolutivo distintas capacidades condicionales (R.A.1.b). analizado distintos criterios planificación entrenamiento deportivo fases iniciación tecnificación (R.A.1.d). valorado supuesto práctico secuencia medición condición física específica carreras marcha, saltos, lanzamientos pruebas combinadas, cambios observados diferentes mediciones, justificando posibles relaciones causa-efecto (R.A.2.e).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1935 // tokens : 175 // text : Asimismo, orientará promoción trabajo colaborativo cooperativo, ayude mejor desempeño funciones. criterios evaluación principales módulo vertebran aprendizajes son: analizado fases proceso evolutivo distintas capacidades condicionales (R.A.1.b). analizado distintos criterios planificación entrenamiento deportivo fases iniciación tecnificación (R.A.1.d). valorado supuesto práctico secuencia medición condición física específica carreras marcha, saltos, lanzamientos pruebas combinadas, cambios observados diferentes mediciones, justificando posibles relaciones causa-efecto (R.A.2.e). justificado necesidad respetar desarrollo individuo proceso detección selección talentos deportivos atletismo (R.A.3.g).
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1936 // tokens : 187 // text : criterios evaluación principales módulo vertebran aprendizajes son: analizado fases proceso evolutivo distintas capacidades condicionales (R.A.1.b). analizado distintos criterios planificación entrenamiento deportivo fases iniciación tecnificación (R.A.1.d). valorado supuesto práctico secuencia medición condición física específica carreras marcha, saltos, lanzamientos pruebas combinadas, cambios observados diferentes mediciones, justificando posibles relaciones causa-efecto (R.A.2.e). justificado necesidad respetar desarrollo individuo proceso detección selección talentos deportivos atletismo (R.A.3.g). # Orientaciones específicas enseñanza distancia características módulo, así orientación mismo posibilitan parte criterios evaluación puedan impartirse formato telemático.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1937 // tokens : 163 // text : analizado distintos criterios planificación entrenamiento deportivo fases iniciación tecnificación (R.A.1.d). valorado supuesto práctico secuencia medición condición física específica carreras marcha, saltos, lanzamientos pruebas combinadas, cambios observados diferentes mediciones, justificando posibles relaciones causa-efecto (R.A.2.e). justificado necesidad respetar desarrollo individuo proceso detección selección talentos deportivos atletismo (R.A.3.g). # Orientaciones específicas enseñanza distancia características módulo, así orientación mismo posibilitan parte criterios evaluación puedan impartirse formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1938 // tokens : 188 // text : valorado supuesto práctico secuencia medición condición física específica carreras marcha, saltos, lanzamientos pruebas combinadas, cambios observados diferentes mediciones, justificando posibles relaciones causa-efecto (R.A.2.e). justificado necesidad respetar desarrollo individuo proceso detección selección talentos deportivos atletismo (R.A.3.g). # Orientaciones específicas enseñanza distancia características módulo, así orientación mismo posibilitan parte criterios evaluación puedan impartirse formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. diferentes R.A., aconseja totalmente presencial relacionado criterios evaluación i) j) R.A.1: - demostrado técnicas entrenamiento fuerza sobrecarga, identificando aspectos importantes aprendizaje.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1939 // tokens : 152 // text : justificado necesidad respetar desarrollo individuo proceso detección selección talentos deportivos atletismo (R.A.3.g). # Orientaciones específicas enseñanza distancia características módulo, así orientación mismo posibilitan parte criterios evaluación puedan impartirse formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. diferentes R.A., aconseja totalmente presencial relacionado criterios evaluación i) j) R.A.1: - demostrado técnicas entrenamiento fuerza sobrecarga, identificando aspectos importantes aprendizaje. - demostrado métodos entrenamiento flexibilidad, identificando aspectos importantes aprendizaje.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1940 // tokens : 175 // text : # Orientaciones específicas enseñanza distancia características módulo, así orientación mismo posibilitan parte criterios evaluación puedan impartirse formato telemático. cuyo caso, imprescindible contar plataforma enseñanza virtual. diferentes R.A., aconseja totalmente presencial relacionado criterios evaluación i) j) R.A.1: - demostrado técnicas entrenamiento fuerza sobrecarga, identificando aspectos importantes aprendizaje. - demostrado métodos entrenamiento flexibilidad, identificando aspectos importantes aprendizaje. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos R.A.2 R.A.3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1941 // tokens : 195 // text : cuyo caso, imprescindible contar plataforma enseñanza virtual. diferentes R.A., aconseja totalmente presencial relacionado criterios evaluación i) j) R.A.1: - demostrado técnicas entrenamiento fuerza sobrecarga, identificando aspectos importantes aprendizaje. - demostrado métodos entrenamiento flexibilidad, identificando aspectos importantes aprendizaje. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos R.A.2 R.A.3. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.2 R.A.3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1942 // tokens : 211 // text : diferentes R.A., aconseja totalmente presencial relacionado criterios evaluación i) j) R.A.1: - demostrado técnicas entrenamiento fuerza sobrecarga, identificando aspectos importantes aprendizaje. - demostrado métodos entrenamiento flexibilidad, identificando aspectos importantes aprendizaje. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos R.A.2 R.A.3. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.2 R.A.3. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.2 R.A.3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1943 // tokens : 212 // text : - demostrado métodos entrenamiento flexibilidad, identificando aspectos importantes aprendizaje. directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos R.A.2 R.A.3. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.2 R.A.3. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.2 R.A.3. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal R.A.2 R.A.3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1944 // tokens : 203 // text : directrices realización enseñanza distancia serán: - Utilizar material audiovisual pueda servir mejor comprensión contenidos y/o ejemplo visualizar forma práctica correcta aplicación contenidos supuestos prácticos R.A.2 R.A.3. - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.2 R.A.3. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.2 R.A.3. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal R.A.2 R.A.3. --- # BOLETÍN OFICIAL Núm.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1945 // tokens : 162 // text : - Plantear supuestos prácticos favorezcan integración conocimiento teórico saber práctico, contribuyendo resolver dichos supuestos forma adecuada adaptada necesidades futuros técnicos cualquiera R.A.2 R.A.3. - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.2 R.A.3. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal R.A.2 R.A.3. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1946 // tokens : 109 // text : - Generar materiales sirvan base apoyo cada temas integren modalidad distancia cualquiera R.A.2 R.A.3. - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal R.A.2 R.A.3. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1947 // tokens : 83 // text : - Apoyar docencia distancia plataforma virtual soporte proceso enseñanza-aprendizaje enriquezca; generando actividades online carácter interactivo contrarresten limitaciones derivadas falta relación interpersonal R.A.2 R.A.3. --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1948 // tokens : 70 // text : --- # BOLETÍN OFICIAL Núm. 92 Lunes 15 abril 2024 Sec. I. Pág. 41352 - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros alumnado R.A.2 R.A.3.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1949 // tokens : 83 // text : 92 Lunes 15 abril 2024 Sec. I. Pág. 41352 - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros alumnado R.A.2 R.A.3. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1950 // tokens : 76 // text : I. Pág. 41352 - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros alumnado R.A.2 R.A.3. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1951 // tokens : 164 // text : Pág. 41352 - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros alumnado R.A.2 R.A.3. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. # Módulo específico enseñanza deportiva: Organización atletismo Código: MED-ATAT206 # A) Relación objetivos generales competencias ciclo: módulo organiza formación necesaria alumnado alcance objetivos generales (h, k, l, m, n) competencias (h, i, k, l, m, n) ciclo final grado medio atletismo.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1952 // tokens : 212 // text : 41352 - Propiciar mecanismos evaluación autoevaluación permitan identificación oportuna dificultades logros alumnado R.A.2 R.A.3. - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. # Módulo específico enseñanza deportiva: Organización atletismo Código: MED-ATAT206 # A) Relación objetivos generales competencias ciclo: módulo organiza formación necesaria alumnado alcance objetivos generales (h, k, l, m, n) competencias (h, i, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz gestionar organizar eventos promoción, recogiendo información desarrollo procesando datos, colaborar organización escuela atletismo identificar organismos regulan atletismo nivel nacional.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1953 // tokens : 231 // text : - Establecer tutorías colectivas individuales garantizar correcto seguimiento aprendizajes cualquiera R.A. módulo. # Módulo específico enseñanza deportiva: Organización atletismo Código: MED-ATAT206 # A) Relación objetivos generales competencias ciclo: módulo organiza formación necesaria alumnado alcance objetivos generales (h, k, l, m, n) competencias (h, i, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz gestionar organizar eventos promoción, recogiendo información desarrollo procesando datos, colaborar organización escuela atletismo identificar organismos regulan atletismo nivel nacional. # B) Línea Maestra: módulo organiza formación alumnado alrededor gestión organización eventos, recogiendo información, colaborando organización funcionamiento escuela atletismo identificando organismos regulan atletismo nivel nacional.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1954 // tokens : 215 // text : módulo. # Módulo específico enseñanza deportiva: Organización atletismo Código: MED-ATAT206 # A) Relación objetivos generales competencias ciclo: módulo organiza formación necesaria alumnado alcance objetivos generales (h, k, l, m, n) competencias (h, i, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz gestionar organizar eventos promoción, recogiendo información desarrollo procesando datos, colaborar organización escuela atletismo identificar organismos regulan atletismo nivel nacional. # B) Línea Maestra: módulo organiza formación alumnado alrededor gestión organización eventos, recogiendo información, colaborando organización funcionamiento escuela atletismo identificando organismos regulan atletismo nivel nacional. # C) Contenidos: 1.
+[INFO|splitters|L138] 2024-06-09 20:44:36: Combined sentence : index : 1955 // tokens : 257 // text : # Módulo específico enseñanza deportiva: Organización atletismo Código: MED-ATAT206 # A) Relación objetivos generales competencias ciclo: módulo organiza formación necesaria alumnado alcance objetivos generales (h, k, l, m, n) competencias (h, i, k, l, m, n) ciclo final grado medio atletismo. módulo contiene formación necesaria alumnado capaz gestionar organizar eventos promoción, recogiendo información desarrollo procesando datos, colaborar organización escuela atletismo identificar organismos regulan atletismo nivel nacional. # B) Línea Maestra: módulo organiza formación alumnado alrededor gestión organización eventos, recogiendo información, colaborando organización funcionamiento escuela atletismo identificando organismos regulan atletismo nivel nacional. # C) Contenidos: 1. Gestiona organiza eventos promoción iniciación atlética, club colabora gestión, organización desarrollo festival atlético tecnificación, analizando programa actividades dentro temporada atlética, características requisitos materiales humanos eventos.
