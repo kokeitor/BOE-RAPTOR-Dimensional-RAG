@@ -196,7 +196,8 @@ class LabelGenerator:
 
             # Generate labels
             generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
-            logger.info(f"Generating labels with model : {self.model_label} using tokenizer : {self.tokenizer}")
+            logger.info(f"Generating labels with model : {self.model_label} // using : {self.tokenizer}")
+            logger.info(f"Generation by model : {generation}")
 
             try:
                 doc.metadata['label_1_label'] = generation["Label_1"]["Label"]
@@ -394,7 +395,7 @@ class Pipeline:
         processed_docs = self.processor.invoke()
         logger.info(f"Number of processed_docs {len(processed_docs)}")
         try:
-            logger.info(f"Type of processed_docs[0] {type(processed_docs[0])}")
+            logger.debug(f"Type of processed_docs[0] {type(processed_docs[0])}")
         except:
             pass
         split_docs = self.splitter.invoke(processed_docs)

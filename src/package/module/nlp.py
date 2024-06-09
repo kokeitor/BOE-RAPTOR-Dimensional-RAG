@@ -351,10 +351,10 @@ class BoeProcessor(TextPreprocess):
             doc = self.get_del_patrones(doc=doc)
             # titles, doc = self._clean_doc(doc=doc)
             # new_metadata.update(titles)
+            new_metadata['pdf_id'] = self._get_id()
             new_docs.append(self._put_metadata(doc=doc, new_metadata=new_metadata))
             logger.info(f"Update metadata of doc {i} :  {doc.metadata}")
             logger.info(f"Char len of doc {i} : {len(doc.page_content)}")
-            logger.info(f"Page content of doc {i} : {len(doc.page_content)}")
             
         logger.info(f"Number of docs after invoke BoeProcessor : {len(new_docs)}")
         
@@ -370,7 +370,7 @@ class BoeProcessor(TextPreprocess):
         docs = []
         for i, (text, metadata) in enumerate(zip(corpus, metadata_list)):
             logger.info(f"Page content len before preprocess for doc {i+1} : {len(text)}")
-            logger.info(f"Page content [100 first characters] before preprocess for doc {i+1} : {text[0:99]}")
+            logger.debug(f"Page content [100 first characters] before preprocess for doc {i+1} : {text[0:100]}")
             logger.info(f"Metadata before preprocess for doc {i+1}: {metadata}")
             docs.append(Document(page_content=text, metadata=metadata))
         return docs
@@ -462,7 +462,7 @@ class BoeProcessor(TextPreprocess):
 
         # text
         text = doc.page_content
-        logger.info(f"Before preprocess {text=}")
+        logger.debug(f"Before preprocess {text=}")
         logger.info(f"Text len Before preprocess {len(text)=}")
 
         # Dictionary to store detected patterns
@@ -529,11 +529,11 @@ class BoeProcessor(TextPreprocess):
 
         for p in patterns2del:
             text = re.sub(p, '', text)
-        logger.info(f"After preprocess {text=}")
+        logger.debug(f"After preprocess {text=}")
         logger.info(f"Text len after preprocess {len(text)=}")
         doc.page_content = text
-        logger.info(f"After preprocess {doc.page_content=}")
-        logger.info(f"Page content  len after preprocess {len(doc.page_content)=}")
+        logger.debug(f"After preprocess {doc.page_content=}")
+        logger.info(f"Page content len after preprocess {len(doc.page_content)=}")
         
         new_doc = self._put_metadata(doc=doc, new_metadata=metadata)
 
@@ -542,7 +542,7 @@ class BoeProcessor(TextPreprocess):
 
     def _get_date_creation_doc(self, doc: Document) -> Tuple[str, Document]:
         doc_copy = deepcopy(doc)
-        logger.info(f"file_path: {doc_copy.metadata['file_path']}")
+        logger.debug(f"File doc path: {doc_copy.metadata['file_path']}")
         if '/' in doc_copy.metadata["file_path"]:
             dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
             mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]

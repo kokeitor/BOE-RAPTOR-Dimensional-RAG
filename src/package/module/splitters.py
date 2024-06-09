@@ -91,8 +91,8 @@ class CustomSemanticSplitter:
         
         text = doc.page_content
         self._metadata = doc.metadata.copy()
-        
-        logger.info(f"Texto para splitear : {text}")
+    
+        logger.debug(f"Texto para splitear [100 char max] : {text[0:100]}")
         
         # Iterate splitter until we get initial len chunks reach a minimum size
         # split patterns the text on : Level 1 on '.', '?', and '!' - Level 2 on \n - Level 3 on \n\n
@@ -107,7 +107,7 @@ class CustomSemanticSplitter:
                 lista = []
                 for i,d in enumerate(sentence_list):
                     logger.info(f"Level of split pattern used {split_level}")
-                    logger.info(f"CHUNK {i} -> {d}")
+                    logger.info(f"CHUNK {i} LEN -> {len(d)}")
                     lista.append({'sentence': d, 'index': i} )
                 # return [{'sentence': d, 'index': i} for i, d in enumerate(sentence_list)]
                 return lista
@@ -146,9 +146,9 @@ class CustomSemanticSplitter:
             num_tokens = self._get_tokens(text=combined_sentence)
             # Logging
             try:
-                logger.info(f'Combined sentence : index : {i} // tokens : {num_tokens} // text :{combined_sentence}' )
+                logger.info(f'Combined sentence : index : {i} // tokens : {num_tokens} // text len : {len(combined_sentence)}' )
             except UnicodeEncodeError:
-                logger.info(f"Combined sentence : index : {i} // tokens : {num_tokens} // text :{combined_sentence.encode('utf-8', 'ignore').decode('utf-8')}" )
+                logger.info(f"Combined sentence : index : {i} // tokens : {num_tokens} // text len : {len(combined_sentence.encode('utf-8', 'ignore').decode('utf-8'))}" )
             if num_tokens > self.max_tokens:
                 num_sentences_exceed += 1
 

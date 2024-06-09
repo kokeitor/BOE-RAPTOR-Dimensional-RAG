@@ -20,3 +20,750 @@
 [INFO|_client|L1026] 2024-06-10 00:15:38: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 [INFO|etl|L194] 2024-06-10 00:15:38: Generating labels with model : GPT using tokenizer : <Encoding 'cl100k_base'>
 [WARNING|etl|L181] 2024-06-10 00:15:38: Reached max samples : 10 parameter while generating labels
+[INFO|SentenceTransformer|L113] 2024-06-10 00:37:35: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:37:37: Use pytorch device_name: cpu
+[INFO|SentenceTransformer|L113] 2024-06-10 00:37:37: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:37:40: Use pytorch device_name: cpu
+[INFO|_client|L1773] 2024-06-10 00:37:46: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:37:47: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-67b6-4945-9577-d95e65ec35d3 "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:37:48: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-67b6-4945-9577-d95e65ec35d3/result/markdown "HTTP/1.1 200 OK"
+[INFO|parsers|L85] 2024-06-10 00:37:48: Parsed num of docs -> 1
+[INFO|etl|L257] 2024-06-10 00:37:48: Configuration of TextPreprocess for task : classification found
+[INFO|etl|L261] 2024-06-10 00:37:48: Trying to preprocess texts --> del_special_words : {'apply': True}
+[INFO|etl|L261] 2024-06-10 00:37:48: Trying to preprocess texts --> custom_del : {'apply': True, 'delete': False, 'plot': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text'}
+[INFO|etl|L291] 2024-06-10 00:37:50: Path to save plot 'custom_del' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\20240610003750.png
+[INFO|etl|L261] 2024-06-10 00:37:51: Trying to preprocess texts --> bow : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow'}
+[INFO|etl|L302] 2024-06-10 00:37:51: Path to save plot 'bow' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow\20240610003751.png
+[INFO|etl|L261] 2024-06-10 00:37:52: Trying to preprocess texts --> bow_tf_idf : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow_tf_idf'}
+[INFO|etl|L311] 2024-06-10 00:37:52: Path to save plot 'bow_tf_idf' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow_tf_idf\20240610003752.png
+[INFO|nlp|L341] 2024-06-10 00:37:52: Transformando en 'Document' los textos BOE preprocesados
+[INFO|nlp|L371] 2024-06-10 00:37:52: Page content len before preprocess for doc 1 : 12112
+[INFO|nlp|L373] 2024-06-10 00:37:52: Metadata before preprocess for doc 1: {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28'}
+[INFO|nlp|L347] 2024-06-10 00:37:52: NUMERO DE DOCS A ANALIZAR : 1
+[INFO|nlp|L544] 2024-06-10 00:37:52: Doc file metadata path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7298.pdf
+[INFO|nlp|L460] 2024-06-10 00:37:52: Inside get_del_patrones method ... 
+[INFO|nlp|L465] 2024-06-10 00:37:52: Text len Before preprocess len(text)=12112
+[INFO|nlp|L532] 2024-06-10 00:37:52: Text len after preprocess len(text)=11733
+[INFO|nlp|L535] 2024-06-10 00:37:52: Page content len after preprocess len(doc.page_content)=11733
+[INFO|nlp|L355] 2024-06-10 00:37:52: Update metadata of doc 0 :  {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28', 'fecha_publicacion_boe': '2024-04-15', 'orden': [], 'real_decreto': ['Real Decreto 353/2024'], 'ministerios': ['El Ministro de la Presidencia, Justicia y Relaciones con las Cortes, FÉLIX BOLAÑOS GARCÍA']}
+[INFO|nlp|L356] 2024-06-10 00:37:52: Char len of doc 0 : 11733
+[INFO|nlp|L358] 2024-06-10 00:37:52: Number of docs after invoke BoeProcessor : 1
+[INFO|etl|L396] 2024-06-10 00:37:52: Number of processed_docs 1
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 0 -> # 
+
+.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 1 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 2 -> 41371
+
+# II.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 3 -> AUTORIDADES Y PERSONAL
+
+# A.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 4 -> Nombramientos, situaciones e incidencias
+
+#     
+
+7298
+Real Decreto 353/2024, de 26 de marzo, por el que se nombran Magistrados y Magistradas a los Jueces y Juezas a quienes corresponde la promoción por el turno de antigüedad.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 5 -> De conformidad con lo establecido en los artículos 311, 634.1 y 602.1 de la Ley Orgánica 6/1985, de 1 de julio, del Poder Judicial, por Acuerdo de la Comisión Permanente del Consejo General del Poder Judicial, en su reunión del día  y como consecuencia del Acuerdo de  de dicha comisión permanente, publicado en el «Boletín Oficial del Estado» de ,
+
+DISPONGO:
+
+1.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 6 -> Se promueve a la categoría de magistrado a don Ildefonso María Muñoz-Perea Piñar, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 7 de Illescas, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 7 -> 2.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 8 -> Se promueve a la categoría de magistrada a doña María del Rocío Moreno de Viana-Cárdenas, jueza, que sirve el Juzgado de Primera Instancia número 5 de Tarragona, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 9 -> 3.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 10 -> Se promueve a la categoría de magistrada a doña Carmen Hernanz Sánchez, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Palencia, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 11 -> 4.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 12 -> Se promueve a la categoría de magistrada a doña María Bervel García, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 8 de Manresa, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 13 -> 5.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 14 -> Se promueve a la categoría de magistrada a doña Laura Marín Sanz, jueza de adscripción territorial del Tribunal Superior de Justicia de Aragón, provincia de Huesca, pasará a desempeñar la plaza en el Juzgado de Primera Instancia e Instrucción número 4 de Huesca.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 15 -> 6.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 16 -> Se promueve a la categoría de magistrada a doña María Francisca Peris Villagrasa, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Xàtiva, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 17 -> 7.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 18 -> Se promueve a la categoría de magistrado a don Agustín Serrano de Haro Sánchez, juez de adscripción territorial del Tribunal Superior de Justicia de Castilla-La Mancha, provincia de Ciudad Real, pasará a desempeñar la plaza en el Juzgado de lo Social número 36 de Madrid.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 19 -> 8.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 20 -> Se promueve a la categoría de magistrada a doña Elena Fraile Lafuente, jueza de adscripción territorial del Tribunal Superior de Justicia de Canarias, provincia de Santa Cruz de Tenerife, pasará a desempeñar la plaza de jueza de adscripción territorial del Tribunal Superior de Justicia de Madrid.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 21 -> 9.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 22 -> Se promueve a la categoría de magistrado a don Esteban Guerrero Torres, juez, que sirve el Juzgado de lo Social número 3 de Badajoz, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 23 -> 10.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 24 -> Se promueve a la categoría de magistrada a doña Andrea Natividad Genovard, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de Requena, pasará a desempeñar la plaza en el Juzgado de lo Social número 2 de Arrecife, constituido en Puerto del Rosario.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 25 -> ---
+# .
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 26 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 27 -> 41372
+
+|Once.|Se promueve a la categoría de magistrada a doña Patricia Sáez Núñez, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de San Vicente del Raspeig, destino que continuará ocupando.|
+|---|---|
+|Doce.|Se promueve a la categoría de magistrada a doña María del Pilar Navarro Andreu, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de Xátiva, destino que continuará ocupando.|
+|Trece.|Se promueve a la categoría de magistrada a doña Jennifer Rocío Álamo, jueza, que sirve el Juzgado de lo Social número 9 de Las Palmas de Gran Canaria, destino que continuará ocupando.|
+|Catorce.|Se promueve a la categoría de magistrado a don Juan Antonio Gómez Sola, juez, que sirve el Juzgado de Primera Instancia 3 de Torrevieja, destino que continuará ocupando.|
+|Quince.|Se promueve a la categoría de magistrado a don Carlos Girón Lozano, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Alcalá de Guadaira, destino que continuará ocupando.|
+|Dieciséis.|Se promueve a la categoría de magistrada a doña María Inmaculada Samaniego Fuente, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Balmaseda, destino que continuará ocupando.|
+|Diecisiete.|Se promueve a la categoría de magistrado a don Daniel González Uriel, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Noia, pasará a desempeñar la plaza en el Juzgado de Primera Instancia e Instrucción número 5 de Leganés.|
+|Dieciocho.|Se promueve a la categoría de magistrado a don Leopoldo Salvador Torres López, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 3 de Ronda, pasará a desempeñar la plaza en el Juzgado de Primera Instancia número 1 de Marbella.|
+|Diecinueve.|Se promueve a la categoría de magistrada a doña Yanira del Carmen González Sosa, jueza de adscripción territorial del Tribunal Superior de Justicia de Canarias, provincia de Las Palmas, destino que continuará ocupando.|
+|Veinte.|Se promueve a la categoría de magistrada a doña Jessica García Salinas, jueza, que sirve el Juzgado de lo Social número 32 de Barcelona, destino que continuará ocupando.|
+|Veintiuno.|Se promueve a la categoría de magistrada a doña Alejandra Llido Carrillo, jueza, que sirve el Juzgado de Instrucción número 1 de Sabadell, destino que continuará ocupando.|
+|Veintidós.|Se promueve a la categoría de magistrada a doña Cristina García González, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Ávila, destino que continuará ocupando.|
+|Veintitrés.|Se promueve a la categoría de magistrada a doña Rocío Esquinas Fernández, jueza, que sirve el Juzgado de Primera Instancia número 5 de Algeciras, destino que continuará ocupando.|
+|Veinticuatro.|Se promueve a la categoría de magistrado a don Iñigo Ares González, juez, que sirve el Juzgado de lo Social número 4 de Palma, destino que continuará ocupando.|
+|Veinticinco.|Se promueve a la categoría de magistrado a don Adrián Cámara del Río, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Estella, destino que continuará ocupando.|
+|Veintiséis.|Se promueve a la categoría de magistrada a doña María del Pilar Julián Díaz de Geras, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Ciudad Rodrigo, destino que continuará ocupando.|
+|Veintisiete.|Se promueve a la categoría de magistrada a doña Carlota Alonso Benito, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de La Almunia de Doña Godina, destino que continuará ocupando.|
+---
+# 
+
+.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 28 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 29 -> 41373
+
+|Veintiocho.|Se promueve a la categoría de magistrada a doña Nicole Alejandra Centanaro Aguado, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 5 de La Orotava, destino que continuará ocupando.|
+|---|---|
+|Veintinueve.|Se promueve a la categoría de magistrada a doña Roser Pla Mateu, jueza de adscripción territorial del Tribunal Superior de Justicia de Cataluña, provincia de Lleida, destino que continuará ocupando.|
+|Treinta.|Se promueve a la categoría de magistrada a doña Elena Jiménez Barroso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Linares, destino que continuará ocupando.|
+|Treinta y uno.|Se promueve a la categoría de magistrado a don Francisco Cerrillo Alemany, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Lliria, destino que continuará ocupando.|
+|Treinta y dos.|Se promueve a la categoría de magistrado a don Carlos Herrera Moreno, juez, que sirve el Juzgado de lo Social número 1 de Badajoz, destino que continuará ocupando.|
+|Treinta y tres.|Se promueve a la categoría de magistrado a don Gorka de la Cuesta Bermejo, juez de adscripción territorial del Tribunal Superior de Justicia del País Vasco, provincia de Gipuzkoa, destino que continuará ocupando.|
+|Treinta y cuatro.|Se promueve a la categoría de magistrada a doña María Dolores García-Pantaleón Porcuna, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Posadas, destino que continuará ocupando.|
+|Treinta y cinco.|Se promueve a la categoría de magistrada a doña María Josefa García-Abadillo Gomez-Roso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Estepona, destino que continuará ocupando.|
+|Treinta y seis.|Se promueve a la categoría de magistrada a doña María Teresa Santos Alonso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Alcalá de Guadaira, destino que continuará ocupando.|
+|Treinta y siete.|Se promueve a la categoría de magistrada a doña Ana Cuenca Fernández, jueza, que sirve el Juzgado de lo Penal número 1 de Algeciras, pasará a desempeñar la plaza de jueza de adscripción territorial del Tribunal Superior de Justicia de Andalucía, provincia de Cádiz.|
+|Treinta y ocho.|Se promueve a la categoría de magistrada a doña María del Pilar Lázaro García, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de El Ejido, destino que continuará ocupando.|
+|Treinta y nueve.|Se promueve a la categoría de magistrada a doña Alicia Andrés Vaquero, jueza, que sirve el Juzgado de Primera Instancia número 2 de L’Hospitalet de Llobregat, destino que continuará ocupando.|
+|Cuarenta.|Se promueve a la categoría de magistrado a don Guillermo de MiguelFerrer, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Fonsagrada, destino que continuará ocupando.|
+|Cuarenta y uno.|Se promueve a la categoría de magistrada a doña Anna Aranda Olaya, jueza de adscripción territorial del Tribunal Superior de Justicia de Cataluña, provincia de Barcelona, destino que continuará ocupando.|
+|Cuarenta y dos.|Se promueve a la categoría de magistrada a doña Tatiana Sanguino Bello, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 3 de Puerto de la Cruz, destino que continuará ocupando.|
+|Cuarenta y tres.|Se promueve a la categoría de magistrado a don Iñigo José Villar Gómez, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 5 de Estepona, destino que continuará ocupando.|
+|Cuarenta y cuatro.|Se promueve a la categoría de magistrada a doña Ana Urrea Martínez, jueza de adscripción territorial del Tribunal Superior de Justicia del País Vasco, provincia de Araba/Álava, pasará a desempeñar la plaza en el Juzgado de Primera Instancia número 1 de Vitoria-Gasteiz.|
+---
+# .
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 30 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 31 -> 41374
+
+Cuarenta y cinco.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 32 -> La incidencia en este concurso de la valoración, como mérito preferente, del idioma y del derecho propio ha sido la siguiente:
+
+Obtiene la plaza del Juzgado de Primera Instancia número 1 de Vitoria-Gasteiz, la jueza doña Ana Urrea Martínez, con número de escalafón 199, con preferencia sobre los/las jueces con mejor número de escalafón.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 33 -> Los/as jueces/zas nombrados/as, que cambien de destino, no cesarán hasta el día siguiente hábil al de la publicación del presente real decreto en el «Boletín Oficial del Estado».
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 34 -> Aquellos que permanezcan en su destino, no han de cesar.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 35 -> Contra este real decreto se podrá interponer recurso contencioso-administrativo ante la Sala de lo Contencioso-Administrativo del Tribunal Supremo, en el plazo de dos meses a partir del día siguiente a la notificación del mismo.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 36 -> Potestativamente, podrá interponer recurso de reposición ante la comisión permanente, en el plazo de un mes contado a partir del día siguiente a la notificación del presente real decreto.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 37 -> En este último caso, no se podrá interponer el recurso contencioso-administrativo, hasta que se haya resuelto el recurso de reposición o se haya producido la desestimación presunta del mismo.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 38 -> Dado en Madrid, el .
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 39 -> FELIPE R.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 40 -> El Ministro de la Presidencia, Justicia y Relaciones con las Cortes, FÉLIX BOLAÑOS GARCÍA
+
+
+
+Verificable en 
+
+ D.
+[INFO|splitters|L109] 2024-06-10 00:37:52: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:37:52: CHUNK 41 -> L.: M-1/1958 - 
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 0 // tokens : 30 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 1 // tokens : 99 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 2 // tokens : 210 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 3 // tokens : 271 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 4 // tokens : 270 // text [max char 40] : 92 Lunes   II.A. 41371
+
+# II. AUTORIDADE
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 5 // tokens : 321 // text [max char 40] : 41371
+
+# II. AUTORIDADES Y PERSONAL
+
+# A
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 6 // tokens : 318 // text [max char 40] : AUTORIDADES Y PERSONAL
+
+# A. Nombramient
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 7 // tokens : 361 // text [max char 40] : Nombramientos, situaciones e incidencias
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 8 // tokens : 295 // text [max char 40] : De conformidad con lo establecido en los
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 9 // tokens : 238 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 10 // tokens : 179 // text [max char 40] : 2. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 11 // tokens : 254 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 12 // tokens : 197 // text [max char 40] : 3. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 13 // tokens : 255 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 14 // tokens : 203 // text [max char 40] : 4. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 15 // tokens : 276 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 16 // tokens : 224 // text [max char 40] : 5. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 17 // tokens : 297 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 18 // tokens : 222 // text [max char 40] : 6. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 19 // tokens : 268 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 20 // tokens : 210 // text [max char 40] : 7. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 21 // tokens : 292 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 22 // tokens : 219 // text [max char 40] : 8. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 23 // tokens : 225 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 24 // tokens : 1255 // text [max char 40] : 9. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 25 // tokens : 1261 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 26 // tokens : 2356 // text [max char 40] : 10. Se promueve a la categoría de magist
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 27 // tokens : 2362 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 28 // tokens : 2288 // text [max char 40] : ---
+# . 92 Lunes   II.A. 41372
+
+|Once.|S
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 29 // tokens : 2377 // text [max char 40] : 92 Lunes   II.A. 41372
+
+|Once.|Se promue
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 30 // tokens : 2417 // text [max char 40] : 41372
+
+|Once.|Se promueve a la categoría
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 31 // tokens : 1328 // text [max char 40] : 92 Lunes   II.A. 41373
+
+|Veintiocho.|Se 
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 32 // tokens : 1376 // text [max char 40] : 41373
+
+|Veintiocho.|Se promueve a la cat
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 33 // tokens : 278 // text [max char 40] : 92 Lunes   II.A. 41374
+
+Cuarenta y cinco
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 34 // tokens : 320 // text [max char 40] : 41374
+
+Cuarenta y cinco. La incidencia e
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 35 // tokens : 318 // text [max char 40] : La incidencia en este concurso de la val
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 36 // tokens : 231 // text [max char 40] : Los/as jueces/zas nombrados/as, que camb
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 37 // tokens : 222 // text [max char 40] : Aquellos que permanezcan en su destino, 
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 38 // tokens : 215 // text [max char 40] : Contra este real decreto se podrá interp
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 39 // tokens : 159 // text [max char 40] : Potestativamente, podrá interponer recur
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 40 // tokens : 113 // text [max char 40] : En este último caso, no se podrá interpo
+[INFO|splitters|L149] 2024-06-10 00:37:52: Combined sentence : index : 41 // tokens : 63 // text [max char 40] : Dado en Madrid, el . FELIPE R. El Minist
+[INFO|SentenceTransformer|L113] 2024-06-10 00:42:56: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:42:59: Use pytorch device_name: cpu
+[INFO|SentenceTransformer|L113] 2024-06-10 00:42:59: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:43:01: Use pytorch device_name: cpu
+[INFO|_client|L1773] 2024-06-10 00:43:07: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:43:08: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-003b-40a4-b017-ce7fdb2340e8 "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:43:09: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-003b-40a4-b017-ce7fdb2340e8/result/markdown "HTTP/1.1 200 OK"
+[INFO|parsers|L85] 2024-06-10 00:43:10: Parsed num of docs -> 1
+[INFO|etl|L257] 2024-06-10 00:43:10: Configuration of TextPreprocess for task : classification found
+[INFO|etl|L261] 2024-06-10 00:43:10: Trying to preprocess texts --> del_special_words : {'apply': True}
+[INFO|etl|L261] 2024-06-10 00:43:10: Trying to preprocess texts --> custom_del : {'apply': True, 'delete': False, 'plot': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text'}
+[INFO|etl|L291] 2024-06-10 00:43:10: Path to save plot 'custom_del' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\20240610004310.png
+[INFO|etl|L261] 2024-06-10 00:43:10: Trying to preprocess texts --> bow : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow'}
+[INFO|etl|L302] 2024-06-10 00:43:10: Path to save plot 'bow' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow\20240610004310.png
+[INFO|etl|L261] 2024-06-10 00:43:10: Trying to preprocess texts --> bow_tf_idf : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow_tf_idf'}
+[INFO|etl|L311] 2024-06-10 00:43:10: Path to save plot 'bow_tf_idf' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow_tf_idf\20240610004310.png
+[INFO|nlp|L341] 2024-06-10 00:43:11: Transformando en 'Document' los textos BOE preprocesados
+[INFO|nlp|L372] 2024-06-10 00:43:11: Page content len before preprocess for doc 1 : 12112
+[INFO|nlp|L374] 2024-06-10 00:43:11: Metadata before preprocess for doc 1: {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28'}
+[INFO|nlp|L347] 2024-06-10 00:43:11: NUMERO DE DOCS A ANALIZAR : 1
+[INFO|nlp|L461] 2024-06-10 00:43:11: Inside get_del_patrones method ... 
+[INFO|nlp|L466] 2024-06-10 00:43:11: Text len Before preprocess len(text)=12112
+[INFO|nlp|L533] 2024-06-10 00:43:11: Text len after preprocess len(text)=11733
+[INFO|nlp|L536] 2024-06-10 00:43:11: Page content len after preprocess len(doc.page_content)=11733
+[INFO|nlp|L356] 2024-06-10 00:43:11: Update metadata of doc 0 :  {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28', 'fecha_publicacion_boe': '2024-04-15', 'orden': [], 'real_decreto': ['Real Decreto 353/2024'], 'ministerios': ['El Ministro de la Presidencia, Justicia y Relaciones con las Cortes, FÉLIX BOLAÑOS GARCÍA']}
+[INFO|nlp|L357] 2024-06-10 00:43:11: Char len of doc 0 : 11733
+[INFO|nlp|L359] 2024-06-10 00:43:11: Number of docs after invoke BoeProcessor : 1
+[INFO|etl|L396] 2024-06-10 00:43:11: Number of processed_docs 1
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 0 -> # 
+
+.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 1 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 2 -> 41371
+
+# II.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 3 -> AUTORIDADES Y PERSONAL
+
+# A.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 4 -> Nombramientos, situaciones e incidencias
+
+#     
+
+7298
+Real Decreto 353/2024, de 26 de marzo, por el que se nombran Magistrados y Magistradas a los Jueces y Juezas a quienes corresponde la promoción por el turno de antigüedad.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 5 -> De conformidad con lo establecido en los artículos 311, 634.1 y 602.1 de la Ley Orgánica 6/1985, de 1 de julio, del Poder Judicial, por Acuerdo de la Comisión Permanente del Consejo General del Poder Judicial, en su reunión del día  y como consecuencia del Acuerdo de  de dicha comisión permanente, publicado en el «Boletín Oficial del Estado» de ,
+
+DISPONGO:
+
+1.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 6 -> Se promueve a la categoría de magistrado a don Ildefonso María Muñoz-Perea Piñar, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 7 de Illescas, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 7 -> 2.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 8 -> Se promueve a la categoría de magistrada a doña María del Rocío Moreno de Viana-Cárdenas, jueza, que sirve el Juzgado de Primera Instancia número 5 de Tarragona, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 9 -> 3.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 10 -> Se promueve a la categoría de magistrada a doña Carmen Hernanz Sánchez, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Palencia, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 11 -> 4.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 12 -> Se promueve a la categoría de magistrada a doña María Bervel García, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 8 de Manresa, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 13 -> 5.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 14 -> Se promueve a la categoría de magistrada a doña Laura Marín Sanz, jueza de adscripción territorial del Tribunal Superior de Justicia de Aragón, provincia de Huesca, pasará a desempeñar la plaza en el Juzgado de Primera Instancia e Instrucción número 4 de Huesca.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 15 -> 6.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 16 -> Se promueve a la categoría de magistrada a doña María Francisca Peris Villagrasa, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Xàtiva, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 17 -> 7.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 18 -> Se promueve a la categoría de magistrado a don Agustín Serrano de Haro Sánchez, juez de adscripción territorial del Tribunal Superior de Justicia de Castilla-La Mancha, provincia de Ciudad Real, pasará a desempeñar la plaza en el Juzgado de lo Social número 36 de Madrid.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 19 -> 8.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 20 -> Se promueve a la categoría de magistrada a doña Elena Fraile Lafuente, jueza de adscripción territorial del Tribunal Superior de Justicia de Canarias, provincia de Santa Cruz de Tenerife, pasará a desempeñar la plaza de jueza de adscripción territorial del Tribunal Superior de Justicia de Madrid.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 21 -> 9.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 22 -> Se promueve a la categoría de magistrado a don Esteban Guerrero Torres, juez, que sirve el Juzgado de lo Social número 3 de Badajoz, destino que continuará ocupando.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 23 -> 10.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 24 -> Se promueve a la categoría de magistrada a doña Andrea Natividad Genovard, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de Requena, pasará a desempeñar la plaza en el Juzgado de lo Social número 2 de Arrecife, constituido en Puerto del Rosario.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 25 -> ---
+# .
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 26 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 27 -> 41372
+
+|Once.|Se promueve a la categoría de magistrada a doña Patricia Sáez Núñez, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de San Vicente del Raspeig, destino que continuará ocupando.|
+|---|---|
+|Doce.|Se promueve a la categoría de magistrada a doña María del Pilar Navarro Andreu, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 4 de Xátiva, destino que continuará ocupando.|
+|Trece.|Se promueve a la categoría de magistrada a doña Jennifer Rocío Álamo, jueza, que sirve el Juzgado de lo Social número 9 de Las Palmas de Gran Canaria, destino que continuará ocupando.|
+|Catorce.|Se promueve a la categoría de magistrado a don Juan Antonio Gómez Sola, juez, que sirve el Juzgado de Primera Instancia 3 de Torrevieja, destino que continuará ocupando.|
+|Quince.|Se promueve a la categoría de magistrado a don Carlos Girón Lozano, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Alcalá de Guadaira, destino que continuará ocupando.|
+|Dieciséis.|Se promueve a la categoría de magistrada a doña María Inmaculada Samaniego Fuente, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Balmaseda, destino que continuará ocupando.|
+|Diecisiete.|Se promueve a la categoría de magistrado a don Daniel González Uriel, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Noia, pasará a desempeñar la plaza en el Juzgado de Primera Instancia e Instrucción número 5 de Leganés.|
+|Dieciocho.|Se promueve a la categoría de magistrado a don Leopoldo Salvador Torres López, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 3 de Ronda, pasará a desempeñar la plaza en el Juzgado de Primera Instancia número 1 de Marbella.|
+|Diecinueve.|Se promueve a la categoría de magistrada a doña Yanira del Carmen González Sosa, jueza de adscripción territorial del Tribunal Superior de Justicia de Canarias, provincia de Las Palmas, destino que continuará ocupando.|
+|Veinte.|Se promueve a la categoría de magistrada a doña Jessica García Salinas, jueza, que sirve el Juzgado de lo Social número 32 de Barcelona, destino que continuará ocupando.|
+|Veintiuno.|Se promueve a la categoría de magistrada a doña Alejandra Llido Carrillo, jueza, que sirve el Juzgado de Instrucción número 1 de Sabadell, destino que continuará ocupando.|
+|Veintidós.|Se promueve a la categoría de magistrada a doña Cristina García González, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Ávila, destino que continuará ocupando.|
+|Veintitrés.|Se promueve a la categoría de magistrada a doña Rocío Esquinas Fernández, jueza, que sirve el Juzgado de Primera Instancia número 5 de Algeciras, destino que continuará ocupando.|
+|Veinticuatro.|Se promueve a la categoría de magistrado a don Iñigo Ares González, juez, que sirve el Juzgado de lo Social número 4 de Palma, destino que continuará ocupando.|
+|Veinticinco.|Se promueve a la categoría de magistrado a don Adrián Cámara del Río, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Estella, destino que continuará ocupando.|
+|Veintiséis.|Se promueve a la categoría de magistrada a doña María del Pilar Julián Díaz de Geras, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Ciudad Rodrigo, destino que continuará ocupando.|
+|Veintisiete.|Se promueve a la categoría de magistrada a doña Carlota Alonso Benito, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de La Almunia de Doña Godina, destino que continuará ocupando.|
+---
+# 
+
+.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 28 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 29 -> 41373
+
+|Veintiocho.|Se promueve a la categoría de magistrada a doña Nicole Alejandra Centanaro Aguado, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 5 de La Orotava, destino que continuará ocupando.|
+|---|---|
+|Veintinueve.|Se promueve a la categoría de magistrada a doña Roser Pla Mateu, jueza de adscripción territorial del Tribunal Superior de Justicia de Cataluña, provincia de Lleida, destino que continuará ocupando.|
+|Treinta.|Se promueve a la categoría de magistrada a doña Elena Jiménez Barroso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Linares, destino que continuará ocupando.|
+|Treinta y uno.|Se promueve a la categoría de magistrado a don Francisco Cerrillo Alemany, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Lliria, destino que continuará ocupando.|
+|Treinta y dos.|Se promueve a la categoría de magistrado a don Carlos Herrera Moreno, juez, que sirve el Juzgado de lo Social número 1 de Badajoz, destino que continuará ocupando.|
+|Treinta y tres.|Se promueve a la categoría de magistrado a don Gorka de la Cuesta Bermejo, juez de adscripción territorial del Tribunal Superior de Justicia del País Vasco, provincia de Gipuzkoa, destino que continuará ocupando.|
+|Treinta y cuatro.|Se promueve a la categoría de magistrada a doña María Dolores García-Pantaleón Porcuna, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Posadas, destino que continuará ocupando.|
+|Treinta y cinco.|Se promueve a la categoría de magistrada a doña María Josefa García-Abadillo Gomez-Roso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Estepona, destino que continuará ocupando.|
+|Treinta y seis.|Se promueve a la categoría de magistrada a doña María Teresa Santos Alonso, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 2 de Alcalá de Guadaira, destino que continuará ocupando.|
+|Treinta y siete.|Se promueve a la categoría de magistrada a doña Ana Cuenca Fernández, jueza, que sirve el Juzgado de lo Penal número 1 de Algeciras, pasará a desempeñar la plaza de jueza de adscripción territorial del Tribunal Superior de Justicia de Andalucía, provincia de Cádiz.|
+|Treinta y ocho.|Se promueve a la categoría de magistrada a doña María del Pilar Lázaro García, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de El Ejido, destino que continuará ocupando.|
+|Treinta y nueve.|Se promueve a la categoría de magistrada a doña Alicia Andrés Vaquero, jueza, que sirve el Juzgado de Primera Instancia número 2 de L’Hospitalet de Llobregat, destino que continuará ocupando.|
+|Cuarenta.|Se promueve a la categoría de magistrado a don Guillermo de MiguelFerrer, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 1 de Fonsagrada, destino que continuará ocupando.|
+|Cuarenta y uno.|Se promueve a la categoría de magistrada a doña Anna Aranda Olaya, jueza de adscripción territorial del Tribunal Superior de Justicia de Cataluña, provincia de Barcelona, destino que continuará ocupando.|
+|Cuarenta y dos.|Se promueve a la categoría de magistrada a doña Tatiana Sanguino Bello, jueza, que sirve el Juzgado de Primera Instancia e Instrucción número 3 de Puerto de la Cruz, destino que continuará ocupando.|
+|Cuarenta y tres.|Se promueve a la categoría de magistrado a don Iñigo José Villar Gómez, juez, que sirve el Juzgado de Primera Instancia e Instrucción número 5 de Estepona, destino que continuará ocupando.|
+|Cuarenta y cuatro.|Se promueve a la categoría de magistrada a doña Ana Urrea Martínez, jueza de adscripción territorial del Tribunal Superior de Justicia del País Vasco, provincia de Araba/Álava, pasará a desempeñar la plaza en el Juzgado de Primera Instancia número 1 de Vitoria-Gasteiz.|
+---
+# .
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 30 -> 92 Lunes   II.A.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 31 -> 41374
+
+Cuarenta y cinco.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 32 -> La incidencia en este concurso de la valoración, como mérito preferente, del idioma y del derecho propio ha sido la siguiente:
+
+Obtiene la plaza del Juzgado de Primera Instancia número 1 de Vitoria-Gasteiz, la jueza doña Ana Urrea Martínez, con número de escalafón 199, con preferencia sobre los/las jueces con mejor número de escalafón.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 33 -> Los/as jueces/zas nombrados/as, que cambien de destino, no cesarán hasta el día siguiente hábil al de la publicación del presente real decreto en el «Boletín Oficial del Estado».
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 34 -> Aquellos que permanezcan en su destino, no han de cesar.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 35 -> Contra este real decreto se podrá interponer recurso contencioso-administrativo ante la Sala de lo Contencioso-Administrativo del Tribunal Supremo, en el plazo de dos meses a partir del día siguiente a la notificación del mismo.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 36 -> Potestativamente, podrá interponer recurso de reposición ante la comisión permanente, en el plazo de un mes contado a partir del día siguiente a la notificación del presente real decreto.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 37 -> En este último caso, no se podrá interponer el recurso contencioso-administrativo, hasta que se haya resuelto el recurso de reposición o se haya producido la desestimación presunta del mismo.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 38 -> Dado en Madrid, el .
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 39 -> FELIPE R.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 40 -> El Ministro de la Presidencia, Justicia y Relaciones con las Cortes, FÉLIX BOLAÑOS GARCÍA
+
+
+
+Verificable en 
+
+ D.
+[INFO|splitters|L109] 2024-06-10 00:43:11: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:43:11: CHUNK 41 -> L.: M-1/1958 - 
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 0 // tokens : 30 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 1 // tokens : 99 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 2 // tokens : 210 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 3 // tokens : 271 // text [max char 40] : # 
+
+. 92 Lunes   II.A. 41371
+
+# II. AUTO
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 4 // tokens : 270 // text [max char 40] : 92 Lunes   II.A. 41371
+
+# II. AUTORIDADE
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 5 // tokens : 321 // text [max char 40] : 41371
+
+# II. AUTORIDADES Y PERSONAL
+
+# A
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 6 // tokens : 318 // text [max char 40] : AUTORIDADES Y PERSONAL
+
+# A. Nombramient
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 7 // tokens : 361 // text [max char 40] : Nombramientos, situaciones e incidencias
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 8 // tokens : 295 // text [max char 40] : De conformidad con lo establecido en los
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 9 // tokens : 238 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 10 // tokens : 179 // text [max char 40] : 2. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 11 // tokens : 254 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 12 // tokens : 197 // text [max char 40] : 3. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 13 // tokens : 255 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 14 // tokens : 203 // text [max char 40] : 4. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 15 // tokens : 276 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 16 // tokens : 224 // text [max char 40] : 5. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 17 // tokens : 297 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 18 // tokens : 222 // text [max char 40] : 6. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 19 // tokens : 268 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 20 // tokens : 210 // text [max char 40] : 7. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 21 // tokens : 292 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 22 // tokens : 219 // text [max char 40] : 8. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 23 // tokens : 225 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 24 // tokens : 1255 // text [max char 40] : 9. Se promueve a la categoría de magistr
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 25 // tokens : 1261 // text [max char 40] : Se promueve a la categoría de magistrado
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 26 // tokens : 2356 // text [max char 40] : 10. Se promueve a la categoría de magist
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 27 // tokens : 2362 // text [max char 40] : Se promueve a la categoría de magistrada
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 28 // tokens : 2288 // text [max char 40] : ---
+# . 92 Lunes   II.A. 41372
+
+|Once.|S
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 29 // tokens : 2377 // text [max char 40] : 92 Lunes   II.A. 41372
+
+|Once.|Se promue
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 30 // tokens : 2417 // text [max char 40] : 41372
+
+|Once.|Se promueve a la categoría
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 31 // tokens : 1328 // text [max char 40] : 92 Lunes   II.A. 41373
+
+|Veintiocho.|Se 
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 32 // tokens : 1376 // text [max char 40] : 41373
+
+|Veintiocho.|Se promueve a la cat
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 33 // tokens : 278 // text [max char 40] : 92 Lunes   II.A. 41374
+
+Cuarenta y cinco
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 34 // tokens : 320 // text [max char 40] : 41374
+
+Cuarenta y cinco. La incidencia e
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 35 // tokens : 318 // text [max char 40] : La incidencia en este concurso de la val
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 36 // tokens : 231 // text [max char 40] : Los/as jueces/zas nombrados/as, que camb
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 37 // tokens : 222 // text [max char 40] : Aquellos que permanezcan en su destino, 
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 38 // tokens : 215 // text [max char 40] : Contra este real decreto se podrá interp
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 39 // tokens : 159 // text [max char 40] : Potestativamente, podrá interponer recur
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 40 // tokens : 113 // text [max char 40] : En este último caso, no se podrá interpo
+[INFO|splitters|L149] 2024-06-10 00:43:11: Combined sentence : index : 41 // tokens : 63 // text [max char 40] : Dado en Madrid, el . FELIPE R. El Minist
+[INFO|splitters|L250] 2024-06-10 00:43:13: Saving similarity plot to -> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\splitter\20240610004313_dc77499d-fd7b-4b1a-a048-cdc4ca9a923d_similarity_plot.png
+[INFO|splitters|L265] 2024-06-10 00:43:13: Saving similarity histogram plot to -> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\splitter\20240610004313_dc77499d-fd7b-4b1a-a048-cdc4ca9a923d_similarity_hist.png
+[INFO|_client|L1026] 2024-06-10 00:43:15: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:15: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:15: Generation by model : {'Label_1': {'Label': 'Avisos y Notificaciones Oficiales', 'Score': 0.75}, 'Label_2': {'Label': 'Anuncios de Concursos y Adjudicaciones de Plazas', 'Score': 0.65}, 'Label_3': {'Label': 'Edictos y Notificaciones Judiciales', 'Score': 0.6}}
+[INFO|_client|L1026] 2024-06-10 00:43:17: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:17: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:17: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.789}, 'Label_2': {'Label': 'Promociones y Situaciones Especiales', 'Score': 0.723}, 'Label_3': {'Label': 'Leyes Orgánicas', 'Score': 0.612}}
+[INFO|_client|L1026] 2024-06-10 00:43:19: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:19: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:19: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.75}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.7}}
+[INFO|_client|L1026] 2024-06-10 00:43:20: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:20: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:20: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Promociones y Situaciones Especiales', 'Score': 0.75}, 'Label_3': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.65}}
+[INFO|_client|L1026] 2024-06-10 00:43:22: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:22: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:22: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.75}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.72}}
+[INFO|_client|L1026] 2024-06-10 00:43:24: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:24: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:24: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.78}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.72}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.68}}
+[INFO|_client|L1026] 2024-06-10 00:43:26: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:26: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:26: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.75}, 'Label_2': {'Label': 'Convocatorias y Resultados de Oposiciones', 'Score': 0.65}, 'Label_3': {'Label': 'Orden de Publicaciones y Sumarios', 'Score': 0.55}}
+[INFO|_client|L1026] 2024-06-10 00:43:27: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:27: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:27: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Procedimientos y Citaciones Judiciales', 'Score': 0.75}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.7}}
+[INFO|_client|L1026] 2024-06-10 00:43:29: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:29: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:29: Generation by model : {'Label_1': {'Label': 'Procedimientos y Citaciones Judiciales', 'Score': 0.75}, 'Label_2': {'Label': 'Reales Decretos y Reales Decretos-Leyes', 'Score': 0.65}, 'Label_3': {'Label': 'Normativas Temporales y Urgentes', 'Score': 0.55}}
+[INFO|_client|L1026] 2024-06-10 00:43:31: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:43:31: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:43:31: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Publicaciones por Órgano Emisor', 'Score': 0.75}, 'Label_3': {'Label': 'Documentos y Comunicaciones Específicas', 'Score': 0.65}}
+[WARNING|etl|L186] 2024-06-10 00:43:31: Reached max samples : 10 parameter while generating labels
+[INFO|SentenceTransformer|L113] 2024-06-10 00:47:20: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:47:23: Use pytorch device_name: cpu
+[INFO|SentenceTransformer|L113] 2024-06-10 00:47:23: Load pretrained SentenceTransformer: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+[INFO|SentenceTransformer|L219] 2024-06-10 00:47:27: Use pytorch device_name: cpu
+[INFO|_client|L1773] 2024-06-10 00:47:37: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:47:39: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-6513-4b6c-9a6d-6be70acc5646 "HTTP/1.1 200 OK"
+[INFO|_client|L1773] 2024-06-10 00:47:39: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-6513-4b6c-9a6d-6be70acc5646/result/markdown "HTTP/1.1 200 OK"
+[INFO|parsers|L85] 2024-06-10 00:47:41: Parsed num of docs -> 1
+[INFO|etl|L257] 2024-06-10 00:47:41: Configuration of TextPreprocess for task : classification found
+[INFO|etl|L261] 2024-06-10 00:47:41: Trying to preprocess texts --> del_special_words : {'apply': True}
+[INFO|etl|L261] 2024-06-10 00:47:41: Trying to preprocess texts --> custom_del : {'apply': True, 'delete': False, 'plot': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text'}
+[INFO|etl|L291] 2024-06-10 00:47:41: Path to save plot 'custom_del' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\20240610004741.png
+[INFO|etl|L261] 2024-06-10 00:47:42: Trying to preprocess texts --> bow : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow'}
+[INFO|etl|L302] 2024-06-10 00:47:42: Path to save plot 'bow' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow\20240610004742.png
+[INFO|etl|L261] 2024-06-10 00:47:43: Trying to preprocess texts --> bow_tf_idf : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow_tf_idf'}
+[INFO|etl|L311] 2024-06-10 00:47:43: Path to save plot 'bow_tf_idf' : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\text\bow_tf_idf\20240610004743.png
+[INFO|nlp|L341] 2024-06-10 00:47:43: Transformando en 'Document' los textos BOE preprocesados
+[INFO|nlp|L372] 2024-06-10 00:47:43: Page content len before preprocess for doc 1 : 12112
+[INFO|nlp|L374] 2024-06-10 00:47:43: Metadata before preprocess for doc 1: {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28'}
+[INFO|nlp|L347] 2024-06-10 00:47:43: NUMERO DE DOCS A ANALIZAR : 1
+[INFO|nlp|L461] 2024-06-10 00:47:43: Inside get_del_patrones method ... 
+[INFO|nlp|L466] 2024-06-10 00:47:43: Text len Before preprocess len(text)=12112
+[INFO|nlp|L533] 2024-06-10 00:47:43: Text len after preprocess len(text)=11733
+[INFO|nlp|L536] 2024-06-10 00:47:43: Page content len after preprocess len(doc.page_content)=11733
+[INFO|nlp|L356] 2024-06-10 00:47:43: Update metadata of doc 0 :  {'file_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15\\BOE-A-2024-7298.pdf', 'file_name': 'BOE-A-2024-7298.pdf', 'file_type': 'application/pdf', 'file_size': 208985, 'creation_date': '2024-06-09', 'last_modified_date': '2024-04-28', 'fecha_publicacion_boe': '2024-04-15', 'orden': [], 'real_decreto': ['Real Decreto 353/2024'], 'ministerios': ['El Ministro de la Presidencia, Justicia y Relaciones con las Cortes, FÉLIX BOLAÑOS GARCÍA']}
+[INFO|nlp|L357] 2024-06-10 00:47:43: Char len of doc 0 : 11733
+[INFO|nlp|L359] 2024-06-10 00:47:43: Number of docs after invoke BoeProcessor : 1
+[INFO|etl|L396] 2024-06-10 00:47:43: Number of processed_docs 1
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 0 LEN -> 5
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 1 LEN -> 16
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 2 LEN -> 12
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 3 LEN -> 28
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 4 LEN -> 226
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 5 LEN -> 363
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 6 LEN -> 198
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 7 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 8 LEN -> 194
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 9 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 10 LEN -> 189
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 11 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 12 LEN -> 185
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 13 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 14 LEN -> 262
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 15 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 16 LEN -> 197
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 17 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 18 LEN -> 271
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 19 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 20 LEN -> 297
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 21 LEN -> 2
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 22 LEN -> 165
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 23 LEN -> 3
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 24 LEN -> 271
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 25 LEN -> 7
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 26 LEN -> 16
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 27 LEN -> 3571
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 28 LEN -> 16
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 29 LEN -> 3800
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 30 LEN -> 16
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 31 LEN -> 24
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 32 LEN -> 337
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 33 LEN -> 178
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 34 LEN -> 56
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 35 LEN -> 228
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 36 LEN -> 187
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 37 LEN -> 191
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 38 LEN -> 20
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 39 LEN -> 9
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 40 LEN -> 113
+[INFO|splitters|L109] 2024-06-10 00:47:43: Level of split pattern used 0
+[INFO|splitters|L110] 2024-06-10 00:47:43: CHUNK 41 LEN -> 15
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 0 // tokens : 30 // text len : 64
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 1 // tokens : 99 // text len : 291
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 2 // tokens : 210 // text len : 655
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 3 // tokens : 271 // text len : 854
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 4 // tokens : 270 // text len : 851
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 5 // tokens : 321 // text len : 1029
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 6 // tokens : 318 // text len : 1019
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 7 // tokens : 361 // text len : 1180
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 8 // tokens : 295 // text len : 956
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 9 // tokens : 238 // text len : 778
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 10 // tokens : 179 // text len : 582
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 11 // tokens : 254 // text len : 842
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 12 // tokens : 197 // text len : 650
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 13 // tokens : 255 // text len : 845
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 14 // tokens : 203 // text len : 658
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 15 // tokens : 276 // text len : 927
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 16 // tokens : 224 // text len : 744
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 17 // tokens : 297 // text len : 1039
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 18 // tokens : 222 // text len : 779
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 19 // tokens : 268 // text len : 942
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 20 // tokens : 210 // text len : 748
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 21 // tokens : 292 // text len : 1017
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 22 // tokens : 219 // text len : 753
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 23 // tokens : 225 // text len : 767
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 24 // tokens : 1255 // text len : 4041
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 25 // tokens : 1261 // text len : 4055
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 26 // tokens : 2356 // text len : 7690
+[INFO|splitters|L149] 2024-06-10 00:47:43: Combined sentence : index : 27 // tokens : 2362 // text len : 7703
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 28 // tokens : 2288 // text len : 7456
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 29 // tokens : 2377 // text len : 7786
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 30 // tokens : 2417 // text len : 7948
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 31 // tokens : 1328 // text len : 4433
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 32 // tokens : 1376 // text len : 4645
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 33 // tokens : 278 // text len : 1032
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 34 // tokens : 320 // text len : 1207
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 35 // tokens : 318 // text len : 1203
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 36 // tokens : 231 // text len : 875
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 37 // tokens : 222 // text len : 810
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 38 // tokens : 215 // text len : 769
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 39 // tokens : 159 // text len : 540
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 40 // tokens : 113 // text len : 352
+[INFO|splitters|L149] 2024-06-10 00:47:44: Combined sentence : index : 41 // tokens : 63 // text len : 160
+[INFO|splitters|L250] 2024-06-10 00:47:48: Saving similarity plot to -> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\splitter\20240610004748_1663da3f-7aba-45b5-9d66-c8e609435b51_similarity_plot.png
+[INFO|splitters|L265] 2024-06-10 00:47:49: Saving similarity histogram plot to -> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\figures\splitter\20240610004749_1663da3f-7aba-45b5-9d66-c8e609435b51_similarity_hist.png
+[INFO|_client|L1026] 2024-06-10 00:47:51: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:51: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:51: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.75}, 'Label_2': {'Label': 'Publicaciones por Órgano Emisor', 'Score': 0.65}, 'Label_3': {'Label': 'Anuncios y Avisos (Oficiales y Privados)', 'Score': 0.55}}
+[INFO|_client|L1026] 2024-06-10 00:47:52: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:52: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:52: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.789}, 'Label_2': {'Label': 'Promociones y Situaciones Especiales', 'Score': 0.678}, 'Label_3': {'Label': 'Leyes Orgánicas', 'Score': 0.543}}
+[INFO|_client|L1026] 2024-06-10 00:47:54: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:54: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:54: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.75}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.7}}
+[INFO|_client|L1026] 2024-06-10 00:47:55: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:55: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:55: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Promociones y Situaciones Especiales', 'Score': 0.75}, 'Label_3': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.65}}
+[INFO|_client|L1026] 2024-06-10 00:47:57: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:57: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:57: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.75}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.72}}
+[INFO|_client|L1026] 2024-06-10 00:47:59: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:47:59: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:47:59: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.78}, 'Label_2': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.72}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.68}}
+[INFO|_client|L1026] 2024-06-10 00:48:00: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:48:00: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:48:00: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.75}, 'Label_2': {'Label': 'Convocatorias y Resultados de Oposiciones', 'Score': 0.65}, 'Label_3': {'Label': 'Judicial y Procedimientos Legales', 'Score': 0.55}}
+[INFO|_client|L1026] 2024-06-10 00:48:02: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:48:02: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:48:02: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.75}, 'Label_2': {'Label': 'Procedimientos y Citaciones Judiciales', 'Score': 0.65}, 'Label_3': {'Label': 'Sentencias y Declaraciones Judiciales', 'Score': 0.6}}
+[INFO|_client|L1026] 2024-06-10 00:48:05: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:48:05: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:48:05: Generation by model : {'Label_1': {'Label': 'Procedimientos y Citaciones Judiciales', 'Score': 0.65}, 'Label_2': {'Label': 'Reales Decretos y Reales Decretos-Leyes', 'Score': 0.6}, 'Label_3': {'Label': 'Edictos y Notificaciones Judiciales', 'Score': 0.55}}
+[INFO|_client|L1026] 2024-06-10 00:48:07: HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[INFO|etl|L199] 2024-06-10 00:48:07: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
+[INFO|etl|L200] 2024-06-10 00:48:07: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Publicaciones por Órgano Emisor', 'Score': 0.75}, 'Label_3': {'Label': 'Documentos y Comunicaciones Específicas', 'Score': 0.65}}
+[WARNING|etl|L186] 2024-06-10 00:48:07: Reached max samples : 10 parameter while generating labels
