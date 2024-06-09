@@ -23,9 +23,7 @@
                       "spc_caracters": [
                                           "!", "@", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
                                           "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".",
-                                          "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__","BOLETÍN", "OFICIAL",
-                                           "DEL", "ESTADO", "CONSEJO", "GENERAL", "DEL", "PODER", "JUDICIAL", "cve", "Núm",
-                                            "ISSN:", "Pág.", "Sec.", "### Primero.", "### Segundo."
+                                          "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__"
                                       ],
                       "task_name": "classification",
                       "methods": {

@@ -364,15 +364,17 @@ class Pipeline:
         return pd.DataFrame(data=texts, columns="text")
     
     def save_figure_from_df(self,df : pd.DataFrame, path : str , method :str) -> None:
+        logger.info(f"Saving plot bow figure into -> {path}")
         most_frequent_tokens= df.sum(axis=0, skipna=True).sort_values(ascending=False)
         num_tokens=50
-        plt.figure(figsize=(16,10))
+        fig = plt.figure(figsize=(16,10))
         plt.bar(x=most_frequent_tokens.head(num_tokens).index, height=most_frequent_tokens.head(num_tokens).values)
         plt.xticks(rotation=45, ha='right')
         plt.title(f"Most frequent {num_tokens} tokens/terms in corpus using bow raw method")
         plt.grid()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         plt.savefig(path, format='png')
-        plt.close()
+        plt.close(fig)
         
     def run(self) -> List[Document]:
         self.parsed_docs = self.parser.invoke()

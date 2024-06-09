@@ -226,14 +226,17 @@ class TextPreprocess:
                     special_c_count[char] = count
 
         if plot:
-            plt.figure(figsize=(10, 6))
+            logger.info(f"Saving plot' Special Characters in Texts' figure into -> {storage_path}")
+            fig = plt.figure(figsize=(10, 6))
             plt.bar(special_c_count.keys(), special_c_count.values(), color='skyblue')
             plt.xlabel('Special Characters')
             plt.ylabel('Frequency')
             plt.title('Special Characters in Texts')
             plt.xticks(rotation=45)
             plt.grid()
+            os.makedirs(os.path.dirname(storage_path), exist_ok=True)
             plt.savefig(storage_path, format="png")
+            plt.close(fig)
 
         if data_is_string:
             return special_c_count, text
@@ -422,57 +425,55 @@ class BoeProcessor(TextPreprocess):
             titles = [t for t in titles if t]
         return titles
 
-    def get_del_patrones(self, doc : Document) -> Tuple[str,dict]:
+    def get_del_patrones(self, doc: Document) -> Tuple[str, dict]:
         """
-        ...
+        Cleans the document text by removing specific patterns and updating metadata.
+
         Args:
-            text (str): The document text to clean.
+            doc (Document): The document to clean.
 
         Returns:
-            str: The cleaned text.
+            Tuple[str, dict]: The cleaned text and updated metadata.
         """
-    
+        logger.info("Inside get_del_patrones method ... ")
+
         # text
         text = doc.page_content
-        
+
         # Dictionary to store detected patterns
         metadata = {
             'orden': [],
             'real_decreto': [],
             'ministerios': []
         }
-        
+
         # Define patterns
         order_pattern = r'Orden [A-Z]+/\d{3,4}/\d{4}'
         resolution_pattern = r'Real Decreto \d+/\d{4}'
         date_pattern = r'\d{1,2} de [a-zA-Z]+ de \d{4}'
         ministerial_pattern = r'El Ministro de [\w\s,]+, [A-ZÁÉÍÓÚÑ ]+'
-        
+
         # Store and remove order numbers
         orders = re.findall(order_pattern, text)
         metadata['orden'].extend(orders)
         # text = re.sub(order_pattern, '', text)
-        
+
         # Store and remove resolution numbers
         resolutions = re.findall(resolution_pattern, text)
         metadata['real_decreto'].extend(resolutions)
         # text = re.sub(resolution_pattern, '', text)
-        
+
         # Store and remove dates
         dates = re.findall(date_pattern, text)
-        #metadata['fecha'].extend(dates)
+        # metadata['fecha'].extend(dates)
         text = re.sub(date_pattern, '', text)
-        
+
         # Store and remove ministerial references
         ministers = re.findall(ministerial_pattern, text)
         metadata['ministerios'].extend(ministers)
-        #text = re.sub(ministerial_pattern, '', text)
-        
-        # Remove page headers and footers
-        text = re.sub(r'BOLETÍN OFICIAL DEL ESTADO', '', text)
-        text = re.sub(r'Núm. \d+ [a-zA-Z]+ \d{1,2} de [a-zA-Z]+ de \d{4} Sec. [I|II]\.[A-Z]\. Pág\. \d+', '', text)
-        
-        # Remove URLs and references to online resources
+        # text = re.sub(ministerial_pattern, '', text)
+
+        # Remove patterns
         patterns2del = [
             r'^##(?!\#).*$',
             r'^###(?!\#).*$',
@@ -492,16 +493,23 @@ class BoeProcessor(TextPreprocess):
             r'Lunes \d+ de abril de \d{4}', 
             r'ISSN: \d{4}-\d{3}[XD]',
             r'cv\se:\sB\sO\sE-\sA-\s\d{4}-\d+\sVe\srif\sic\sab\sle\se\sn\sht\stp\ss://\sw\sw\w\.boe\.es',
-            r'D\. L\.: M-\d+/\d{4} - ISSN: \d{4}-\d{4}'
+            r'D\. L\.: M-\d+/\d{4} - ISSN: \d{4}-\d{4}',
+            r"BOLETÍN", r"OFICIAL",
+            r"DEL", r"ESTADO", r"CONSEJO", 
+            r"GENERAL", r"DEL", r"PODER", 
+            r"JUDICIAL", r"cve", r"Núm",
+            r"ISSN:", r"Pág.", r"Sec.", 
+            r"### Primero.", r"### Segundo."
         ]
-        
-        for p in patterns2del: 
-            text = re.sub(r'https://www\.boe\.es', '', text)
-        
+
+        for p in patterns2del:
+            text = re.sub(p, '', text)
+
         doc.page_content = text
         new_doc = self._put_metadata(doc=doc, new_metadata=metadata)
-        
+
         return new_doc
+
 
     def _get_date_creation_doc(self, doc: Document) -> Tuple[str, Document]:
         doc_copy = deepcopy(doc)
