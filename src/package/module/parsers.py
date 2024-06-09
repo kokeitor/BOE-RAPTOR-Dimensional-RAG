@@ -1,5 +1,6 @@
 import os
 import tiktoken
+import pytz
 from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
@@ -45,11 +46,11 @@ logger = logging.getLogger("parser_module_logger")  # Child logger [for this mod
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 
-#util functions
-def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
-
+# util functions
+def get_current_spanish_date_iso():
+    # Get the current date and time in the Europe/Madrid time zone
+    spanish_tz = pytz.timezone('Europe/Madrid')
+    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 class Parser:
     def __init__(self, directory_path: str, 
@@ -72,12 +73,12 @@ class Parser:
             recursive=recursive_parser,  # recursively search in subdirectories
             required_exts=[file_type]
         )
-
+        
     def invoke(self) -> List[Document]:
         
         self.llama_parsed_docs = self.reader.load_data()  # returns List[llama doc objt]
         self.lang_parsed_docs = [d.to_langchain_format() for d in self.llama_parsed_docs]
-        
+    
         if len(self.lang_parsed_docs) == 0:
             logger.error("Parsed docs list empty")
         else:

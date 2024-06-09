@@ -25,37 +25,41 @@
                                           "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".",
                                           "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__"
                                       ],
+                      "spc_words": [
+                                        "BOE"
+                                      ],
                       "task_name": "classification",
                       "methods": {
-                                  "del_stopwords": {
-                                                    "apply":false,
-                                                      "lang": "Spanish"
-                                                  },
-                                  "del_urls": {"apply":false},
-                                  "del_html": {"apply":false},
-                                  "del_emojis": {"apply":false},
-                                  "del_special": {"apply":false},
-                                  "del_digits": {"apply":false},
-                                  "del_chinese_japanese": {"apply":false},
-                                  "del_extra_spaces": {"apply":false},
-                                  "get_lower": {"apply":false},
-                                  "get_alfanumeric": {"apply":false},
-                                  "stem": {"apply":false},
-                                  "lemmatize": {"apply":false},
-                                  "custom_del": {
-                                                  "apply":true,
-                                                  "delete": false,
-                                                  "plot": true,
-                                                  "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text"
-                                                },
-                                  "bow": { 
-                                            "apply":true,
-                                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
-                                          },
-                                  "bow_tf_idf": {
-                                              "apply":true,
-                                              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
-                                                }
+                        "del_stopwords": {
+                                          "apply":false,
+                                            "lang": "Spanish"
+                                        },
+                        "del_urls": {"apply":false},
+                        "del_html": {"apply":false},
+                        "del_emojis": {"apply":false},
+                        "del_special": {"apply":false},
+                        "del_special_words": {"apply":true},
+                        "del_digits": {"apply":false},
+                        "del_chinese_japanese": {"apply":false},
+                        "del_extra_spaces": {"apply":false},
+                        "get_lower": {"apply":false},
+                        "get_alfanumeric": {"apply":false},
+                        "stem": {"apply":false},
+                        "lemmatize": {"apply":false},
+                        "custom_del": {
+                            "apply":true,
+                            "delete": false,
+                            "plot": true,
+                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text"
+                                      },
+                        "bow": { 
+                            "apply":true,
+                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
+                                },
+                        "bow_tf_idf": {
+                              "apply":true,
+                              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow_tf_idf"
+                                      }
                       }
   },
   "label_generator": {
@@ -66,8 +70,8 @@
   },
   "storer": {
     "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boedataset",
-    "file_name":"train",
-    "file_format": "csv"
+    "file_name":"train_calpe",
+    "file_format": "parquet"
   }
 }
 

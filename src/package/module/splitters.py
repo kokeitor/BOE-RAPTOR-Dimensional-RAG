@@ -3,6 +3,7 @@ import json
 import re
 import uuid
 import torch
+import pytz
 import tiktoken
 import numpy as np
 import pandas as pd
@@ -21,8 +22,11 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 import logging
+import matplotlib
 
 
+# Set the default font to DejaVu Sans
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 # Load environment variables from .env file
 load_dotenv()
@@ -51,11 +55,11 @@ EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraph
 logger = logging.getLogger("splitters_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
-
-#util functions
-def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+# util functions
+def get_current_spanish_date_iso():
+    # Get the current date and time in the Europe/Madrid time zone
+    spanish_tz = pytz.timezone('Europe/Madrid')
+    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 
 class CustomSemanticSplitter:
@@ -113,12 +117,17 @@ class CustomSemanticSplitter:
         return str(uuid.uuid5(self.namespace_id, text))
 
     def _combine_sentences(self, sentences_to_combine: List[Dict], buffer_size: int = None) -> List[Dict]:
+        
         if buffer_size is None:
             buffer_size = self.buffer_size
+            
+        if not isinstance(sentences_to_combine, list):
+            logger.exception("Expected sentences_to_combine to be a list")
+            raise ValueError("Expected sentences_to_combine to be a list")
 
         num_sentences_exceed = 0
         sentences = sentences_to_combine.copy()
-
+        
         for i in range(len(sentences)):
             combined_sentence = ''
 
@@ -135,8 +144,11 @@ class CustomSemanticSplitter:
             sentences[i]['combined_sentence'] = combined_sentence
 
             num_tokens = self._get_tokens(text=combined_sentence)
-            
-            logger.info(f'Combined sentence : index : {i} // tokens : {num_tokens} // text : {combined_sentence}' )
+            # Logging
+            try:
+                logger.info(f'Combined sentence : index : {i} // tokens : {num_tokens} // text :{combined_sentence}' )
+            except UnicodeEncodeError:
+                logger.info(f"Combined sentence : index : {i} // tokens : {num_tokens} // text :{combined_sentence.encode('utf-8', 'ignore').decode('utf-8')}" )
             if num_tokens > self.max_tokens:
                 num_sentences_exceed += 1
 
@@ -191,11 +203,19 @@ class CustomSemanticSplitter:
             chunks.append({'chunk_text': combined_text, 'chunk_metadata': chunk_metadata})
         return chunks
 
-    def _plot_similarity(self, pdf_id : str, sentences: List[Dict], threshold: int = 75):
+    def _plot_similarity(self, pdf_id: str, sentences: List[Dict], threshold: int = 75):
+        """
+        Plot similarity distances between sentences and save the plots.
 
+        Args:
+            pdf_id (str): Identifier for the PDF document.
+            sentences (List[Dict]): List of sentence dictionaries with similarity distances.
+            threshold (int, optional): Percentile threshold for determining significant distances. Defaults to 75.
+        """
         distances = [x["distance_to_next"] for x in sentences]
         max_distance = np.max(distances)
-        
+
+        # Plot similarity distances
         plt.figure(figsize=(12, 8))
         plt.plot(distances, marker='o')
         plt.xticks(ticks=np.arange(len(distances)), labels=np.arange(len(distances)))
@@ -205,36 +225,45 @@ class CustomSemanticSplitter:
         breakpoint_distance_threshold = np.percentile(distances, threshold)
         plt.axhline(y=breakpoint_distance_threshold, color='r', linestyle='-')
         num_distances_above_threshold = len([x for x in distances if x > breakpoint_distance_threshold])
-        plt.text(x=(len(distances) * .01), y=y_upper_bound / 50, s=f"{num_distances_above_threshold + 1} Chunks")
+        plt.text(x=(len(distances) * 0.01), y=y_upper_bound / 50, s=f"{num_distances_above_threshold + 1} Chunks")
         indices_above_thresh = [i for i, x in enumerate(distances) if x > breakpoint_distance_threshold]
         colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+
         for i, breakpoint_index in enumerate(indices_above_thresh):
             start_index = 0 if i == 0 else indices_above_thresh[i - 1]
             end_index = breakpoint_index if i < len(indices_above_thresh) - 1 else len(distances)
             plt.axvspan(start_index, end_index, facecolor=colors[i % len(colors)], alpha=0.25)
-            plt.text(x=np.average([start_index, end_index]), y=breakpoint_distance_threshold + (y_upper_bound) / 20, s=f"Chunk #{i}", horizontalalignment='center', rotation='vertical')
+            plt.text(x=np.average([start_index, end_index]), y=breakpoint_distance_threshold + (y_upper_bound / 20),
+                     s=f"Chunk #{i}", horizontalalignment='center', rotation='vertical')
+
         if indices_above_thresh:
             last_breakpoint = indices_above_thresh[-1]
             if last_breakpoint < len(distances):
                 plt.axvspan(last_breakpoint, len(distances), facecolor=colors[len(indices_above_thresh) % len(colors)], alpha=0.25)
-                plt.text(x=np.average([last_breakpoint, len(distances)]), y=breakpoint_distance_threshold + (y_upper_bound) / 20, s=f"Chunk #{i + 1}", rotation='vertical')
+                plt.text(x=np.average([last_breakpoint, len(distances)]), y=breakpoint_distance_threshold + (y_upper_bound / 20),
+                         s=f"Chunk #{len(indices_above_thresh)}", rotation='vertical')
+
         plt.title("Chunks Based On Embedding Breakpoints")
         plt.xlabel("Index sentence")
         plt.ylabel("Similarity distance between pairwise sentences")
-        plot_file = os.path.join(self.storage_path, pdf_id+"_"+"similarity_plot.png")
-        plt.savefig(plot_file)
+        plot_file = os.path.join(os.path.abspath(self.storage_path), f"{get_current_spanish_date_iso()}_{pdf_id}_similarity_plot.png")
+        logger.info(f"Saving similarity plot to -> {plot_file}")
+        plt.savefig(plot_file, format='png')
         plt.close()
 
+        # Plot histogram of similarity distances
         line = np.arange(0, 10, 0.01)
         plt.figure(figsize=(10, 6))
         plt.hist(distances, alpha=0.5, color='b')
         plt.plot([breakpoint_distance_threshold] * len(line), line, color='r')
-        plt.text(x=breakpoint_distance_threshold - 0.01, y=0, s=f" Percentile : {str(threshold)}", rotation='vertical', color='r')
-        plt.title("Chunks Based On Embedding Breakpoints")
-        plt.ylabel("Similarity distance between pairwise sentences")
+        plt.text(x=breakpoint_distance_threshold - 0.01, y=0, s=f"Percentile: {threshold}", rotation='vertical', color='r')
+        plt.title("Histogram of Similarity Distances")
+        plt.ylabel("Frequency")
+        plt.xlabel("Similarity distance between pairwise sentences")
         plt.grid(alpha=0.75)
-        plot_file_hist = os.path.join(self.storage_path,pdf_id+"_"+"similarity_hist.png")
-        plt.savefig(plot_file_hist)
+        plot_file_hist = os.path.join(os.path.abspath(self.storage_path), f"{get_current_spanish_date_iso()}_{pdf_id}_similarity_hist.png")
+        logger.info(f"Saving similarity histogram plot to -> {plot_file_hist}")
+        plt.savefig(plot_file_hist, format='png')
         plt.close()
 
     def _get_tokens(self, text: str) -> int:

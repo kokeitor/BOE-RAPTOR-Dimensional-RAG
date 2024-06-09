@@ -3,6 +3,7 @@ import json
 import re
 import uuid
 import nltk
+import pytz
 from nltk.data import find
 import numpy as np
 import pandas as pd
@@ -21,6 +22,12 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from langchain_community.chat_message_histories import ChatMessageHistory
 import logging
 from copy import deepcopy
+import matplotlib
+
+
+# Set the default font to DejaVu Sans
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -52,10 +59,11 @@ ensure_nltk_data('corpora/stopwords.zip')
 ensure_nltk_data('corpora/omw-1.4.zip')
 ensure_nltk_data('corpora/wordnet.zip')
 
-# Utility functions
-def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+# util functions
+def get_current_spanish_date_iso():
+    # Get the current date and time in the Europe/Madrid time zone
+    spanish_tz = pytz.timezone('Europe/Madrid')
+    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 @dataclass
 class TextPreprocess:
@@ -92,11 +100,14 @@ class TextPreprocess:
     task: str
     docs: List[Document]
     spc_caracters: Optional[List[str]] = field(default_factory=list)
+    spc_words: Optional[List[str]] = None
     data: Optional[pd.DataFrame] = None
     
     def __post_init__(self):
         self.corpus = [d.page_content for d in self.docs]
         self.metadata = [d.metadata for d in self.docs]
+        if self.spc_caracters is None:
+            self.spc_caracters = TextPreprocess.SPC_CARACTERS
     
     def del_stopwords(self, lang: str) -> 'TextPreprocess':
         empty_words = set(stopwords.words(lang))
@@ -128,6 +139,20 @@ class TextPreprocess:
         for i, t in enumerate(self.corpus):
             self.corpus[i] = ''.join([c for c in t if c != self.spc_caracters])
         return self
+    
+    def del_special_words(self) -> 'TextPreprocess':
+        if self.spc_words is not None:
+            for idx, t in enumerate(self.corpus):
+                words = t.split(' ')
+                new_words = []
+                for word in words:
+                    if word not in self.spc_words:
+                        new_words.append(word)
+                self.corpus[idx] = ' '.join(new_words)
+        else:
+            logger.warning("No special words defined to delete")
+        return self
+
 
     def del_digits(self) -> 'TextPreprocess':
         for i, t in enumerate(self.corpus):
@@ -177,16 +202,16 @@ class TextPreprocess:
         self,
         text_field_name: str,
         storage_path: str,
-        special_c: Optional[List[str]] = None,
         data: Optional[Union[pd.DataFrame, str]] = None,
         delete: bool = False,
         plot: bool = False
     ) -> Tuple[dict, Union[pd.DataFrame, str]]:
         """Method for custom preprocess/delete characters from List[texts] or text (string)"""
+        
         if data is None:
             data = self.data
-        if special_c is None:
-            special_c = TextPreprocess.SPC_CARACTERS
+            
+        special_c = self.spc_caracters
 
         if data is None:
             raise ValueError("Data must be provided either as a class attribute or as a method parameter.")
@@ -226,8 +251,7 @@ class TextPreprocess:
                     special_c_count[char] = count
 
         if plot:
-            logger.info(f"Saving plot' Special Characters in Texts' figure into -> {storage_path}")
-            fig = plt.figure(figsize=(10, 6))
+            plt.figure(figsize=(10, 6))
             plt.bar(special_c_count.keys(), special_c_count.values(), color='skyblue')
             plt.xlabel('Special Characters')
             plt.ylabel('Frequency')
@@ -236,7 +260,7 @@ class TextPreprocess:
             plt.grid()
             os.makedirs(os.path.dirname(storage_path), exist_ok=True)
             plt.savefig(storage_path, format="png")
-            plt.close(fig)
+            plt.close()
 
         if data_is_string:
             return special_c_count, text
@@ -327,11 +351,10 @@ class BoeProcessor(TextPreprocess):
             doc = self.get_del_patrones(doc=doc)
             # titles, doc = self._clean_doc(doc=doc)
             # new_metadata.update(titles)
-            new_metadata["pdf_id"] = self._get_id()  # Adición de identificador único del pdf del que se extrajo dicho doc
             new_docs.append(self._put_metadata(doc=doc, new_metadata=new_metadata))
             logger.info(f"Update metadata of doc {i} :  {doc.metadata}")
             logger.info(f"Char len of doc {i} : {len(doc.page_content)}")
-            logger.info(f"Page_conetnt of doc {i} : {len(doc.page_content)}")
+            logger.info(f"Page content of doc {i} : {len(doc.page_content)}")
             
         logger.info(f"Number of docs after invoke BoeProcessor : {len(new_docs)}")
         
@@ -346,9 +369,9 @@ class BoeProcessor(TextPreprocess):
     def reconstruct_docs(self, corpus: List[str], metadata_list: List[str]) -> List[Document]:
         docs = []
         for i, (text, metadata) in enumerate(zip(corpus, metadata_list)):
-            logger.debug(f"Page_content len for doc {i+1} : {len(text)}")
-            logger.debug(f"Page_content 100 first characters for doc {i+1} : {text[0:99]}")
-            logger.debug(f"Metadata for doc {i+1}: {metadata}")
+            logger.info(f"Page content len before preprocess for doc {i+1} : {len(text)}")
+            logger.info(f"Page content [100 first characters] before preprocess for doc {i+1} : {text[0:99]}")
+            logger.info(f"Metadata before preprocess for doc {i+1}: {metadata}")
             docs.append(Document(page_content=text, metadata=metadata))
         return docs
 
@@ -439,6 +462,8 @@ class BoeProcessor(TextPreprocess):
 
         # text
         text = doc.page_content
+        logger.info(f"Before preprocess {text=}")
+        logger.info(f"Text len Before preprocess {len(text)=}")
 
         # Dictionary to store detected patterns
         metadata = {
@@ -504,8 +529,12 @@ class BoeProcessor(TextPreprocess):
 
         for p in patterns2del:
             text = re.sub(p, '', text)
-
+        logger.info(f"After preprocess {text=}")
+        logger.info(f"Text len after preprocess {len(text)=}")
         doc.page_content = text
+        logger.info(f"After preprocess {doc.page_content=}")
+        logger.info(f"Page content  len after preprocess {len(doc.page_content)=}")
+        
         new_doc = self._put_metadata(doc=doc, new_metadata=metadata)
 
         return new_doc

@@ -3,10 +3,12 @@ import json
 import uuid
 import tiktoken
 import asyncio
+import pytz
 import pandas as pd
 import logging
 import logging.config
 import logging.handlers
+import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
@@ -24,6 +26,11 @@ import splitters
 import parsers
 import nlp
 import warnings
+import matplotlib
+
+
+# Set the default font to DejaVu Sans
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 
 # Suppress the specific FutureWarning
@@ -71,9 +78,10 @@ def setup_logging() -> None:
     logging.config.dictConfig(content)
 
 # util functions
-def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+def get_current_spanish_date_iso():
+    # Get the current date and time in the Europe/Madrid time zone
+    spanish_tz = pytz.timezone('Europe/Madrid')
+    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 
 class Storer:
@@ -108,7 +116,7 @@ class Storer:
 
         # Ensure the output directory exists
         os.makedirs(os.path.dirname(self.store_path), exist_ok=True)
-        name_format =  str(get_current_utc_date_iso()) + "_" + self.file_name +'.'+ self.file_format
+        name_format =  str(get_current_spanish_date_iso()) + "_" + self.file_name +'.'+ self.file_format
         
         df = self._document_to_dataframe(docs)
         full_path = os.path.join(self.store_path, name_format)
@@ -236,79 +244,84 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self, docs : List[Document]) -> nlp.BoeProcessor:
-        
-        
+    def _create_processor(self, docs: List[Document]) -> nlp.BoeProcessor:
         txt_process_config = self.config.get('TextPreprocess', None)
         if txt_process_config is not None:
+            spc_words = txt_process_config.get('spc_words', None)
+            special_char = txt_process_config.get('spc_caracters', None)
+            preprocess_task = txt_process_config.get('task_name', "Default")
+            processor = nlp.BoeProcessor(task=preprocess_task, docs=docs, spc_caracters=special_char, spc_words=spc_words)
             
-            self.special_char, self.preprocess_task= txt_process_config.get('spc_caracters', None),txt_process_config.get('task_name', "Default")
-            if  self.special_char is not None:
-                processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs, spc_caracters =self.special_char )
-            else:
-                processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs)
-                
             txt_process_methods = txt_process_config.get('methods', None)
+            logger.info(f"Configuration of TextPreprocess for task : {preprocess_task} found")
             
-            logger.info(f"Configuration of TextPreprocess for task : {self.preprocess_task} founded")
-            
-            for method_key,method_vals in txt_process_methods.items():
-                if method_vals.get("apply") is not None and method_vals.get("apply") == True:
-                    logger.debug(f"Trying to preprocess texts --> {method_key} : {method_vals}")
-                    if 'del_stopwords':
-                        processor = processor.del_stopwords(lang=method_vals.get("lang","Spanish"))
-                    elif "del_urls" :
+            for method_key, method_vals in txt_process_methods.items():
+                if method_vals.get("apply", False):
+                    logger.info(f"Trying to preprocess texts --> {method_key} : {method_vals}")
+                    if method_key == 'del_stopwords':
+                        processor = processor.del_stopwords(lang=method_vals.get("lang", "Spanish"))
+                    elif method_key == 'del_urls':
                         processor = processor.del_urls()
-                    elif "del_html":
+                    elif method_key == 'del_html':
                         processor = processor.del_html()
-                    elif "del_emojis":
+                    elif method_key == 'del_emojis':
                         processor = processor.del_emojis()
-                    elif "del_special":
+                    elif method_key == 'del_special':
                         processor = processor.del_special()
-                    elif "del_digits":
+                    elif method_key == 'del_digits':
                         processor = processor.del_digits()
-                    elif "del_chinese_japanese":
+                    elif method_key == 'del_special_words':
+                        processor = processor.del_special_words()
+                    elif method_key == 'del_chinese_japanese':
                         processor = processor.del_chinese_japanese()
-                    elif "del_extra_spaces":
+                    elif method_key == 'del_extra_spaces':
                         processor = processor.del_extra_spaces()
-                    elif "get_lower":
+                    elif method_key == 'get_lower':
                         processor = processor.get_lower()
-                    elif "get_alfanumeric":
+                    elif method_key == 'get_alfanumeric':
                         processor = processor.get_alfanumeric()
-                    elif "stem":
+                    elif method_key == 'stem':
                         processor = processor.stem()
-                    elif "lemmatizer" :
-                        processor = processor.lemmatizer()
-                    elif "custom_del":
-                        processor = processor.custom_del(
-                        text_field_name="text",
-                        data=self.get_dataframe(docs=docs),
-                        delete=method_vals.get("delete",False),
-                        plot=method_vals.get("plot",True),
-                        storage_path=method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/process"), f"{get_current_utc_date_iso()}"),
-                                                        )
-                    elif "bow":
+                    elif method_key == 'lemmatizer':
+                        processor = processor.lemmatize()
+                    elif method_key == 'custom_del':
+                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/process"))
+                        abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
+                        logger.info(f"Path to save plot 'custom_del' : {abs_path_name}")
+                        _, _ = processor.custom_del(
+                            text_field_name="text",
+                            data=self.get_dataframe(docs=docs),
+                            delete=method_vals.get("delete", False),
+                            plot=method_vals.get("plot", True),
+                            storage_path=abs_path_name
+                        )
+                    elif method_key == 'bow':
+                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/bow"))
+                        abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
+                        logger.info(f"Path to save plot 'bow' : {abs_path_name}")
                         self.save_figure_from_df(
-                        path=method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/bow"), f"{get_current_utc_date_iso()}"),
-                        df=processor.bow(),
-                        method='BOW'
-                                        )
-
-                    elif "bow_tf_idf":
+                            df=processor.bow(),
+                            path=abs_path_name,
+                            method='BOW'
+                        )
+                    elif method_key == 'bow_tf_idf':
+                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/bow"))
+                        abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
+                        logger.info(f"Path to save plot 'bow_tf_idf' : {abs_path_name}")
                         self.save_figure_from_df(
-                        path= method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/bow"), f"{get_current_utc_date_iso()}"),
-                        df=processor.bow_tf_idf(),
-                        method='BOW-TF-IDF'
-                                        )
+                            df=processor.bow_tf_idf(),
+                            path=abs_path_name,
+                            method='BOW-TF-IDF'
+                        )
                     else:
                         logger.warning(f"Method {method_key} not found for TextPreprocess class")
-         
         else:
-            logger.warning(f"Configuration of TextPreprocess not founded, applying default one")
-            self.preprocess_task="Default process config"
-            processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs)
+            logger.warning("Configuration of TextPreprocess not found, applying default one")
+            preprocess_task = "Default process config"
+            processor = nlp.BoeProcessor(task=preprocess_task, docs=docs)
 
         return processor
+
 
     def _create_splitter(self) -> splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
@@ -361,21 +374,20 @@ class Pipeline:
 
     def get_dataframe(self,docs :List[Document]) -> pd.DataFrame:
         texts = [d.page_content for d in docs]
-        return pd.DataFrame(data=texts, columns="text")
+        return pd.DataFrame(data=texts, columns=["text"])
     
-    def save_figure_from_df(self,df : pd.DataFrame, path : str , method :str) -> None:
-        logger.info(f"Saving plot bow figure into -> {path}")
-        most_frequent_tokens= df.sum(axis=0, skipna=True).sort_values(ascending=False)
-        num_tokens=50
-        fig = plt.figure(figsize=(16,10))
+    def save_figure_from_df(self, df: pd.DataFrame, path: str, method: str) -> None:
+        most_frequent_tokens = df.sum(axis=0, skipna=True).sort_values(ascending=False)
+        num_tokens = 50
+        fig = plt.figure(figsize=(16, 10))
         plt.bar(x=most_frequent_tokens.head(num_tokens).index, height=most_frequent_tokens.head(num_tokens).values)
         plt.xticks(rotation=45, ha='right')
-        plt.title(f"Most frequent {num_tokens} tokens/terms in corpus using bow raw method")
+        plt.title(f"Most frequent {num_tokens} tokens/terms in corpus using {method} method")
         plt.grid()
         os.makedirs(os.path.dirname(path), exist_ok=True)
         plt.savefig(path, format='png')
         plt.close(fig)
-        
+
     def run(self) -> List[Document]:
         self.parsed_docs = self.parser.invoke()
         self.processor = self._create_processor(docs=self.parsed_docs)
