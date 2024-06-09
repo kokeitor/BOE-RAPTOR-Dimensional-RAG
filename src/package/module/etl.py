@@ -11,10 +11,12 @@ from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
 from langchain.schema import Document
-from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_community.chat_models import ChatOllama
+from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_openai import ChatOpenAI
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
@@ -22,6 +24,7 @@ import splitters
 import parsers
 import nlp
 import warnings
+
 
 # Suppress the specific FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
@@ -235,8 +238,79 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self,docs) -> nlp.BoeProcessor:
-        return nlp.BoeProcessor(docs=docs)
+    def _create_processor(self, docs : List[Document]) -> nlp.BoeProcessor:
+        
+        
+        txt_process_config = self.config.get('TextPreprocess', None)
+        if txt_process_config is not None:
+            
+            self.special_char, self.preprocess_task= txt_process_config.get('spc_caracters', None),txt_process_config.get('task_name', "Default")
+            if  self.special_char is not None:
+                processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs, spc_caracters =self.special_char )
+            else:
+                processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs)
+                
+            txt_process_methods = txt_process_config.get('methods', None)
+            
+            logger.info(f"Configuration of TextPreprocess for task : {self.preprocess_task} founded")
+            
+            for method_key,method_vals in txt_process_methods.items():
+                if method_vals.get("apply") is not None and method_vals.get("apply") == True:
+                    logger.debug(f"Trying to preprocess texts --> {method_key} : {method_vals}")
+                    if 'del_stopwords':
+                        processor = processor.del_stopwords(lang=method_vals.get("lang","Spanish"))
+                    elif "del_urls" :
+                        processor = processor.del_urls()
+                    elif "del_html":
+                        processor = processor.del_html()
+                    elif "del_emojis":
+                        processor = processor.del_emojis()
+                    elif "del_special":
+                        processor = processor.del_special()
+                    elif "del_digits":
+                        processor = processor.del_digits()
+                    elif "del_chinese_japanese":
+                        processor = processor.del_chinese_japanese()
+                    elif "del_extra_spaces":
+                        processor = processor.del_extra_spaces()
+                    elif "get_lower":
+                        processor = processor.get_lower()
+                    elif "get_alfanumeric":
+                        processor = processor.get_alfanumeric()
+                    elif "stem":
+                        processor = processor.stem()
+                    elif "lemmatizer" :
+                        processor = processor.lemmatizer()
+                    elif "custom_del":
+                        processor = processor.custom_del(
+                        text_field_name="text",
+                        data=self.get_dataframe(docs=docs),
+                        delete=method_vals.get("delete",False),
+                        plot=method_vals.get("plot",True),
+                        storage_path=method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/process"), f"{get_current_utc_date_iso()}"),
+                                                        )
+                    elif "bow":
+                        self.save_figure_from_df(
+                        path=method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/bow"), f"{get_current_utc_date_iso()}"),
+                        df=processor.bow(),
+                        method='BOW'
+                                        )
+
+                    elif "bow_tf_idf":
+                        self.save_figure_from_df(
+                        path= method_vals.get("storage_path",os.path.abspath("../../../data/figures/text/bow"), f"{get_current_utc_date_iso()}"),
+                        df=processor.bow_tf_idf(),
+                        method='BOW-TF-IDF'
+                                        )
+                    else:
+                        logger.warning(f"Method {method_key} not found for TextPreprocess class")
+         
+        else:
+            logger.warning(f"Configuration of TextPreprocess not founded, applying default one")
+            self.preprocess_task="Default process config"
+            processor = nlp.BoeProcessor(task=self.preprocess_task, docs=docs)
+
+        return processor
 
     def _create_splitter(self) -> splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
@@ -286,23 +360,37 @@ class Pipeline:
         }
         return embd_available.get(embd_model, HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"))
 
-    async def run(self) -> List[Document]:
-        self.parsed_docs = await self.parser.invoke()
-        self.processor = self._create_processor(task = "classification", docs=self.parsed_docs)
+    def get_dataframe(self,docs :List[Document]) -> pd.DataFrame:
+        texts = [d.page_content for d in docs]
+        return pd.DataFrame(data=texts, columns="text")
+    
+    def save_figure_from_df(self,df : pd.DataFrame, path : str , method :str) -> None:
+        most_frequent_tokens= df.sum(axis=0, skipna=True).sort_values(ascending=False)
+        num_tokens=50
+        plt.figure(figsize=(16,10))
+        plt.bar(x=most_frequent_tokens.head(num_tokens).index, height=most_frequent_tokens.head(num_tokens).values)
+        plt.xticks(rotation=45, ha='right')
+        plt.title(f"Most frequent {num_tokens} tokens/terms in corpus using bow raw method")
+        plt.grid()
+        plt.savefig(path, format='png')
+        
+    def run(self) -> List[Document]:
+        self.parsed_docs = self.parser.invoke()
+        self.processor = self._create_processor(docs=self.parsed_docs)
         processed_docs = self.processor.invoke()
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
         return labeled_docs
     
-
+        
 def main() -> None:
     
     setup_logging()
 
     ETL_CONFIG_PATH = os.path.join(os.path.abspath("../../../config/etl"),"etl.json")
     pipeline = Pipeline(config_path=ETL_CONFIG_PATH)
-    result = asyncio.run(pipeline.run())
+    result = pipeline.run()
 
     text = """ En este apartado se valorará, en su caso, el grado reconocido como personal
     funcionario de carrera en otras Administraciones Públicas o en la Sociedad Estatal de

@@ -12,7 +12,8 @@ from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
 from langchain.schema import Document
-from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import GPT4AllEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from datetime import datetime, timezone

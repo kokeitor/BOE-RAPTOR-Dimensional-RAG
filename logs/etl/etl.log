@@ -1,375 +1,335 @@
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB318B2250>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49787B60> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB47772F10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:01 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'396a2c3e-2c30-4370-a6af-6f6f0cb1ef5b'), (b'x-correlation-id', b'9f5aea23-3d87-4e8f-9dd8-68639219d1af'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:00: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/5bdb5104-2747-4b08-803b-2f1658f0bdeb "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:00: response_closed.complete
-[DEBUG|_config|L80] 2024-06-09 00:30:01: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:01: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:02: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_config|L80] 2024-06-09 00:30:02: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:02: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:03: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:03: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:04: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:04: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:06: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:06: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:07: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:07: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:08: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:08: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:09: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:09: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB46CFAB10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49784170> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB48459A10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49785A30> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB49D93750>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB477A30B0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB47792710>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB497870B0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB46CF8210>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49785D90> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB46CFA190>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB477A0D40> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB46CFBF10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB477A3260> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB46CFBA50>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB497871D0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5CFFFE50>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB711CB3D0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB49D93C10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5CFFE810>
-[DEBUG|_trace|L85] 2024-06-09 00:30:10: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5CFFD110>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5CFFD0D0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB715669D0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB71567E50>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'4d0e3b90-2edd-42b2-9efc-37f4ddbfcc22'), (b'x-correlation-id', b'01a89d3a-edbf-4405-b6e3-521fd1f54e66'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/4522fbba-6bb0-4cdf-bb2e-bc31c0bfe2b6 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'59d843fc-e9cf-4b3b-b2ae-4b3312a35ae8'), (b'x-correlation-id', b'929a8dce-6c32-402d-9b82-6ac57227eae4'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/448f6397-b1d7-4d6b-a1be-52bd1c04cfaa "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'9f8a0d08-b718-465e-96ef-00c4aaa5ca5f'), (b'x-correlation-id', b'ccd6dd66-fdce-4cf4-80a3-5220a459473b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/276dcb88-f5bc-4982-bc41-bcbba9a6f1b0 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'e36eb188-8d23-454b-b5f5-6fdf3b207018'), (b'x-correlation-id', b'b3ca086f-bcf9-46d4-952c-7a57d9184822'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/4c2c8b77-dd76-44ec-81aa-85901725ff1b "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'2d00682c-6522-4abe-932c-7ec37306fa06'), (b'x-correlation-id', b'f7f524fe-9ad6-4ff6-a7d4-6e5f346c3d59'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/ffa44b11-66e5-43af-978c-f0305db4f54a "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'07e8feea-faef-4e66-9d84-bc0ff4293b09'), (b'x-correlation-id', b'78adb28a-e993-4456-a801-ad929d6c817d'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/6ac46021-0775-4646-8f3a-af4e0358b3d8 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'b30045ed-cef0-4b7f-8688-078b66184333'), (b'x-correlation-id', b'752dd85d-e8bb-4b7c-aa92-bf3feeeb20c0'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/69e915af-7061-498a-ad90-f90faa2411ae "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'25c56cc3-2565-40c0-b78e-c7dcde3c9c97'), (b'x-correlation-id', b'a0b7dd44-4aaf-47dc-b665-d4d42eb1a05f'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/838df2e7-99b9-4980-9d92-9b3d42f99f99 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:11: response_closed.complete
-[DEBUG|_config|L80] 2024-06-09 00:30:11: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:11: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB477A4E90>
-[DEBUG|_trace|L85] 2024-06-09 00:30:12: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49786B10> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB47758B50>
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:13 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'9963f585-ccb1-4f76-9a2f-20a65db5a213'), (b'x-correlation-id', b'd2b0426b-a39c-474e-9d3c-21d08ad7d531'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:13: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/5bdb5104-2747-4b08-803b-2f1658f0bdeb "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:13: response_closed.complete
-[DEBUG|_config|L80] 2024-06-09 00:30:13: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:13: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:15: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:15: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:16: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:16: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:17: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:17: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:18: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:18: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:20: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:20: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:21: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:21: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:22: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:22: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4CDC8ED0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49786060> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5D187DD0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49786600> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5D184210>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49787260> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB5D184690>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49786690> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4CDC9810>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49785250> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB470EAA10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49787890> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB470E9290>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49784560> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4CDC8710>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB49785EB0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB470EA890>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB470E8E10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4780A450>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4780B210>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB478590D0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4785BE90>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB47858D10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB47858AD0>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'06a8c5ea-e9a3-4db2-89bd-bb9fe0ce4040'), (b'x-correlation-id', b'99d5cda2-47c5-4451-a5a5-62059b882715'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/4522fbba-6bb0-4cdf-bb2e-bc31c0bfe2b6 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'a2f5edba-ce40-4062-93e8-b88638375d48'), (b'x-correlation-id', b'8f9ec374-bd1f-4bba-a0fd-e296a173b31a'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/6ac46021-0775-4646-8f3a-af4e0358b3d8 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'dad7d2a3-77ca-458d-9a07-4566b211fe2a'), (b'x-correlation-id', b'47041050-2c15-4274-b929-e3707ff6a9e8'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/838df2e7-99b9-4980-9d92-9b3d42f99f99 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'4c475848-ecc7-4345-a135-bdb90eb21d1d'), (b'x-correlation-id', b'33cb2cee-aa4a-432f-a14f-6f4bbe59cbb5'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/69e915af-7061-498a-ad90-f90faa2411ae "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'b8115c37-3d29-4a97-9f6b-eaed55bb8042'), (b'x-correlation-id', b'712b1eff-f17d-4d3e-84e1-ec4962b29c41'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/276dcb88-f5bc-4982-bc41-bcbba9a6f1b0 "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'209ecf7b-900e-4ed3-9846-600a172805e5'), (b'x-correlation-id', b'0eba3ac1-ac31-452f-9186-0b2753738bd5'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/4c2c8b77-dd76-44ec-81aa-85901725ff1b "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'ff8d2d5a-0905-4325-bcf3-320eea9104e7'), (b'x-correlation-id', b'e40c3b0b-6a54-4d02-9b25-b651102c5ac9'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/448f6397-b1d7-4d6b-a1be-52bd1c04cfaa "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6825a54e-7edd-41ac-b50d-5f4d5f466485'), (b'x-correlation-id', b'6ddadbd9-d30d-4536-846d-c762693c6262'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:24: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/ffa44b11-66e5-43af-978c-f0305db4f54a "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:24: response_closed.complete
-[DEBUG|_config|L80] 2024-06-09 00:30:25: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:25: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: close.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB497E8050>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001DB476CD0A0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001DB4CDC8F10>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: send_request_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: send_request_headers.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: send_request_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: send_request_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: receive_response_headers.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sat, 08 Jun 2024 22:30:27 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'9a6084f5-eaa5-4af9-b2af-21af3af20c5d'), (b'x-correlation-id', b'48db2953-9a2c-45c8-9d8c-862c450f9411'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
-[INFO|_client|L1773] 2024-06-09 00:30:26: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/5bdb5104-2747-4b08-803b-2f1658f0bdeb "HTTP/1.1 200 OK"
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: receive_response_body.started request=<Request [b'GET']>
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: receive_response_body.complete
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: response_closed.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:26: response_closed.complete
-[DEBUG|_config|L80] 2024-06-09 00:30:27: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:27: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:28: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:28: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:29: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:29: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:30: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:30: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_config|L80] 2024-06-09 00:30:31: load_ssl_context verify=True cert=None trust_env=True http2=False
-[DEBUG|_config|L146] 2024-06-09 00:30:31: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
-[DEBUG|_trace|L85] 2024-06-09 00:30:32: close.started
-[DEBUG|_trace|L85] 2024-06-09 00:30:32: close.complete
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:12:55: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:12:55: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:12:55: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:12:55: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DA4E90>
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA2F00> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438239C50>
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:12:56: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:12:57: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:12:57: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:00 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'7c76ced8-be27-4ec8-80c2-a3f1c76e947e'), (b'x-correlation-id', b'67f047cd-6bff-4664-a281-df50d26a0790'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:01: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:01: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:02: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:02: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478C3A890>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA2F90> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478C3A7D0>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:05 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'95dd13f2-589e-4d41-8e0a-19cceee57695'), (b'x-correlation-id', b'be51c5ec-943c-4104-a000-bf8c51842470'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:05: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-2b60-4dcd-9116-d5c6abb2f52d "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:05: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:05 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'233734'), (b'Connection', b'keep-alive'), (b'x-session-id', b'c571a34c-b2d5-4049-ba13-9c31aec9dd13'), (b'x-correlation-id', b'3058e5e0-3cc0-4251-b839-bc18808efd37'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:06: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-2b60-4dcd-9116-d5c6abb2f52d/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:06: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:13:06: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:13:06: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:06: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DB2F10>
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA1880> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C4352F4D90>
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:07: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:09 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'92785be5-7c15-4f14-a793-3d4b26f336ae'), (b'x-correlation-id', b'127dd13b-b49d-4a62-b959-1d5562821698'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:09: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:09: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:10: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:10: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DB1910>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA2A80> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DB3250>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:11 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'357bc1ad-e56b-41a8-b494-cd3a802c6e95'), (b'x-correlation-id', b'69e87288-5ed3-4ea5-8eac-efcfc9b29fcd'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:11: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-fce1-4c07-9877-edb5eeffd12c "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:11: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:12 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'8463'), (b'Connection', b'keep-alive'), (b'x-session-id', b'0aa19a11-eda4-4399-9a95-a34ebd2d35ec'), (b'x-correlation-id', b'78e9bebd-ab30-4ba6-b1ba-a83f5cba1c47'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:12: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-fce1-4c07-9877-edb5eeffd12c/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:12: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:13:12: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:13:12: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:12: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C4327CB9D0>
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA1C70> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478C39290>
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:13: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:15 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'b62abf57-2a66-43ae-834f-7224e6eac84a'), (b'x-correlation-id', b'58a27a73-30c1-4b3e-8475-c8ab606551c2'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:15: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:15: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:16: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:16: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C450188990>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7C050> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438916250>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:17 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'6567cdf2-5623-42f3-af98-991c8befe361'), (b'x-correlation-id', b'800059cc-1aac-4b8e-9542-cabac030ab4f'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:17: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-b2bb-4804-88dd-debb27982991 "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:17: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:17 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'12669'), (b'Connection', b'keep-alive'), (b'x-session-id', b'1f2c2fa1-7707-4559-b0c1-a5e07ee721e3'), (b'x-correlation-id', b'5b010514-d977-4941-bc7d-0f52b0cae0ff'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:18: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-b2bb-4804-88dd-debb27982991/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:13:18: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:13:18: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:18: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C45130E450>
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7C5F0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478C39110>
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:18: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:19: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:19: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:19 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'5dd4453d-84f9-4841-8b68-edff19ef1637'), (b'x-correlation-id', b'518c14b2-cb2f-44e2-b4c1-edf95b969785'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:20: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:20: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:21: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:21: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438C02950>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7C7A0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438C02590>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:22 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'0b9ba43d-4f12-4710-b9a9-ab7c155406a5'), (b'x-correlation-id', b'7e906aff-123c-4d20-9a1b-40f62614159d'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:22: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-bf4a-4f11-bbb0-a75e61d87caf "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:22 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'1341'), (b'Connection', b'keep-alive'), (b'x-session-id', b'fc3e63c6-4cb5-46fe-9767-4526b154b774'), (b'x-correlation-id', b'705899cc-ae2e-41d0-b86d-50cf2e2295a3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:22: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-bf4a-4f11-bbb0-a75e61d87caf/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:22: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:13:22: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:13:22: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:22: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438915890>
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437BA2F00> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C45130F190>
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:23: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:25 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'fa35427e-2cab-4f99-9e0d-5b8647f25a50'), (b'x-correlation-id', b'3ac9e0d3-2bf4-43ec-a2e3-d108ebda4de4'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:25: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:25: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:26: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:26: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C43823B350>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7C440> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DB3990>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:27 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'f4ffe612-fd3c-4a52-aa81-c60e579355c6'), (b'x-correlation-id', b'7fc9e295-31ef-4e20-b2f3-e4d7189464a3'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:27: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-b5f8-4fbc-b118-e29f41cdf043 "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:27 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'1464'), (b'Connection', b'keep-alive'), (b'x-session-id', b'5922dc16-ec41-4c94-ae88-8b2e2b249562'), (b'x-correlation-id', b'981bdd9f-bffc-471d-b711-b5a501887217'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:27: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-b5f8-4fbc-b118-e29f41cdf043/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:27: close.complete
+[DEBUG|proactor_events|L633] 2024-06-09 14:13:27: Using proactor: IocpProactor
+[DEBUG|_config|L80] 2024-06-09 14:13:27: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:27: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478DB3E10>
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7C5F0> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C438917910>
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: send_request_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:28: send_request_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:29: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:29: receive_response_headers.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:30 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'c9b375b0-b0e7-4903-85b2-5efb7662c8c0'), (b'x-correlation-id', b'de6fd172-3e0e-4318-b406-96d7339d4495'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:31: HTTP Request: POST https://api.cloud.llamaindex.ai/api/parsing/upload "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: receive_response_body.started request=<Request [b'POST']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:31: close.complete
+[DEBUG|_config|L80] 2024-06-09 14:13:32: load_ssl_context verify=True cert=None trust_env=True http2=False
+[DEBUG|_config|L146] 2024-06-09 14:13:32: load_verify_locations cafile='C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\env\\Lib\\site-packages\\certifi\\cacert.pem'
+[DEBUG|_trace|L85] 2024-06-09 14:13:32: connect_tcp.started host='api.cloud.llamaindex.ai' port=443 local_address=None timeout=2000 socket_options=None
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C478C39650>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: start_tls.started ssl_context=<ssl.SSLContext object at 0x000001C437C7CC20> server_hostname='api.cloud.llamaindex.ai' timeout=2000
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000001C464ED6AD0>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:32 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'64'), (b'Connection', b'keep-alive'), (b'x-session-id', b'40179c7b-b060-4214-9aef-4c27d1d62eaa'), (b'x-correlation-id', b'a4870b33-1d14-4a7b-8d25-fe9660149ad7'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:33: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5986-40f0-918e-e823bc79162f "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_headers.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: send_request_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_headers.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 09 Jun 2024 12:13:33 GMT'), (b'Content-Type', b'application/json'), (b'Content-Length', b'886414'), (b'Connection', b'keep-alive'), (b'x-session-id', b'd49ecd29-3731-4f2e-a461-fd082ac40b7b'), (b'x-correlation-id', b'6276361b-d3fc-4bed-88d2-b0ebe2bd945b'), (b'Strict-Transport-Security', b'max-age=31536000; includeSubDomains')])
+[INFO|_client|L1773] 2024-06-09 14:13:33: HTTP Request: GET https://api.cloud.llamaindex.ai/api/parsing/job/cac11eca-5986-40f0-918e-e823bc79162f/result/markdown "HTTP/1.1 200 OK"
+[DEBUG|_trace|L85] 2024-06-09 14:13:33: receive_response_body.started request=<Request [b'GET']>
+[DEBUG|_trace|L85] 2024-06-09 14:13:34: receive_response_body.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:34: response_closed.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:34: response_closed.complete
+[DEBUG|_trace|L85] 2024-06-09 14:13:34: close.started
+[DEBUG|_trace|L85] 2024-06-09 14:13:34: close.complete
+[INFO|parsers|L84] 2024-06-09 14:13:36: Parsed num of docs -> 9
+[INFO|etl|L255] 2024-06-09 14:13:36: Configuration of TextPreprocess for task : classification founded
+[DEBUG|etl|L259] 2024-06-09 14:13:36: Trying to preprocess texts --> del_stopwords : {'apply': True, 'lang': 'Spanish'}
+[DEBUG|etl|L259] 2024-06-09 14:13:36: Trying to preprocess texts --> del_urls : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:36: Trying to preprocess texts --> del_html : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> del_emojis : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> del_special : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> del_digits : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> del_chinese_japanese : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> del_extra_spaces : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> get_lower : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> get_alfanumeric : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> stem : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> lemmatize : {'apply': True}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> custom_del : {'apply': True, 'text_field_name': 'str', 'delete': True, 'plot': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text'}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> bow : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow'}
+[DEBUG|etl|L259] 2024-06-09 14:13:37: Trying to preprocess texts --> bow_tf_idf : {'apply': True, 'storage_path': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow'}
+[INFO|nlp|L314] 2024-06-09 14:13:37: Transformando en 'Document' los textos BOE preprocesados
+[INFO|nlp|L320] 2024-06-09 14:13:37: NUMERO DE DOCS A ANALIZAR : 9
+
+
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7293.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7294.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7295.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7296.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7297.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7298.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7299.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7300.pdf
+[INFO|nlp|L453] 2024-06-09 14:13:37: file_path: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\documentos\boe\dias\2024\04\15\BOE-A-2024-7335.pdf

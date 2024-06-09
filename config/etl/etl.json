@@ -8,7 +8,7 @@
   },
   "splitter": {
     "chunk_size": 200,
-    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures",
+    "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\splitter",
     "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
     "threshold": 75,
@@ -18,6 +18,46 @@
     "max_big_chunks": 4,
     "splitter_mode": "CUSTOM"
 
+  },
+  "TextPreprocess": {
+                      "spc_caracters": [
+                                          "!", "@", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
+                                          "{", "}", "[", "]", "|", "\\", ":", ";", "\"", "'", "<", ">", ",", ".",
+                                          "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__"
+                                      ],
+                      "task_name": "classification",
+                      "methods": {
+                                  "del_stopwords": {
+                                                    "apply":true,
+                                                      "lang": "Spanish"
+                                                  },
+                                  "del_urls": {"apply":true},
+                                  "del_html": {"apply":true},
+                                  "del_emojis": {"apply":true},
+                                  "del_special": {"apply":true},
+                                  "del_digits": {"apply":true},
+                                  "del_chinese_japanese": {"apply":true},
+                                  "del_extra_spaces": {"apply":true},
+                                  "get_lower": {"apply":true},
+                                  "get_alfanumeric": {"apply":true},
+                                  "stem": {"apply":true},
+                                  "lemmatize": {"apply":true},
+                                  "custom_del": {
+                                                  "apply":true,
+                                                  "text_field_name": "str",
+                                                  "delete": true,
+                                                  "plot": true,
+                                                  "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text"
+                                                },
+                                  "bow": { 
+                                            "apply":true,
+                                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
+                                          },
+                                  "bow_tf_idf": {
+                                              "apply":true,
+                                              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
+                                                }
+                      }
   },
   "label_generator": {
     "tokenizer_model": "GPT35",

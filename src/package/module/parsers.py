@@ -4,7 +4,8 @@ from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
 from dotenv import load_dotenv
 from typing import Dict, List, Union, Optional
 from langchain.schema import Document
-from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import GPT4AllEmbeddings
 from llama_parse import LlamaParse
 from llama_index.core import SimpleDirectoryReader
 from datetime import datetime, timezone
@@ -72,7 +73,13 @@ class Parser:
             required_exts=[file_type]
         )
 
-    async def invoke(self) -> List[Document]:
-        self.llama_parsed_docs = await self.reader.aload_data()  # returns List[llama doc objt]
+    def invoke(self) -> List[Document]:
+        
+        self.llama_parsed_docs = self.reader.load_data()  # returns List[llama doc objt]
         self.lang_parsed_docs = [d.to_langchain_format() for d in self.llama_parsed_docs]
+        
+        if len(self.lang_parsed_docs) == 0:
+            logger.error("Parsed docs list empty")
+        else:
+            logger.info(f"Parsed num of docs -> {len(self.lang_parsed_docs) }")
         return self.lang_parsed_docs

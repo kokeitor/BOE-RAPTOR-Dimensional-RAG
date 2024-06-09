@@ -3,32 +3,22 @@ import json
 import re
 import uuid
 import nltk
+from nltk.data import find
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Optional, Tuple, ClassVar
 from langchain.schema import Document
-from langchain_community.embeddings import GPT4AllEmbeddings, HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import GPT4AllEmbeddings
 from datetime import datetime, timezone
-from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from dataclasses import dataclass, Field
-import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import logging
-
-
-# NLP
-nltk.download('stopwords')
-nltk.download('omw-1.4')
-nltk.download('wordnet')
-
 
 # Load environment variables from .env file
 load_dotenv()
@@ -43,58 +33,68 @@ os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
-
 # Logging configuration
 logger = logging.getLogger("nlp_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
+# NLP download resources
+def ensure_nltk_data(resource):
+    try:
+        find(resource)
+        logger.info(f"'{resource}' is already installed.")
+    except LookupError:
+        nltk.download(resource)
+        logger.info(f"'{resource}' has been downloaded.")
 
-#util functions
+ensure_nltk_data('corpora/stopwords.zip')
+ensure_nltk_data('corpora/omw-1.4.zip')
+ensure_nltk_data('corpora/wordnet.zip')
+
+# Utility functions
 def get_current_utc_date_iso():
     # Get the current date and time in UTC and format it directly
     return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 
-
 @dataclass
 class TextPreprocess:
     """Class for text preprocess"""
-    SPC_CARACTERS : ClassVar =  [
-                                    '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+',
-                                    '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.',
-                                    '?', '/', '~', '`', '\n', '\r', '\t', '\b', '\f','__'
-                                ]
-    PATRON_EMOJI  : ClassVar = re.compile(
-                                            "["
-                                            "\U0001F600-\U0001F64F"  # Emoticons
-                                            "\U0001F300-\U0001F5FF"  # Symbols & Pictographs
-                                            "\U0001F680-\U0001F6FF"  # Transport & Map Symbols
-                                            "\U0001F1E0-\U0001F1FF"  # Flags (iOS)
-                                            "\U00002700-\U000027BF"  # Dingbats
-                                            "\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
-                                            "\U00002600-\U000026FF"  # Miscellaneous Symbols
-                                            "\U00002B50-\U00002B55"  # Additional symbols
-                                            "\U00002300-\U000023FF"  # Miscellaneous Technical
-                                            "\U0000200D"             # Zero Width Joiner
-                                            "\U00002500-\U000025FF"  # Geometric Shapes
-                                            "\U00002100-\U0000219F"  # Arrows
-                                            "]+",
-                                            flags=re.UNICODE,
-                                        )
-    
+    SPC_CARACTERS: ClassVar = [
+        '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+',
+        '{', '}', '[', ']', '|', '\\', ':', ';', '"', "'", '<', '>', ',', '.',
+        '?', '/', '~', '`', '\n', '\r', '\t', '\b', '\f', '__'
+    ]
+    PATRON_EMOJI: ClassVar = re.compile(
+        "["
+        "\U0001F600-\U0001F64F"  # Emoticons
+        "\U0001F300-\U0001F5FF"  # Symbols & Pictographs
+        "\U0001F680-\U0001F6FF"  # Transport & Map Symbols
+        "\U0001F1E0-\U0001F1FF"  # Flags (iOS)
+        "\U00002700-\U000027BF"  # Dingbats
+        "\U0001F900-\U0001F9FF"  # Supplemental Symbols and Pictographs
+        "\U00002600-\U000026FF"  # Miscellaneous Symbols
+        "\U00002B50-\U00002B55"  # Additional symbols
+        "\U00002300-\U000023FF"  # Miscellaneous Technical
+        "\U0000200D"             # Zero Width Joiner
+        "\U00002500-\U000025FF"  # Geometric Shapes
+        "\U00002100-\U0000219F"  # Arrows
+        "]+",
+        flags=re.UNICODE,
+    )
     PATRON_CH_JAP: ClassVar = re.compile(
-                                    r'[\u4e00-\u9fff]|'  # Basic Chinese
-                                    r'[\u3400-\u4dbf]|'  # Extended Chinese
-                                    r'[\u3040-\u309f]|'  # Hiragana
-                                    r'[\u30a0-\u30ff]|'  # Katakana
-                                    r'[\uff66-\uff9f]'   # Half-width Katakana
-                                    )
-    task : str
-    docs : List[Document]
-    spc_caracters : Optional[List[str]] = field(default_factory=list)
-    data : Optional[pd.DataFrame] = None
+        r'[\u4e00-\u9fff]|'  # Basic Chinese
+        r'[\u3400-\u4dbf]|'  # Extended Chinese
+        r'[\u3040-\u309f]|'  # Hiragana
+        r'[\u30a0-\u30ff]|'  # Katakana
+        r'[\uff66-\uff9f]'   # Half-width Katakana
+    )
+    task: str
+    docs: List[Document]
+    spc_caracters: Optional[List[str]] = field(default_factory=list)
+    data: Optional[pd.DataFrame] = None
     
-    def __post__init(self):
+    def __post_init__(self):
         self.corpus = [d.page_content for d in self.docs]
+        self.metadata = [d.metadata for d in self.docs]
     
     def del_stopwords(self, lang: str) -> 'TextPreprocess':
         empty_words = set(stopwords.words(lang))
@@ -156,10 +156,10 @@ class TextPreprocess:
         return self
 
     def stem(self) -> 'TextPreprocess':
-        Porter = PorterStemmer()
+        porter = PorterStemmer()
         for i, t in enumerate(self.corpus):
             word_tokens = t.split()
-            stems = [Porter.stem(word) for word in word_tokens]
+            stems = [porter.stem(word) for word in word_tokens]
             self.corpus[i] = ' '.join(stems)
         return self
 
@@ -172,23 +172,23 @@ class TextPreprocess:
         return self
     
     def custom_del(
-                self,
-                text_field_name: str,
-                special_c: Optional[List[str]] = None,
-                data: Optional[Union[pd.DataFrame,str]] = None,
-                delete: bool = False,
-                plot: bool = False
-                ) -> Tuple[dict, pd.DataFrame]: 
-        
-        """Method for custom preprocess/delete chaaracters ferom List[texts] or text (string)"""
+        self,
+        text_field_name: str,
+        storage_path: str,
+        special_c: Optional[List[str]] = None,
+        data: Optional[Union[pd.DataFrame, str]] = None,
+        delete: bool = False,
+        plot: bool = False
+    ) -> Tuple[dict, Union[pd.DataFrame, str]]:
+        """Method for custom preprocess/delete characters from List[texts] or text (string)"""
         if data is None:
             data = self.data
         if special_c is None:
             special_c = TextPreprocess.SPC_CARACTERS
-        
+
         if data is None:
             raise ValueError("Data must be provided either as a class attribute or as a method parameter.")
-        
+
         if isinstance(data, pd.DataFrame):
             data_is_string = False
             df = data.copy().reset_index(drop=True)  # Reset index here
@@ -199,11 +199,10 @@ class TextPreprocess:
         else:
             raise ValueError("Unknown non-process-type of 'data' parameter")
 
-        
         special_c_count = {}
         if not text_field_name:
             raise ValueError("text_field_name must be defined")
-        
+
         for char in special_c:
             count = 0
             patron_busqueda = re.compile(re.escape(char))
@@ -213,20 +212,17 @@ class TextPreprocess:
                     count += 1
                     if delete:
                         text = ''.join([c for c in text if c != char])
-                        #text = re.sub(patron_busqueda, '', text) # alternative method
                 special_c_count[char] = count
             else:
                 for i in range(df.shape[0]):
-                        text = df.loc[i, text_field_name]
-                        match_obj = patron_busqueda.search(text)
-                        if char in text or match_obj is not None:
-                            count += 1
-                            if delete:
-                                df.loc[i, text_field_name] = ''.join([c for c in text if c != char])
-                                #df.loc[i, text_field_name] = re.sub(patron_busqueda, '', text) # alternative method
-                        special_c_count[char] = count
-                
-        
+                    text = df.loc[i, text_field_name]
+                    match_obj = patron_busqueda.search(text)
+                    if char in text or match_obj is not None:
+                        count += 1
+                        if delete:
+                            df.loc[i, text_field_name] = ''.join([c for c in text if c != char])
+                    special_c_count[char] = count
+
         if plot:
             plt.figure(figsize=(10, 6))
             plt.bar(special_c_count.keys(), special_c_count.values(), color='skyblue')
@@ -235,13 +231,13 @@ class TextPreprocess:
             plt.title('Special Characters in Texts')
             plt.xticks(rotation=45)
             plt.grid()
-            plt.show()
-            
+            plt.savefig(storage_path, format="png")
+
         if data_is_string:
             return special_c_count, text
         else:
             return special_c_count, df
-        
+
     def bow(self) -> pd.DataFrame:
         vectorizador = CountVectorizer(
             input='content',
@@ -305,33 +301,45 @@ class TextPreprocess:
         terms = tfidf_vectorizador.get_feature_names_out()
         return pd.DataFrame(data=X.toarray(), columns=terms, index=self.corpus)
 
-@dataclass()
+@dataclass
 class BoeProcessor(TextPreprocess):
     """BOE PREPROCESS DOC AND ADD METADATA TO EACH DOC"""
 
-    def invoke(self, docs: Optional[List[Document]] =None) -> List[Document]:
-
-        logger.info(f"NUMERO DE DOCS A ANALIZAR : {len(docs)}\n\n")
+    def invoke(self, docs: Optional[List[Document]] = None) -> List[Document]:
         new_metadata = {}
         titulos = {}
         new_docs = []
+        
         if docs is None:
-            logger.info(f"Procesando documentos boe en {self.__name__}")
-            self.processed_docs = self.docs.copy()
+            logger.info("Transformando en 'Document' los textos BOE preprocesados")
+            self.processed_docs = self.reconstruct_docs(corpus=self.corpus, metadata=self.metadata)
         else:
-            logger.warning(f"Los documentos BOE en {self.__name__} han sido cambiados en el metodo invoke")
+            logger.warning(f"Los documentos BOE en {self} han sido cambiados en el metodo invoke")
             self.processed_docs = docs.copy()
+            
+        logger.info(f"NUMERO DE DOCS A ANALIZAR : {len(self.processed_docs)}")
         for _, d in enumerate(self.processed_docs):
             new_metadata["fecha_publicacion_boe"], new_doc = self._get_date_creation_doc(doc=d)
-            titulos,new_doc = self._clean_doc(doc=new_doc)
+            titulos, new_doc = self._clean_doc(doc=new_doc)
             for k, t in titulos.items():
                 new_metadata[k] = t
-            new_metadata["pdf_id"] = self._get_id()  # adicion de identificador unico del pdf del que se extrajo dicho doc
+            new_metadata["pdf_id"] = self._get_id()  # Adición de identificador único del pdf del que se extrajo dicho doc
             new_docs.append(self._put_metadata(doc=new_doc, new_metadata=new_metadata))
         return new_docs
 
+    def reconstruct_docs(self, corpus: List[str], metadata: List[str]) -> List[Document]:
+        docs = []
+        i = 0
+        for text, metadata in zip(corpus, metadata):
+            i += 1
+            logger.info(f"Page_content len for doc {i}: {len(text)}")
+            logger.info(f"Page_content 100 first characters for doc {i}: {text[0:99]}")
+            logger.info(f"Metadata for doc {i}: {metadata}")
+            docs.append(Document(page_content=text, metadata=metadata))
+        return docs
+            
     def _get_id(self):
-        """generate an unique random id and convert it to str"""
+        """Generate a unique random id and convert it to str"""
         return str(uuid.uuid4())
 
     def _clean_doc(self, doc: Document) -> Tuple[Dict, Document]:
@@ -446,27 +454,24 @@ class BoeProcessor(TextPreprocess):
         return clean_text
 
     def _get_date_creation_doc(self, doc: Document):
-      doc_copy = doc.copy()
-      logger.info(f"file_path: {doc_copy.metadata['file_path']}")
-      if '/' in doc_copy.metadata["file_path"]:
-        dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
-        mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
-        año_publicacion = doc_copy.metadata["file_path"].split("/")[-4]
-      elif '\\' in doc_copy.metadata["file_path"]:
-        dia_publicacion = doc_copy.metadata["file_path"].split("\\")[-2]
-        mes_publicacion = doc_copy.metadata["file_path"].split("\\")[-3]
-        año_publicacion = doc_copy.metadata["file_path"].split("\\")[-4]
-      doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
-      return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
+        doc_copy = doc.copy()
+        logger.info(f"file_path: {doc_copy.metadata['file_path']}")
+        if '/' in doc_copy.metadata["file_path"]:
+            dia_publicacion = doc_copy.metadata["file_path"].split("/")[-2]
+            mes_publicacion = doc_copy.metadata["file_path"].split("/")[-3]
+            año_publicacion = doc_copy.metadata["file_path"].split("/")[-4]
+        elif '\\' in doc_copy.metadata["file_path"]:
+            dia_publicacion = doc_copy.metadata["file_path"].split("\\")[-2]
+            mes_publicacion = doc_copy.metadata["file_path"].split("\\")[-3]
+            año_publicacion = doc_copy.metadata["file_path"].split("\\")[-4]
+        doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
+        return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
 
     def _put_metadata(self, doc: Document, new_metadata: Dict) -> None:
         new_doc = doc.copy()
         for key in new_metadata.keys():
             new_doc.metadata[key] = new_metadata.get(key, "Metadata Value not found")
         return new_doc
-    
-    
-
 
 
 """
