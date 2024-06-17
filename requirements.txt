@@ -117,8 +117,10 @@ langchain-community==0.2.4
 langchain-core==0.2.5
 langchain-experimental==0.0.60
 langchain-huggingface==0.0.3
+langchain-nvidia-ai-endpoints==0.1.2
 langchain-openai==0.1.8
 langchain-text-splitters==0.2.1
+langgraph==0.0.69
 langserve==0.2.1
 langsmith==0.1.75
 lazy_loader==0.3

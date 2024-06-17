@@ -5,3 +5,5 @@
 /__pycache__
 /src/package/__pycache__
 /logs
+/src/notebooks/colab
+/src/tests
