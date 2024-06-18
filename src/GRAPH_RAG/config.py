@@ -6,16 +6,14 @@ from dataclasses import dataclass
 from typing import Union, Optional, Callable, ClassVar
 from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
 from chains import get_chain
 from prompts import (
-    analyze_cv_prompt,
-    offer_check_prompt,
-    re_analyze_cv_prompt,
-    cv_check_prompt,
-    analyze_cv_prompt_nvidia,
-    offer_check_prompt_nvidia,
-    re_analyze_cv_prompt_nvidia,
-    cv_check_prompt_nvidia
+    grader_docs_prompt,
+    gen_prompt,
+    query_process_prompt,
+    hallucination_prompt,
+    grade_answer_prompt
     )
 from base_models import (
     Analisis,
@@ -27,7 +25,7 @@ from graph_utils import (
                         get_current_spanish_date_iso, 
                         get_id
                         )
-from ..exceptions.exceptions import NoOpenAIToken, JsonlFormatError
+from exceptions.exceptions import NoOpenAIToken, JsonlFormatError, ConfigurationFileError
 from models import (
     get_nvdia,
     get_ollama,
@@ -47,10 +45,11 @@ class ConfigGraph:
             }
 
     AGENTS: ClassVar = {
-        "analyzer": Agent(agent_name="analyzer", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=analyze_cv_prompt),
-        "re_analyzer": Agent(agent_name="re_analyzer", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=re_analyze_cv_prompt),
-        "cv_reviewer": Agent(agent_name="cv_reviewer", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=cv_check_prompt),
-        "offer_reviewer": Agent(agent_name="offer_reviewer", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=offer_check_prompt)
+        "docs_grader": Agent(agent_name="docs_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
+        "query_processor": Agent(agent_name="query_processor", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
+        "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=StrOutputParser),
+        "hallucination_grader": Agent(agent_name="hallucination_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=hallucination_prompt,parser=JsonOutputParser),
+        "answer_grader": Agent(agent_name="answer_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grade_answer_prompt,parser=JsonOutputParser),
     }
     config_path: Optional[str] = None
     data_path: Optional[str] = None
@@ -135,27 +134,38 @@ class ConfigGraph:
         logger.info(f"Graph Agents : {agents}")
         return agents
 
-    def get_model_agent_prompt(self, model : str, agent : str) -> PromptTemplate:
+    def get_model_agent_prompt(self, model : str, agent : str) -> Union[PromptTemplate,str]:
         if model == 'OPENAI':
-            if agent == "analyzer":
-                return analyze_cv_prompt
-            elif agent == "re_analyzer":
-                return re_analyze_cv_prompt            
-            elif agent == "cv_reviewer":
-                return cv_check_prompt        
-            elif agent == "offer_reviewer":
-                return offer_check_prompt
+            if agent == "docs_grader":
+                return ''
+            elif agent == "query_processor":
+                return ''            
+            elif agent == "generator":
+                return ''        
+            elif agent == "hallucination_grader":
+                return ''
+            elif agent == "answer_grader":
+                return ''
+            else:
+                logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
+                raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")      
         elif model == 'NVIDIA' or  model =='OLLAMA':
-            if agent == "analyzer":
-                return analyze_cv_prompt_nvidia
-            elif agent == "re_analyzer":
-                return re_analyze_cv_prompt_nvidia            
-            elif agent == "cv_reviewer":
-                return cv_check_prompt_nvidia      
-            elif agent == "offer_reviewer":
-                return offer_check_prompt_nvidia
+            if agent == "docs_grader":
+                return grader_docs_prompt
+            elif agent == "query_processor":
+                return query_process_prompt        
+            elif agent == "generator":
+                return gen_prompt      
+            elif agent == "hallucination_grader":
+                return hallucination_prompt
+            elif agent == "answer_grader":
+                return grade_answer_prompt
+            else:
+                logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
+                raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
         else:
-            return None
+            logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
+            raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
 
     def get_candidato(self, cv :str , oferta :str) -> Candidato:
         return Candidato(id=get_id(), cv=cv, oferta=oferta)

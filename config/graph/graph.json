@@ -1,0 +1,28 @@
+{
+    "agents":{
+              "docs_grader": {
+                            "name":"NVIDIA",
+                            "temperature":0
+                            },
+              "query_processor": {
+                            "name":"NVIDIA",
+                            "temperature":0
+                            },
+              "generator": {
+                              "name":"NVIDIA",
+                              "temperature":0
+                              },
+                "hallucination_grader": {
+                            "name":"NVIDIA",
+                            "temperature":0
+                            },
+                "answer_grader": {
+                                        "name":"NVIDIA",
+                                        "temperature":0
+                                        }
+        },
+      "iteraciones": 10,
+      "thread_id": "4",
+      "verbose": 0
+  }
+    

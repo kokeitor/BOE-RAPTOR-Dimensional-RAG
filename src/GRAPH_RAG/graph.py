@@ -1,54 +1,62 @@
 import logging
 import logging.config
 import logging.handlers
-from langchain_core.runnables import RunnableLambda
 from langgraph.graph import StateGraph, END
-from typing import TypedDict, Annotated
-from langchain_core.messages import HumanMessage
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
 from base_models import (
     State,
     Candidato,
     Analisis
 )
+from config import ConfigGraph
+from chains import get_chain
 from nodes import (
     retriever,
+    retreived_docs_grader,
+    route_generate_requery,
+    process_query,
     generator,
-    query_tool,
+    hallucination_checker,
+    generation_grader,
     final_report,
-    end_node,
+    route_generate_grade_gen,
+    route_generate_final
 )
 
 logger = logging.getLogger(__name__)
 
 def create_graph(config : ConfigGraph) -> StateGraph:
     
-    graph = StateGraph(GraphState)
+    graph = StateGraph(State)
+    
+    retrievers = get_retrievers()
+    docs_grader = config.agents.get("retreived_docs_grader",None)
+    query_processor = config.agents.get("reprocess_query",None)
+    generator_agent = config.agents.get("generator",None)
+    hallucination_grader = config.agents.get("hallucination_checker",None)
+    answer_grader = config.agents.get("generation_grader",None)
+
 
     # Define the nodes
-    graph.add_node("query_tool", query_tool) # web search
-    graph.add_node("retrieve", retriever) # retrieve
-    graph.add_node("grade_documents", grade_documents) # grade documents
-    graph.add_node("generate", generator) # generatae
-    
-    analyzer = config.agents.get("analyzer",None)
-    re_analyzer = config.agents.get("re_analyzer",None)
-    cv_reviewer = config.agents.get("cv_reviewer",None)
-    offer_reviewer = config.agents.get("offer_reviewer",None)
-
-    graph = StateGraph(State)
-    graph.add_node("analyzer",lambda state: analyzer_agent(state=state,analyzer=analyzer, re_analyzer=re_analyzer))
-    graph.add_node("reviewer_cv",lambda state: reviewer_cv_agent(state=state, agent=cv_reviewer))
-    graph.add_node( "reviewer_offer", lambda state: reviewer_offer_agent(state=state, agent=offer_reviewer))
-    graph.add_node( "report", lambda state: final_report(state=state))
-    graph.add_node( "end_node", lambda state: end_node(state=state))
+    graph.add_node("retriever",lambda state: retriever(state=state,retrievers=retrievers)) # pinecone,chromadb,qdrant,pinecone
+    graph.add_node("retreived_docs_grader",lambda state: retreived_docs_grader(state=state,agent=docs_grader, get_chain=get_chain))
+    graph.add_node("reprocess_query",lambda state: process_query(state=state,agent=query_processor, get_chain=get_chain))
+    graph.add_node("generator",lambda state: generator(state=state,agent=generator_agent, get_chain=get_chain))
+    graph.add_node("hallucination_checker",lambda state: hallucination_checker(state=state,agent=hallucination_grader, get_chain=get_chain))
+    graph.add_node("generation_grader",lambda state: generation_grader(state=state,agent=answer_grader, get_chain=get_chain))
+    graph.add_node("final_report",lambda state: final_report(state=state))
 
     # Add edges to the graph
-    graph.set_entry_point("analyzer")
-    graph.set_finish_point("end_node")
-    graph.add_edge("analyzer", "reviewer_cv")
-    graph.add_conditional_edges( "reviewer_cv",lambda state: pass_cv_review(state=state),)
-    graph.add_conditional_edges( "reviewer_offer",lambda state: pass_offer_review(state=state))
-    graph.add_edge("report","end_node")
+    graph.set_entry_point("retriever")
+    graph.set_finish_point("final_report")
+    graph.add_edge("retriever", "retreived_docs_grader")
+    graph.add_conditional_edges( "retreived_docs_grader",lambda state: route_generate_requery(state=state))
+    graph.add_edge("reprocess_query", "retriever")
+    graph.add_edge( "generator","hallucination_checker")
+    graph.add_conditional_edges( "hallucination_checker",lambda state: route_generate_grade_gen(state=state))
+    graph.add_conditional_edges( "generation_grader",lambda state: route_generate_final(state=state))
+    graph.add_edge("final_report",END)
+    
 
     return graph
 

@@ -22,8 +22,8 @@ from models import (
     get_ollama,
     get_open_ai
 )
-from .chains import get_chain
-from .graph_utils import get_current_spanish_date_iso, merge_page_content
+from chains import get_chain
+from graph_utils import get_current_spanish_date_iso, merge_page_content
 
 
 # Logging configuration
@@ -51,19 +51,12 @@ clasify_chain = clasify_prompt | llm | JsonOutputParser()
 """
 
 ### Nodes
-def retriever(retriever, state : State) -> State:
-    """
-    Retrieve documents from vectorstore
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): New key added to state, documents, that contains retrieved documents
-    """
+def retriever(retrievers : list , state : State) -> State:
+    """Retrieve documents from vector database"""
+    
     logger.info(f"Retriever node : \n {state}")
     question = state["question"]
-    documents = retriever.invoke(question)
+    documents = [retriever.invoke(question) for retriever in retrievers]
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     state["documents"] = documents
@@ -72,16 +65,8 @@ def retriever(retriever, state : State) -> State:
 
 
 def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
-    """
-    Determines whether the retrieved documents are relevant to the question
-    If any document is not relevant, we will set a flag to run [?] IMPLEMENATCION LOGICA DE ESTE NODO
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): Filtered out irrelevant documents and updated web_search state
-    """
+    """Determines whether the retrieved documents are relevant to the question"""
+    
     logger.info(f"Retrieved Documents Grader Node : \n {state}")
     question = state["question"]
     documents = state["documents"]
@@ -116,16 +101,10 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
 
     return state
 
+
 def generator(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
-    """
-    Generate answer using RAG on retrieved documents
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): New key added to state, generation, that contains LLM generation
-    """
+    """Generate answer using RAG on retrieved documents"""
+    
     logger.info(f"RAG Generator node : \n {state}")
     question = state["question"]
     
@@ -146,158 +125,112 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     return state
 
 
-def _web_search(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
-    """
-    Web search based based on the question
+def process_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+    """Reprocess a user query to improve docs retrieval"""
 
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): Appended web results to documents
-    """
-
-    print("---WEB SEARCH---")
+    logger.info(f"Query Reprocessing : \n {state}")
     question = state["question"]
-    documents = state["documents"]
+    chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    response = chain.invoke({"question": question})
+    reprocesed_question = response["reprocess_question"]
+    state["question"] = reprocesed_question
+    logger.info(f"{question=} // after reprocessing question -> {response=}")
 
-    # Web search
-    docs = web_search_tool.invoke({"query": question})
-    web_results = "\n".join([d["content"] for d in docs])
-    web_results = Document(page_content=web_results)
-    if documents is not None:
-        documents.append(web_results)
-    else:
-        documents = [web_results]
     return state
 
 
-def reprocess_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
-    """
-    Query processing tool
+def hallucination_checker(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+    """Checks for hallucionation on the response or generation"""
 
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): Appended web results to documents
-    """
-
-    logger.info(f"Query Reprocessing : \n {state}")
-    
-    question = state["question"]
+    logger.info(f"hallucination_checker node : \n {state}")
+    generation = state["question"]
     documents = state["documents"]
-    ### here code for procesing query 
-    ### ...
-    ###
-    new_question= "¿A quien se promueve como magistrada en el Puerto de la Cruz?"
-    state["question"] = new_question
-    logger.info(f"{question=} //after reprocessing// {new_question=}")
+    context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
+    
+    hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    response = hall_chain.invoke({"documents": context, "generation": generation})
+    fact_based_answer = response["score"]
+    logger.info(f"hallucination grade : {response=}")
+    
+    # Update Graph State
+    state["fact_based_answer"] = fact_based_answer
+
+    return state
+
+def generation_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+    """Grades the generation/answer given a question"""
+    
+    logger.info(f"generation_grader node : \n {state}")
+    generation = state["question"]
+    question = state["question"]
+
+    garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    response = garder_chain.invoke({"question": question, "generation": generation})
+    grade = response["score"]
+    logger.info(f"Answer grade : {response=}")
+    
+    # Update Graph State
+    state["useful_answer"] = grade
 
     return state
 
 def final_report(state:State) -> State:
 
-    analisis_final = state["analisis"][-1]
-    candidato = state["candidato"]
+    generation = state["generation"]
+    question = state["question"]
+    documents = state["documents"]
+    grade = state["answer_grade"]
     
-    logger.info(f"Analisis final : \n {analisis_final}")
-    print(colored(f"\nReporte final 📝\n\nFecha del analisis : {analisis_final.fecha}\n\n**CANDIDATO**\n{candidato.cv}\n\n**OFERTA**\n{candidato.oferta}\n\n**ANALISIS**\n- Puntuacion : {analisis_final.puntuacion}\n- Experiencias : {analisis_final.experiencias}\n- Descripcion : {analisis_final.descripcion}", 'light_yellow',attrs=["bold"]))
+    logger.info(f"Final model response : \n {state}")
+    print(colored(f"\nFinal model report 📝\n\**QUESTION**: {question}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**ANSWER GRADE** : {grade}", 'light_yellow',attrs=["bold"]))
 
-    state = {**state, "analisis_final": analisis_final}
-
-    return state
-
-def end_node(state:State) -> State:
-    logger.info(f"Nodo final")
     return state
 
 
 ### Conditional edge functions
-def route_question(state : State, agent : Agent, get_chain : Callable = get_chain) -> str:
-    """
-    Route question to question processing tool or RAG.
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Next node to call
-    """
-    logger.info(f"Router Query : \n {state}")
-    question = state["question"]
+def route_generate_requery(state : State) -> str:
+    """Route to generation or to reprocess question """
     
-    router_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
-    source = router_chain.invoke({"question": question})  
-    next_node = source["source"]
-    logger.info(f"Routing query to -> \n {next_node=}")
-    
-    # Check model output format error
-    if next_node == 'query_reprocess':
-        return "query_reprocess"
-    elif next_node == 'vectorstore':
-        return "vectorstore"
-    else:
-        logger.exception(f"Unkonwn response : {next_node=} from the route_question model node")
-        raise ValueError(f"Unkonwn response : {next_node=} from the route_question model node")
-
-def decide_to_generate(state : State) -> str:
-    """
-    Determines whether to generate an answer, or add web search
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Binary decision for next node to call
-    """
-
-    logger.info(f"Decide to generate edge or query tool: \n {state}")
+    logger.info(f"Router Generation or Reprocess Query : \n {state}")
     query_reprocess = state["query_reprocess"]
-    if query_reprocess == "yes":
-        # All documents have been filtered check_relevance
-        # We will re-generate a new query
-        logger.info("Decision ->  Query Reprocess")
-        return "query_reprocess"
-    if query_reprocess == "no":
-        # We have relevant documents, so generate answer
-        logger.info("Decision -> Generation")
-        return "generate"
-
-
-def check_generation(state : State, agent : Agent, get_chain : Callable = get_chain) -> str:
-    """
-    Determines whether the generation is grounded in the document and answers question.
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Decision for next node to call
-    """
-
-    logger.info(f"Generation hallucionation checker : \n {state=}")
-    question = state["question"]
-    documents = state["documents"]
-    generation = state["generation"]
+    filter_docs = state["documents"]
     
-    hallu_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
-    response = hallu_chain.invoke({"documents": documents, "generation": generation})
-    grade = response['score']
-    logger.info(f"Hallucionation grade-> {grade=}")
-
-    # Check hallucination
-    if grade == "no":
-        print("---DECISION: GENERATION IS GROUNDED IN DOCUMENTS---")
-        logger.debug(f"Generation is grounded in documents")
+    if query_reprocess == "yes" and filter_docs is None:
+        logger.info(f"Routing to -> 'query_reprocess'")
+        return 'query_reprocess'
+    if query_reprocess == "no" and filter_docs is not None:
+        logger.info(f"Routing to -> 'generate'")
+        return 'generate'
+    
+def route_generate_grade_gen(state : State) -> str:
+    """Route to generation or to grade the generation/answer"""
+    
+    logger.info(f"Router Generation or Grader Generation : \n {state}")
+    fact_based_answer = state["fact_based_answer"]
+    
+    if fact_based_answer == "yes":
+        logger.info(f"Routing to -> 'Grader generation'")
         return 'generation_grader'
-    elif grade == "yes":
-        return "retriever"
-    else:
-        logger.exception(f"Unkonwn response : {grade=} from the check generation node")
-        raise ValueError(f"Unkonwn response : {grade=} from the check generation node")
+    if fact_based_answer == "no":
+        logger.info(f"Routing to -> 'Generation'")
+        return 'generator'
+
     
-def grade_generation(state : State, agent : Agent, get_chain : Callable = get_chain, threshold : float = 0.7) -> str:
+def route_generate_final(state : State) -> str:
+    """Route to generation or to final report"""
+    
+    logger.info(f"Router Generation or Final report : \n {state}")
+    useful_answer = state["useful_answer"]
+    
+    if useful_answer == "yes":
+        logger.info(f"Routing to -> 'Final Report'")
+        return 'final_report'
+    if useful_answer == "no":
+        logger.info(f"Routing to -> 'Generation'")
+        return 'generator'
+
+    
+def _grade_generation(state : State, agent : Agent, get_chain : Callable = get_chain, threshold : float = 0.7) -> str:
     """
     Grades the accuracy/precison of the model response whrn answers a given question
 
