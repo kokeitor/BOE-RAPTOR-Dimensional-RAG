@@ -14,10 +14,9 @@ class Analisis(BaseModel):
     descripcion: str
     status: str
     
-class Candidato(BaseModel):
+class Question(BaseModel):
     id : Union[str,None] = None
-    cv : str
-    oferta : str
+    user_question : str
 
 class State(TypedDict):
     """

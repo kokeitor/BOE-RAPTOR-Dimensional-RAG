@@ -1,21 +1,26 @@
-import os 
+import os
+import logging
+from termcolor import colored
 from dotenv import load_dotenv
-from typing_extensions import TypedDict
-from typing import List
-from chains import router_chain,grader_chain, rag_chain, hallucination_chain,answer_chain
-from src.package.utils.utils import translate,format_docs
-from langchain.schema import Document
-from tqdm import tqdm
-from langgraph.graph import END, StateGraph
-from src.package.module.db import db_conexion
+from src.GRAPH_RAG.graph import create_graph, compile_workflow
+from src.GRAPH_RAG.config import ConfigGraph
+from src.GRAPH_RAG.graph_utils import (
+                        setup_logging,
+                        get_arg_parser
+                        )
 
-### env keys
+
+# Load environment variables from .env file
 load_dotenv()
+
+# Set environment variables
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
 
 
-
+# Logging configuration
+logger = logging.getLogger(__name__)
 
 ## RETRIEVER FUNCTION 
 chroma_vectorstore,retriever_chroma,pinecone_vectorstore,retriever_pinecone = db_conexion()
@@ -32,308 +37,62 @@ def docs_from_retriver(question :str):
         print(f"{e}")
 
 
-
-
-
-### State
-class GraphState(TypedDict):
-    """
-    Represents the state of our graph.
-
-    Attributes:
-        question: question
-        generation: LLM generation
-        web_search: whether to add search
-        documents: list of documents 
-    """
-    question : str
-    generation : str
-    query_processing : str
-    documents : List[str]
-
-
-### Nodes
-def retrieve(state):
-    """
-    Retrieve documents from vectorstore
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): New key added to state, documents, that contains retrieved documents
-    """
-    print("---RETRIEVE---")
-    question = state["question"]
+def main() -> None:
+    # Logger set up
+    setup_logging()
     
-    documents = docs_from_retriver(question=question)
-    return {"documents": documents, "question": question}
-
-def generate(state):
-    """
-    Generate answer using RAG on retrieved documents
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): New key added to state, generation, that contains LLM generation
-    """
-    print("---GENERATE---")
-    question = state["question"]
-    documents = state["documents"]
+    # With scripts parameters mode
+    parser = get_arg_parser()
+    args = parser.parse_args()
+    CONFIG_PATH = args.config_path
+    OPENAI_API_KEY = args.token
+    DATA_PATH = args.data_path
+    MODE = args.mode
     
-    # Translation of query and docs
-    #question_trl = translate(text = question, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")
-    #docs_trl  = [Document(page_content = translate(text = doc_trl, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")) for doc_trl in documents]
-    
-    # Format docs obj into unique str for model
-    format_doc_text = format_docs(docs = documents )
-    
-    # RAG generation
-    generation = rag_chain.invoke({"context": format_doc_text, "question": question})
-    print("generation", generation)
-    print("context", format_doc_text)
-    print("question", question)
-    #gen_trl = translate(text = "generation", generation, target_lang = "ES" , verbose  = 0, mode = "LOCAL_LLM")
-    
-    return {"documents": documents, "question": question, "generation": generation}
-
-def grade_documents(state):
-    """
-    Determines whether the retrieved documents are relevant to the question
-    If any document is not relevant, we will set a flag to run web search
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): Filtered out irrelevant documents and updated web_search state
-    """
-
-    print("---CHECK DOCUMENT RELEVANCE TO QUESTION---")
-    question = state["question"]
-    documents = state["documents"]
-    
-    # Translation of query and docs
-    #question_trl = translate(text = question, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")
-    #docs_trl  = [Document(page_content = translate(text = doc_trl, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")) for doc_trl in documents]
-    
-    # Score each doc
-    filtered_docs = []
-    query_tool = "No"
-    for index_doc, d in enumerate(documents):
-        score = grader_chain.invoke({"question": question, "document": d.page_content})
-        grade = score['score']
-        # Document relevant
-        if grade.lower() == "yes":
-            print("---GRADE: DOCUMENT RELEVANT---")
-            filtered_docs.append(d)
-        # Document not relevant
-        else:
-            print(f"---GRADE: DOCUMENT {index_doc} NOT RELEVANT---")
-            # We do not include the document in filtered_docs
-
-    # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
-    if len(filtered_docs) <= 1:  
-        query_tool = "Yes"
-
-    return {"documents": filtered_docs, "question": question, "query_processing": query_tool}
-
-
-#def web_search(state):
-#    """
-#    Web search based based on the question
-#
-#    Args:
-#        state (dict): The current graph state
-#
-#    Returns:
-#        state (dict): Appended web results to documents
-#    """
-#
-#    print("---WEB SEARCH---")
-#    question = state["question"]
-#    documents = state["documents"]
-#
-#    # Web search
-#    docs = web_search_tool.invoke({"query": question})
-#    web_results = "\n".join([d["content"] for d in docs])
-#    web_results = Document(page_content=web_results)
-#    if documents is not None:
-#        documents.append(web_results)
-#    else:
-#        documents = [web_results]
-#    return {"documents": documents, "question": question}
-
-
-def query_tool(state) -> dict:
-    """
-    Query processing tool
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        state (dict): Appended web results to documents
-    """
-
-    print("---QUERY PROCESSING---")
-    question = state["question"]
-    documents = state["documents"]
-    ### here code for procesing query ...
-    ###
-    for _ in tqdm(range(4)):
-        print("PROCESSING THE QUERY ... ")
-        
-    question = "¿Cual es la duración total de las enseñanzas en ciclos de grado medio?"
-        
-    return {"documents": documents, "question": question}
-
-### Conditional edge
-
-def route_question(state) -> str:
-    """
-    Route question to question processing tool or RAG.
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Next node to call
-    """
-
-    print("---ROUTE QUESTION---")
-    question = state["question"]
-    print(question)
-    #question_trl = translate(text = question, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")
-    
-    source = router_chain.invoke({"question": question})  
-    print(source)
-    print(source['datasource'])
-    if source['datasource'] == 'query_tool':
-        print("---ROUTE QUESTION TO QUERY PROCESSING TOOL---")
-        return "query_tool"
-    elif source['datasource'] == 'vectorstore':
-        print("---ROUTE QUESTION TO RAG---")
-        return "vectorstore"
-
-def decide_to_generate(state):
-    """
-    Determines whether to generate an answer, or add web search
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Binary decision for next node to call
-    """
-
-    print("---ASSESS GRADED DOCUMENTS---")
-    question = state["question"]
-    query_tool = state["query_processing"]
-    filtered_documents = state["documents"]
-
-    if query_tool == "Yes":
-        # All documents have been filtered check_relevance
-        # We will re-generate a new query
-        print("---DECISION: ONLY 1 OR 0 DOCUMENTS ARE RELEVANT TO QUESTION, QUERY PROCESSING NECESARY---")
-        return "query_tool"
+    # Without scripts parameters mode
+    if OPENAI_API_KEY:
+        os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
     else:
-        # We have relevant documents, so generate answer
-        print("---DECISION: GENERATE---")
-        return "generate"
-
-### Conditional edge
-
-def grade_generation_v_documents_and_question(state):
-    """
-    Determines whether the generation is grounded in the document and answers question.
-
-    Args:
-        state (dict): The current graph state
-
-    Returns:
-        str: Decision for next node to call
-    """
-
-    print("---CHECK HALLUCINATIONS---")
-    question = state["question"]
-    documents = state["documents"]
-    generation = state["generation"]
+        os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+    if not CONFIG_PATH:
+        CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config/graph', 'graph.json') 
+    if not DATA_PATH:
+        DATA_PATH = os.path.join(os.path.dirname(__file__), 'config/graph', 'querys.json') 
+    if not MODE:
+        MODE = 'graph'
+        
+    logger.info(f"{DATA_PATH=}")
+    logger.info(f"{CONFIG_PATH=}")
+    logger.info(f"{MODE=}")
     
-    # Translation of query and docs
-    #question_trl = translate(text = question, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")
-    #gen_trl = translate(text = question, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")
-    #docs_trl  = [Document(page_content = translate(text = doc_trl, target_lang = "EN-GB" , verbose  = 0, mode = "LOCAL_LLM")) for doc_trl in documents]
-
-    score = hallucination_chain.invoke({"documents": documents, "generation": generation})
-    grade = score['score']
-
-    # Check hallucination
-    if grade == "yes":
-        print("---DECISION: GENERATION IS GROUNDED IN DOCUMENTS---")
-        # Check question-answering
-        print("---GRADE GENERATION vs QUESTION---")
-        score = answer_chain.invoke({"question": question,"generation": generation})
-        grade = score['score']
-        if grade == "yes":
-            print("---DECISION: GENERATION ADDRESSES QUESTION---")
-            return "useful"
-        else:
-            print("---DECISION: GENERATION DOES NOT ADDRESS QUESTION---")
-            return "not useful"
-    else:
-        print("---DECISION: GENERATION IS NOT GROUNDED IN DOCUMENTS, RE-TRY---")
-        return "not supported"
-
-
-workflow = StateGraph(GraphState)
-
-# Define the nodes
-workflow.add_node("query_tool", query_tool) # web search
-workflow.add_node("retrieve", retrieve) # retrieve
-workflow.add_node("grade_documents", grade_documents) # grade documents
-workflow.add_node("generate", generate) # generatae
-
-# Build graph
-workflow.set_conditional_entry_point(
-    route_question,
-    {
-        "query_tool": "query_tool",
-        "vectorstore": "retrieve",
-    },
-)
-
-workflow.add_edge("retrieve", "grade_documents")
-workflow.add_conditional_edges(
-    "grade_documents",
-    decide_to_generate,
-    {
-        "query_tool": "query_tool",
-        "generate": "generate",
-    },
-)
-workflow.add_edge("query_tool", "retrieve")
-workflow.add_conditional_edges(
-    "generate",
-    grade_generation_v_documents_and_question,
-    {
-        "not supported": "generate",
-        "useful": END,
-        "not useful": END,
-    },
-)
-
-# Compile
-app = workflow.compile()
-
-# Test
+    # Mode -> Langgraph Agents
+    if MODE == 'graph':
+        
+        logger.info(f"Graph mode")
+        logger.info(f"Getting Data and Graph configuration from {DATA_PATH=} and {CONFIG_PATH=} ")
+        config_graph = ConfigGraph(config_path=CONFIG_PATH, data_path=DATA_PATH)
+        
+        logger.info("Creating graph and compiling workflow...")
+        graph = create_graph(config=config_graph)
+        workflow = compile_workflow(graph)
+        logger.info("Graph and workflow created")
+        
+        thread = {"configurable": {"thread_id": config_graph.thread_id}}
+        iteraciones = {"recursion_limit": config_graph.iteraciones}
+        
+        # itera por todos questions definidos
+        for user_question in config_graph.user_questions:
+            
+            logger.info(f"User Question: {user_question}")
+            inputs = {"question": f"{user_question}"}
+            
+            for event in workflow.stream(inputs, iteraciones):
+                for key, value in event.items():
+                    print(f"Finished running: {key}:")
+            print("BOE DICE : " , value["generation"])
+                    
 if __name__ == '__main__':
-    
-    user_question = input("¡PREGUNTA AL BOE!")
-    inputs = {"question": f"{user_question}"}
-    for output in app.stream(inputs):
-        for key, value in output.items():
-            print(f"Finished running: {key}:")
-    print("BOE DICE : " , value["generation"])
+    main()
+    # terminal command with script parameters : python app.py --data_path ./config/data.json --mode "graph" --config_path ./config/generation.json
+    # terminal command : python app.py 
+

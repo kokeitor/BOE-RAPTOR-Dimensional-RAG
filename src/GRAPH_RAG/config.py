@@ -17,8 +17,7 @@ from prompts import (
     )
 from base_models import (
     Analisis,
-    Candidato,
-    State,
+    Question,
     Agent
 )
 from graph_utils import (
@@ -69,7 +68,7 @@ class ConfigGraph:
             logger.info(f"Definidos los datos mediante archivo JSON en {self.data_path}")
         
         if len(self.data) > 0:
-            self.candidatos = [self.get_candidato(cv=candidato.get("cv", None), oferta=candidato.get("oferta", None)) for candidato in self.data]
+            self.user_questions = [self.get_user_question(q=user_q.get("user_question", None)) for user_q in self.data]
         else:
             logger.exception("No se han proporcionado candidatos en el archivo JSON con el correcto fomato [ [cv : '...', oferta : '...'] , [...] ] ")
             raise JsonlFormatError()
@@ -167,5 +166,5 @@ class ConfigGraph:
             logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
 
-    def get_candidato(self, cv :str , oferta :str) -> Candidato:
-        return Candidato(id=get_id(), cv=cv, oferta=oferta)
+    def get_user_question(self, q : str) -> Question:
+        return Question(id=get_id(), user_question=q)

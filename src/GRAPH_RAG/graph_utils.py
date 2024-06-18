@@ -47,7 +47,6 @@ def get_arg_parser() -> argparse.ArgumentParser:
                     prog='Analisis Cvs',
                     description='Obten un analisis del Cv segun la oferta de empleo deseada usando LLms')
     parser.add_argument('--data_path', type=str, required=False, help='Ruta del archivo de datos con el cv y oferta [json format]')
-    parser.add_argument('--token', type=str, required=False, help='Token de conexion API openAI')
     parser.add_argument('--mode', type=str, required=True, help='Modo de generacion : "graph" "pipeline" ')
     parser.add_argument('--config_path', type=str, required=False, help='Ruta del archivo de configuracion [json format]')
     
