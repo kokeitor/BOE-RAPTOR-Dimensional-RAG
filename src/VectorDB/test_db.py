@@ -36,9 +36,9 @@ def try_client_conexion(tries: int = 2):
             # Second test a
             try:
                 # Note: Instantiating Chroma class creates an object equivalent to chroma_client from chromadb library but using langchain library
-                logger.info("Db Collection info : ", vectorstore.get().keys())
-                logger.info("Db Collection info ids len : ", (vectorstore.get()["ids"]))
-                logger.info("Db Collection docs : ", vectorstore.get()["documents"])
+                logger.info(f"Db Collection info {vectorstore.get().keys()}")
+                logger.info(f"Db Collection info ids len : {vectorstore.get()["ids"]}")
+                logger.info(f"Db Collection docs : {vectorstore.get()["documents"]}")
             except Exception as e:
                 logger.error(f"Client db Second test a [Collection] error using {func.__name__} -> {e}")
             
@@ -47,7 +47,7 @@ def try_client_conexion(tries: int = 2):
                 logger.info(f"Db Collection embeddings (1st comp of first embedding) :  {vectorstore.get(include=['embeddings'])['embeddings'][0][0]}")
                 logger.info(f"Db len of collection embeddings: {len(vectorstore.get(include=['embeddings'])['embeddings'][0])}")
             except Exception as e:
-                logger.error(f"Client db Second test b[embeddings] error using {func.__name__} -> {e}")
+                logger.error(f"Client db Second test b [embeddings] error using {func.__name__} -> {e}")
 
             return retriever, vectorstore
 
