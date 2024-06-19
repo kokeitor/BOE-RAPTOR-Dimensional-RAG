@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 from langchain.prompts import PromptTemplate
 from dataclasses import dataclass
+from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
+from GRAPH_RAG.models import get_hg_emb
 import operator
 
 
@@ -49,3 +51,27 @@ class Agent:
     temperature : float
     prompt : PromptTemplate
     parser : BaseTransformOutputParser
+    
+@dataclass()  
+class VectorDB:
+    client : str
+    index_name : str
+    embedding_model : str
+    similarity_metric : str
+    k : int
+    
+    def __post_init__(self):
+        if self.client == 'pinecone':
+            self.retriever, self.vectorstore = get_pinecone_retriever(
+                                    index_name=self.index_name , 
+                                    embedding_model=self.embedding_model, 
+                                    search_kwargs={"k" : self.k}
+            )
+        elif self.client == 'chromadb':
+            self.retriever, self.vectorstore = get_chromadb_retriever(
+                                    index_name=self.index_name , 
+                                    embedding_model=self.embedding_model, 
+                                    collection_metadata= {"hnsw:space": self.similarity_metric},
+                                    search_kwargs = {"k" : self.k}
+            )
+

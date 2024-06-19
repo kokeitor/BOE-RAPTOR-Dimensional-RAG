@@ -5,7 +5,7 @@ from langchain.prompts import PromptTemplate
 from pydantic import ValidationError
 from GRAPH_RAG.base_models import (
     State,
-    Analisis,
+    VectorDB,
     Agent
 )
 from GRAPH_RAG.models import (
@@ -42,12 +42,12 @@ clasify_chain = clasify_prompt | llm | JsonOutputParser()
 """
 
 ### Nodes
-def retriever(retrievers : list , state : State) -> State:
+def retriever(vector_db : dict[str,VectorDB], state : State) -> State:
     """Retrieve documents from vector database"""
     
     logger.info(f"Retriever node : \n {state}")
     question = state["question"]
-    documents = [retriever.invoke(question) for retriever in retrievers]
+    documents = [vdb.retriever.invoke(question) for vdb_client , vdb in vector_db.items()]
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     state["documents"] = documents

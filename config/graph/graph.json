@@ -21,6 +21,18 @@
                                         "temperature":0
                                         }
         },
+    "vector_db": {
+                    "pinecone":{
+                        "embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                        "similarity_metric": "COSINE",
+                        "k" : 3
+                    },
+                    "chromadb" : {
+                        "embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                        "similarity_metric": "cosine",
+                        "k" : 3
+                    }
+    },
       "iteraciones": 10,
       "thread_id": "4",
       "verbose": 0

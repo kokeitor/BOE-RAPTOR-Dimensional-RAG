@@ -33,7 +33,8 @@ os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
 @VectorDB.test_db.try_client_conexion
 def get_chromadb_retriever(
                             index_name :str = INDEX_NAME, 
-                            embedding_model : callable = get_hg_emb, 
+                            get_embedding_model : callable = get_hg_emb, 
+                            embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
                             collection_metadata : dict[str,str] = {"hnsw:space": "cosine"},
                             search_kwargs : dict = {"k" : 3},
                             delete_index_name : Union[str,None] = None
@@ -54,7 +55,7 @@ def get_chromadb_retriever(
         
     try: 
         chroma_vectorstore = Chroma(
-                                    embedding_function=embedding_model(),   
+                                    embedding_function=get_embedding_model(model=embedding_model),   
                                     client=client,
                                     collection_name=index_name,
                                     collection_metadata=collection_metadata
@@ -67,18 +68,20 @@ def get_chromadb_retriever(
     
     return retriever , chroma_vectorstore
 
+
 @VectorDB.test_db.try_retriever(query="¿hola?")
 @VectorDB.test_db.try_client_conexion
 def get_pinecone_retriever(
                             index_name :str = INDEX_NAME, 
-                            embedding_model : callable = get_hg_emb, 
+                            get_embedding_model : callable = get_hg_emb, 
+                            embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" ,
                             search_kwargs : dict = {"k" : 3},
                             ) -> tuple[VectorStoreRetriever,VectorStore]:
 
     try:
         logger.info(f"Connecting to an existing index of PineCone DB cient -> {index_name}")
         pinecone_vectorstore = PineconeVectorStore(
-                                                embedding=embedding_model(),
+                                                embedding=get_embedding_model(model=embedding_model),
                                                 text_key='text',
                                                 distance_strategy=DistanceStrategy.COSINE,
                                                 pinecone_api_key=os.getenv('PINECONE_API_KEY'),

@@ -8,6 +8,8 @@ from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
 from GRAPH_RAG.chains import get_chain
+from GRAPH_RAG.chains import get_chain
+from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
 from GRAPH_RAG.prompts import (
     grader_docs_prompt,
     gen_prompt,
@@ -18,7 +20,8 @@ from GRAPH_RAG.prompts import (
 from GRAPH_RAG.base_models import (
     Analisis,
     Question,
-    Agent
+    Agent,
+    VectorDB
 )
 from GRAPH_RAG.graph_utils import (
                         get_current_spanish_date_iso, 
@@ -28,7 +31,9 @@ from exceptions.exceptions import NoOpenAIToken, JsonlFormatError, Configuration
 from GRAPH_RAG.models import (
     get_nvdia,
     get_ollama,
-    get_open_ai_json
+    get_open_ai_json,
+    get_openai_emb,
+    get_hg_emb
 )
 
 # Logging configuration
@@ -48,6 +53,20 @@ class ConfigGraph:
         "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=StrOutputParser),
         "hallucination_grader": Agent(agent_name="hallucination_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=hallucination_prompt,parser=JsonOutputParser),
         "answer_grader": Agent(agent_name="answer_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grade_answer_prompt,parser=JsonOutputParser),
+    }
+    VECTOR_DB: ClassVar = {
+        "chromadb": VectorDB(
+                                client="chromadb", 
+                                embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                                similarity_metric="cosine", 
+                                k=3
+                                ),
+        "pinecone": VectorDB(
+                                client="pinecone", 
+                                embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                                similarity_metric="COSINE", 
+                                k=3
+                                )
     }
     config_path: Optional[str] = None
     data_path: Optional[str] = None
@@ -76,6 +95,11 @@ class ConfigGraph:
         self.agents_config = self.config.get("agents", None)
         if self.agents_config is not None:
             self.agents = self.get_agents()
+            
+        # Graph Retrievers configuration
+        self.vector_db_config = self.config.get("vector_db", None)
+        if self.vector_db_config is not None:
+            self.vector_db = self.get_vector_db()
 
         # Graph configuration
         self.iteraciones = self.config.get("iteraciones", len(self.candidatos))
@@ -113,12 +137,12 @@ class ConfigGraph:
                         get_model = ConfigGraph.MODEL.get(model, None)
                         if get_model is None:
                             logger.error(f"The Model defined for agemt : {agent} isnt't available -> using OpenAI model")
-                            get_model = get_open_ai
+                            get_model = get_nvdia
                             prompt = self.get_model_agent_prompt(model ='OPENAI', agent = agent)
                         else:
                             prompt = self.get_model_agent_prompt(model = model, agent = agent)
                     else:
-                        get_model = get_open_ai(temperature=model_temperature)
+                        get_model = get_nvdia(temperature=model_temperature)
 
                     agents[agent] = Agent(
                         agent_name=agent,
@@ -164,6 +188,16 @@ class ConfigGraph:
         else:
             logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
+    
+    def get_vector_db(self) -> dict[str,VectorDB]:
+        vector_db = ConfigGraph.VECTOR_DB.copy()
+        for vdb_default in vector_db.keys():
+            for vdb_name, vdb_config in self.vector_db_config.items():
+                if vdb_default == vdb_name:
+                    vector_db[vdb_default] = VectorDB(**vdb_config, client=vdb_default)
+                    logger.info(f"Initializating new retriever -> {vector_db[vdb_default]}")
+            
+        return vector_db
 
     def get_user_question(self, q : str) -> Question:
         return Question(id=get_id(), user_question=q)
