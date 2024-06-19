@@ -8,8 +8,8 @@ import chromadb
 import logging 
 import os
 from typing import Union
-from graph_rag.models import get_openai_emb, get_hg_emb
-from exceptions.exceptions import VectorDatabaseError
+from src.GRAPH_RAG.models import get_openai_emb, get_hg_emb
+from src.exceptions.exceptions import VectorDatabaseError
 import test_db
 """
 from qdrant_client import QdrantClient
@@ -111,17 +111,3 @@ def get_qdrant_retriever(
 
 """
 
-if __name__ == '__main__':
-    retriever, client = get_chromadb_retriever(
-    index_name = "hola"
-    
-                        )
-    retriever, client = get_pinecone_retriever(
-    index_name = "llama3"
-    
-            )
-    retriever, client = get_pinecone_retriever(
-    index_name = "hola"
-    
-    )
-    

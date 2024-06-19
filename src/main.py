@@ -3,9 +3,9 @@ import logging
 from termcolor import colored
 from dotenv import load_dotenv
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
-from src.graph_rag.graph import create_graph, compile_workflow
-from graph_rag.config import ConfigGraph
-from graph_rag.graph_utils import (
+from src.GRAPH_RAG.graph import GRAPH_RAG, compile_workflow
+from src.GRAPH_RAG.config import ConfigGraph
+from src.GRAPH_RAG.graph_utils import (
                         setup_logging,
                         get_arg_parser
                         )
@@ -46,8 +46,21 @@ def docs_from_retriver(question :str):
 def main() -> None:
     # Logger set up
     setup_logging()
+    retriever, client = get_chromadb_retriever(
+    index_name = "hola"
     
-    # With scripts parameters mode
+                        )
+    retriever, client = get_pinecone_retriever(
+    index_name = "llama3"
+    
+            )
+    retriever, client = get_pinecone_retriever(
+    index_name = "hola"
+    
+    )
+    
+    """
+     # With scripts parameters mode
     parser = get_arg_parser()
     args = parser.parse_args()
     CONFIG_PATH = args.config_path
@@ -96,25 +109,14 @@ def main() -> None:
                 for key, value in event.items():
                     print(f"Finished running: {key}:")
             print("BOE DICE : " , value["generation"])
+    """
 
           
 if __name__ == '__main__':
-    # main()
+    main()
     # terminal command with script parameters : python app.py --data_path ./config/data.json --mode "graph" --config_path ./config/generation.json
     # terminal command : python app.py 
-    retriever, client = get_chromadb_retriever(
-    index_name = "hola"
-    
-                        )
-    retriever, client = get_pinecone_retriever(
-    index_name = "llama3"
-    
-            )
-    retriever, client = get_pinecone_retriever(
-    index_name = "hola"
-    
-    )
-    
+
 
 
     
