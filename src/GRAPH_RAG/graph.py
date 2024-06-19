@@ -5,7 +5,6 @@ from langgraph.graph import StateGraph, END
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
 from GRAPH_RAG.base_models import (
     State,
-    Candidato,
     Analisis
 )
 from GRAPH_RAG.config import ConfigGraph
@@ -29,7 +28,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     
     graph = StateGraph(State)
     
-    retrievers = get_retrievers()
+    # retrievers = get_retrievers()
     docs_grader = config.agents.get("retreived_docs_grader",None)
     query_processor = config.agents.get("reprocess_query",None)
     generator_agent = config.agents.get("generator",None)
@@ -38,7 +37,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 
 
     # Define the nodes
-    graph.add_node("retriever",lambda state: retriever(state=state,retrievers=retrievers)) # pinecone,chromadb,qdrant,pinecone
+    graph.add_node("retriever",lambda state: retriever(state=state,retrievers="retrievers")) # pinecone,chromadb,qdrant,pinecone
     graph.add_node("retreived_docs_grader",lambda state: retreived_docs_grader(state=state,agent=docs_grader, get_chain=get_chain))
     graph.add_node("reprocess_query",lambda state: process_query(state=state,agent=query_processor, get_chain=get_chain))
     graph.add_node("generator",lambda state: generator(state=state,agent=generator_agent, get_chain=get_chain))

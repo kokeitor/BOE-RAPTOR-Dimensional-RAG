@@ -237,3 +237,14 @@
 [DEBUG|connectionpool|L1052] 2024-06-08T18:47:52: Starting new HTTPS connection (1): boe.es:443
 [DEBUG|connectionpool|L546] 2024-06-08T18:47:52: https://boe.es:443 "GET /boe/dias/2024/04/15/pdfs/BOE-A-2024-7311.pdf HTTP/1.1" 200 206648
 [INFO|download|L146] 2024-06-08T18:47:53: Archivo descargado con exito: C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\BOE-A-2024-7311.pdf
+[INFO|posthog|L20] 2024-06-19 19:09:47: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component System
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component Posthog
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component OpenTelemetryClient
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component FastAPI
+[INFO|posthog|L20] 2024-06-19 19:09:47: Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component System
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component Posthog
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component OpenTelemetryClient
+[DEBUG|config|L313] 2024-06-19 19:09:47: Starting component FastAPI
+[DEBUG|connectionpool|L244] 2024-06-19 19:09:47: Starting new HTTP connection (1): localhost:8000

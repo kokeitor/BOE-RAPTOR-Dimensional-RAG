@@ -23,7 +23,7 @@ def try_client_conexion(tries: int = 2):
     def decorator(func: callable):
         def wrapper(*args, **kwargs):
             retriever, vectorstore = func(*args, **kwargs)
-            logger.info(f"Trying client db {func.__name__}")
+            logger.info(f"Trying client db conexion : {func.__name__}")
 
             # First test
             try:
@@ -33,19 +33,21 @@ def try_client_conexion(tries: int = 2):
             except Exception as e:
                 logger.error(f"Client db First test error using {func.__name__} -> {e}")
 
-            # Second test
+            # Second test a
             try:
                 # Note: Instantiating Chroma class creates an object equivalent to chroma_client from chromadb library but using langchain library
                 logger.info("Db Collection info : ", vectorstore.get().keys())
                 logger.info("Db Collection info ids len : ", (vectorstore.get()["ids"]))
                 logger.info("Db Collection docs : ", vectorstore.get()["documents"])
-                try:
-                    logger.info(f"Db Collection embeddings (1st comp of first embedding) :  {vectorstore.get(include=['embeddings'])['embeddings'][0][0]}")
-                    logger.info(f"Db len of collection embeddings: {len(vectorstore.get(include=['embeddings'])['embeddings'][0])}")
-                except Exception as e:
-                    logger.error(f"Client db Second test [embeddings] error using {func.__name__} -> {e}")
             except Exception as e:
-                logger.error(f"Client db Second test [Collection] error using {func.__name__} -> {e}")
+                logger.error(f"Client db Second test a [Collection] error using {func.__name__} -> {e}")
+            
+            # Second test b
+            try:
+                logger.info(f"Db Collection embeddings (1st comp of first embedding) :  {vectorstore.get(include=['embeddings'])['embeddings'][0][0]}")
+                logger.info(f"Db len of collection embeddings: {len(vectorstore.get(include=['embeddings'])['embeddings'][0])}")
+            except Exception as e:
+                logger.error(f"Client db Second test b[embeddings] error using {func.__name__} -> {e}")
 
             return retriever, vectorstore
 
@@ -63,7 +65,7 @@ def try_retriever(query="La duración total de las enseñanzas en ciclos de grad
     def decorator(func: callable):
         def wrapper(*args, **kwargs):
             retriever, vectorestore = func(*args, **kwargs)
-            logger.info(f"Trying retriever {func.__name__}")
+            logger.info(f"Trying retriever associated with DB client")
 
             try:
                 response = retriever.invoke(query)

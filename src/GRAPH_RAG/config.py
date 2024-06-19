@@ -28,8 +28,7 @@ from exceptions.exceptions import NoOpenAIToken, JsonlFormatError, Configuration
 from GRAPH_RAG.models import (
     get_nvdia,
     get_ollama,
-    get_open_ai_json,
-    get_open_ai
+    get_open_ai_json
 )
 
 # Logging configuration

@@ -17,6 +17,7 @@ class Analisis(BaseModel):
 class Question(BaseModel):
     id : Union[str,None] = None
     user_question : str
+    
 
 class State(TypedDict):
     """

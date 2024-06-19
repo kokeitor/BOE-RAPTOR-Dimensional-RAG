@@ -21,9 +21,8 @@ INDEX_NAME = "INDEX_DEFAULT_VDB_NAME"
 
 logger = logging.getLogger(__name__)
 
-
-@VectorDB.test_db.try_client_conexion(tries = 2)
 @VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
+@VectorDB.test_db.try_client_conexion(tries = 2)
 def get_chromadb_retriever(
                             index_name :str = INDEX_NAME, 
                             embedding_model : callable = get_hg_emb, 
@@ -31,8 +30,10 @@ def get_chromadb_retriever(
                             search_kwargs : dict = {"k" : 3},
                             delete_index_name : Union[str,None] = None
                             ) -> tuple[VectorStoreRetriever,VectorStore]:
-    
-    client = chromadb.HttpClient(host='localhost', port=8000)
+    try:
+        client = chromadb.HttpClient(host='localhost', port=8000)
+    except ValueError:
+        logger.error("ValueError: Could not connect to a Chroma server. Are you sure it is running?")
     
     if delete_index_name:
         logger.error(f"Try to delete existing collection name index : {delete_index_name} of client Chroma DB")
@@ -41,7 +42,7 @@ def get_chromadb_retriever(
             logger.info(f"CHROMA DB collection with name : {delete_index_name} deleted")
         except Exception as e:
             logger.error(f"No CHROMA DB collection with name : {delete_index_name}")
-            raise VectorDatabaseError(exception=e)
+            raise VectorDatabaseError(message="Error while connecting to Chroma DB",exception=e)
         
     try: 
         chroma_vectorstore = Chroma(
@@ -52,15 +53,14 @@ def get_chromadb_retriever(
                                     )
     except Exception as e:
         logger.error(f"Error while connecting to Chroma DB -> {e}")
-        raise VectorDatabaseError(exception=e)
+        raise VectorDatabaseError(message="Error while connecting to Chroma DB",exception=e)
   
     retriever =  chroma_vectorstore.as_retriever(search_kwargs = search_kwargs)
     
     return retriever , chroma_vectorstore
 
-    
-@VectorDB.test_db.try_client_conexion(tries = 2)
 @VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
+@VectorDB.test_db.try_client_conexion(tries = 2)
 def get_pinecone_retriever(
                             index_name :str = INDEX_NAME, 
                             embedding_model : callable = get_hg_emb, 
@@ -78,7 +78,7 @@ def get_pinecone_retriever(
                                                     )
         except Exception as e:
             logger.exception(f"Error while creating new pinecone index  -> {e}")
-            raise VectorDatabaseError(exception=e)
+            raise VectorDatabaseError(message="Error while connecting to Chroma DB",exception=e)
     else:
         try:
             pinecone_vectorstore = PineconeVectorStore.from_existing_index(
@@ -87,7 +87,7 @@ def get_pinecone_retriever(
                                                                         )
         except Exception as e:
             logger.error(f"Error while connecting to PineCone DB from existing index : {index_name} -> {e}")
-            raise VectorDatabaseError(exception=e)
+            raise VectorDatabaseError(message="Error while connecting to Chroma DB",exception=e)
         
     retriever = pinecone_vectorstore.as_retriever(search_kwargs = search_kwargs)
     

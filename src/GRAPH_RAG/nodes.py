@@ -6,21 +6,12 @@ from pydantic import ValidationError
 from GRAPH_RAG.base_models import (
     State,
     Analisis,
-    Candidato,
     Agent
 )
-from GRAPH_RAG.prompts import (
-    analyze_cv_prompt,
-    offer_check_prompt,
-    re_analyze_cv_prompt,
-    cv_check_prompt,
-    analyze_cv_prompt_nvidia
-    )
 from GRAPH_RAG.models import (
     get_open_ai_json,
     get_nvdia,
-    get_ollama,
-    get_open_ai
+    get_ollama
 )
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.graph_utils import get_current_spanish_date_iso, merge_page_content

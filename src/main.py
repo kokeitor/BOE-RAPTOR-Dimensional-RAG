@@ -3,7 +3,7 @@ import logging
 from termcolor import colored
 from dotenv import load_dotenv
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
-from GRAPH_RAG.graph import GRAPH_RAG, compile_workflow
+from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.graph_utils import (
                         setup_logging,
@@ -27,20 +27,6 @@ os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
 # Logging configuration
 logger = logging.getLogger(__name__)
-
-## RETRIEVER FUNCTION 
-chroma_vectorstore,retriever_chroma,pinecone_vectorstore,retriever_pinecone = db_conexion()
-def docs_from_retriver(question :str):
-    
-    try: 
-        return retriever_chroma.invoke(question)
-    except Exception as e:
-        print(f"{e}")
-
-    try: 
-        return retriever_pinecone.invoke(question)
-    except Exception as e:
-        print(f"{e}")
 
 
 def main() -> None:
