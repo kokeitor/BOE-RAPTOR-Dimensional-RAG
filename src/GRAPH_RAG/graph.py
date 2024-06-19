@@ -3,14 +3,14 @@ import logging.config
 import logging.handlers
 from langgraph.graph import StateGraph, END
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
-from base_models import (
+from GRAPH_RAG.base_models import (
     State,
     Candidato,
     Analisis
 )
-from config import ConfigGraph
-from chains import get_chain
-from nodes import (
+from GRAPH_RAG.config import ConfigGraph
+from GRAPH_RAG.chains import get_chain
+from GRAPH_RAG.nodes import (
     retriever,
     retreived_docs_grader,
     route_generate_requery,

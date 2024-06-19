@@ -6,7 +6,7 @@ from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 from exceptions.exceptions import LangChainError
-from .models import (
+from GRAPH_RAG.models import (
     get_open_ai_json,
     get_nvdia,
     get_ollama

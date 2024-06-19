@@ -3,9 +3,9 @@ import logging
 from termcolor import colored
 from dotenv import load_dotenv
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
-from src.GRAPH_RAG.graph import GRAPH_RAG, compile_workflow
-from src.GRAPH_RAG.config import ConfigGraph
-from src.GRAPH_RAG.graph_utils import (
+from GRAPH_RAG.graph import GRAPH_RAG, compile_workflow
+from GRAPH_RAG.config import ConfigGraph
+from GRAPH_RAG.graph_utils import (
                         setup_logging,
                         get_arg_parser
                         )

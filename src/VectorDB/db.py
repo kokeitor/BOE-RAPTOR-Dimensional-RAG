@@ -8,9 +8,9 @@ import chromadb
 import logging 
 import os
 from typing import Union
-from src.GRAPH_RAG.models import get_openai_emb, get_hg_emb
-from src.exceptions.exceptions import VectorDatabaseError
-import test_db
+from GRAPH_RAG.models import get_openai_emb, get_hg_emb
+from exceptions.exceptions import VectorDatabaseError
+import VectorDB.test_db
 """
 from qdrant_client import QdrantClient
 from langchain_qdrant import Qdrant
@@ -22,8 +22,8 @@ INDEX_NAME = "INDEX_DEFAULT_VDB_NAME"
 logger = logging.getLogger(__name__)
 
 
-@test_db.try_client_conexion(tries = 2)
-@test_db.try_retriever(query="¿que dia es hoy?")
+@VectorDB.test_db.try_client_conexion(tries = 2)
+@VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
 def get_chromadb_retriever(
                             index_name :str = INDEX_NAME, 
                             embedding_model : callable = get_hg_emb, 
@@ -59,8 +59,8 @@ def get_chromadb_retriever(
     return retriever , chroma_vectorstore
 
     
-@test_db.try_client_conexion(tries = 2)
-@test_db.try_retriever(query="¿que dia es hoy?")
+@VectorDB.test_db.try_client_conexion(tries = 2)
+@VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
 def get_pinecone_retriever(
                             index_name :str = INDEX_NAME, 
                             embedding_model : callable = get_hg_emb, 

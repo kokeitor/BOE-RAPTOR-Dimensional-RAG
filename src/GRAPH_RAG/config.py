@@ -7,25 +7,25 @@ from typing import Union, Optional, Callable, ClassVar
 from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
-from chains import get_chain
-from prompts import (
+from GRAPH_RAG.chains import get_chain
+from GRAPH_RAG.prompts import (
     grader_docs_prompt,
     gen_prompt,
     query_process_prompt,
     hallucination_prompt,
     grade_answer_prompt
     )
-from base_models import (
+from GRAPH_RAG.base_models import (
     Analisis,
     Question,
     Agent
 )
-from graph_utils import (
+from GRAPH_RAG.graph_utils import (
                         get_current_spanish_date_iso, 
                         get_id
                         )
 from exceptions.exceptions import NoOpenAIToken, JsonlFormatError, ConfigurationFileError
-from models import (
+from GRAPH_RAG.models import (
     get_nvdia,
     get_ollama,
     get_open_ai_json,
