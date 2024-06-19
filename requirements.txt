@@ -119,6 +119,7 @@ langchain-experimental==0.0.60
 langchain-huggingface==0.0.3
 langchain-nvidia-ai-endpoints==0.1.2
 langchain-openai==0.1.8
+langchain-pinecone==0.1.1
 langchain-text-splitters==0.2.1
 langgraph==0.0.69
 langserve==0.2.1
