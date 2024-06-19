@@ -2,6 +2,7 @@ import os
 import logging
 from termcolor import colored
 from dotenv import load_dotenv
+from langchain.schema import Document
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
 from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.config import ConfigGraph
@@ -32,19 +33,28 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     # Logger set up
     setup_logging()
+    """
     retriever, client = get_chromadb_retriever(
     index_name = "hola"
-    
                         )
-    retriever, client = get_pinecone_retriever(
-    index_name = "llama3"
+    logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
+    logger.info(f"Client chroma db info {client.get()}")
+    retriever.add_documents(documents = [Document(page_content="Hoy hace un tiempo en madrid muy malo", metadata={"atributo":"Tiempo"})])
+    logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
+    logger.info(f"Client chroma db info {client.get()}")
+    retriever, client = get_chromadb_retriever(
+    index_name = "hola2",
+    delete_index_name="hola"
+                        )
+    """
+    
+    retriever, _ = get_pinecone_retriever(
+    index_name = "llama3",
+    search_kwargs= {"k":3}
     
             )
-    retriever, client = get_pinecone_retriever(
-    index_name = "hola"
-    
-    )
-    
+    retriever.add_documents(documents = [Document(page_content="El partido de la seleccion es el lunes", metadata={"atributo":"Tiempo"})])
+    logger.info(f"invoke retreiver pinecone : {retriever.invoke('futbol')}")
     """
      # With scripts parameters mode
     parser = get_arg_parser()
