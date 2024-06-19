@@ -2,9 +2,9 @@ import os
 import logging
 from termcolor import colored
 from dotenv import load_dotenv
-from src.GRAPH_RAG.graph import create_graph, compile_workflow
-from src.GRAPH_RAG.config import ConfigGraph
-from src.GRAPH_RAG.graph_utils import (
+from src.graph_rag.graph import create_graph, compile_workflow
+from src.graph_rag.config import ConfigGraph
+from src.graph_rag.graph_utils import (
                         setup_logging,
                         get_arg_parser
                         )
@@ -17,6 +17,11 @@ load_dotenv()
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
 os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
+os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
+os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
+os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
 
 # Logging configuration

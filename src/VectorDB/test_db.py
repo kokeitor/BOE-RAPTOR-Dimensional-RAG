@@ -52,7 +52,8 @@ def try_client_conexion(func : Union[callable,None] = None , tries : int = 2):
     
     return wrapper
 
-def try_retriever(func : Union[callable, None] = None , try_query = "La duración total de las enseñanzas en ciclos de grado medio"):
+
+def try_retriever(func : Union[callable, None] = None , query = "La duración total de las enseñanzas en ciclos de grado medio"):
     """
     Try retriever
 
@@ -67,7 +68,7 @@ def try_retriever(func : Union[callable, None] = None , try_query = "La duració
         logger.info(f"Trying retriever {func.__name__}")
         
         try:
-            response = retriever.invoke(try_query)
+            response = retriever.invoke(query)
             logger.info(f"Number of embeddings retrieved : {len(response)}")
             if len(response) > 0:
                 logger.info(f"Best similarity retriever search : {response[0].page_content}")
@@ -77,3 +78,4 @@ def try_retriever(func : Union[callable, None] = None , try_query = "La duració
         return retriever , vectorestore
     
     return wrapper
+
