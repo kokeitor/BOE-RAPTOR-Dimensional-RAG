@@ -1,4 +1,4 @@
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma, Qdrant
 from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_core.embeddings import Embeddings
 from langchain_core.vectorstores import VectorStore
@@ -12,10 +12,7 @@ from typing import Union
 from GRAPH_RAG.models import get_openai_emb, get_hg_emb
 from exceptions.exceptions import VectorDatabaseError
 import VectorDB.test_db
-"""
-from qdrant_client import QdrantClient
-from langchain_qdrant import Qdrant
-"""
+import qdrant_client
 
 
 INDEX_NAME = "INDEX_DEFAULT_VDB_NAME"
@@ -25,14 +22,11 @@ logger = logging.getLogger(__name__)
 # Load environment variables from .env file
 load_dotenv()
 
-# Set environment variables
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-
 
 @VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
 @VectorDB.test_db.try_client_conexion
 def get_chromadb_retriever(
-                            index_name :str = INDEX_NAME, 
+                            index_name :str = os.getenv("PINECONE_COLLECTION_NAME"), 
                             get_embedding_model : callable = get_hg_emb, 
                             embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
                             collection_metadata : dict[str,str] = {"hnsw:space": "cosine"},
@@ -72,7 +66,7 @@ def get_chromadb_retriever(
 @VectorDB.test_db.try_retriever(query="¿hola?")
 @VectorDB.test_db.try_client_conexion
 def get_pinecone_retriever(
-                            index_name :str = INDEX_NAME, 
+                            index_name :str = os.getenv("CHROMA_COLLECTION_NAME"), 
                             get_embedding_model : callable = get_hg_emb, 
                             embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" ,
                             search_kwargs : dict = {"k" : 3},
@@ -95,21 +89,50 @@ def get_pinecone_retriever(
     
     return retriever , pinecone_vectorstore
 
-
-"""
+@VectorDB.test_db.try_qdrant_conexion
 def get_qdrant_retriever(   
-                        index_name :str = INDEX_NAME, 
-                        embedding_model : callable = get_hg_emb, 
+                        collection_name :str = os.getenv("QDRANT_COLLECTION_NAME"), 
+                        get_embedding_model : callable = get_hg_emb, 
+                        embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" ,
                         search_kwargs : dict = {"k" : 3},
-                        new_index_name : Union[str, None] = None
-                            ) -> VectorStoreRetriever:
-    qdrant_client = QdrantClient(
-        url="https://31f87457-62d5-4e83-8645-06687c43390f.europe-west3-0.gcp.cloud.qdrant.io:6333", 
-        api_key=os.getenv('QDRANT_API_KEY'),
+                        new_collection : bool = False,
+                        check_collection : bool = True,
+                        get_collections : bool = True
+                            ) -> tuple[VectorStoreRetriever,VectorStore]:
+    
+    client = qdrant_client.QdrantClient(
+        url=os.getenv("QDRANT_HOST"),
+        api_key=os.getenv("QDRANT_API_KEY")
     )
 
-    logger.info(f"Existing QDRANT collections : {qdrant_client.get_collections()}")
-    return None
+    vectors_config = qdrant_client.http.models.VectorParams(
+        size=384,
+        distance=qdrant_client.http.models.Distance.COSINE
+    )
 
-"""
+    # Delete and create a new collection
+    if new_collection:
+        client.recreate_collection(
+            collection_name=collection_name,
+            vectors_config=vectors_config
+            
+        )
+        
+    if check_collection:
+        client.collection_exists(collection_name=collection_name)
+        logger.info(f"Checking if Qdrant collection : {collection_name} exists -> {client.collection_exists(collection_name=collection_name)}")
+        
+    if get_collections:
+        client.collection_exists(collection_name=collection_name)
+        logger.info(f"Qdrant collections  -> {client.get_collections()}")
 
+    # Integration with langchain -> vector store and retriever 
+    vector_store = Qdrant(
+        client=client,
+        collection_name=collection_name,
+        embeddings=get_embedding_model(model=embedding_model),
+        distance_strategy="COSINE"
+    )
+    retriever = vector_store.as_retriever(search_kwargs = search_kwargs)
+    
+    return retriever , vector_store

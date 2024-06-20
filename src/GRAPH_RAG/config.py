@@ -57,12 +57,14 @@ class ConfigGraph:
     VECTOR_DB: ClassVar = {
         "chromadb": VectorDB(
                                 client="chromadb", 
+                                index_name=os.getenv("CHROMA_COLLECTION_NAME"),
                                 embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                                 similarity_metric="cosine", 
                                 k=3
                                 ),
         "pinecone": VectorDB(
                                 client="pinecone", 
+                                index_name=os.getenv("PINECONE_COLLECTION_NAME"),
                                 embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                                 similarity_metric="COSINE", 
                                 k=3

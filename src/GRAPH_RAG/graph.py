@@ -28,7 +28,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     
     graph = StateGraph(State)
     
-    # retrievers = get_retrievers()
+    vector_db = config.vector_db.copy()
     docs_grader = config.agents.get("retreived_docs_grader",None)
     query_processor = config.agents.get("reprocess_query",None)
     generator_agent = config.agents.get("generator",None)

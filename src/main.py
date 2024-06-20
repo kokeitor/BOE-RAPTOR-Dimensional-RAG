@@ -3,7 +3,7 @@ import logging
 from termcolor import colored
 from dotenv import load_dotenv
 from langchain.schema import Document
-from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
+from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.graph_utils import (
@@ -12,45 +12,50 @@ from GRAPH_RAG.graph_utils import (
                         )
 
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Set environment variables
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
-os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
-os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
-
-
 # Logging configuration
 logger = logging.getLogger(__name__)
 
 
 def main() -> None:
+    
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Set environment variables
+    os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+    os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
+    os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
+    os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+    os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
+    os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
+    os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+    os.environ['PINECONE_COLLECTION_NAME'] = os.getenv('PINECONE_COLLECTION_NAME')
+    os.environ['CHROMA_COLLECTION_NAME'] = os.getenv('CHROMA_COLLECTION_NAME')
+    os.environ['QDRANT_API_KEY'] = os.getenv('QDRANT_API_KEY')
+    os.environ['QDRANT_HOST'] = os.getenv('QDRANT_HOST')
+    os.environ['QDRANT_COLLECTION_NAME'] = os.getenv('QDRANT_COLLECTION_NAME')
+    os.environ['QDRANT_COLLECTIONS'] = os.getenv('QDRANT_COLLECTIONS')
+        
     # Logger set up
     setup_logging()
-    """
-    retriever, client = get_chromadb_retriever(
-    index_name = "hola"
+
+    retriever, client = get_qdrant_retriever(
+    collection_name = "hola"
                         )
     logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
     logger.info(f"Client chroma db info {client.get()}")
     retriever.add_documents(documents = [Document(page_content="Hoy hace un tiempo en madrid muy malo", metadata={"atributo":"Tiempo"})])
     logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
     logger.info(f"Client chroma db info {client.get()}")
-    retriever, client = get_chromadb_retriever(
+    retriever, client = get_qdrant_retriever(
     index_name = "hola2",
     delete_index_name="hola"
                         )
-    """
+
     
-    retriever, _ = get_pinecone_retriever(
-    index_name = "llama3",
-    search_kwargs= {"k":3}
+    retriever, _ = get_qdrant_retriever(
+    collection_name="BOE",
     
             )
     retriever.add_documents(documents = [Document(page_content="El partido de la seleccion es el lunes", metadata={"atributo":"Tiempo"})])

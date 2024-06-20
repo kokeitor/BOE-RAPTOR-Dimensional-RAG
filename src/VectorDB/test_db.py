@@ -1,4 +1,6 @@
 import logging 
+import os
+import requests
 
 
 logger = logging.getLogger(__name__)
@@ -70,4 +72,36 @@ def try_retriever(query :str ="La duración total de las enseñanzas en ciclos d
         return wrapper
     
     return decorator
+
+
+def try_qdrant_conexion(func : callable):
+    def wrapper(*args,**kwargs):
+        
+        url_host = os.getenv('QDRANT_HOST')
+        headers = {
+                    "Api-key": os.getenv('QDRANT_API_KEY')
+                }
+        response = requests.get(url_host, headers=headers)
+        
+        logger.info(f"Qdrant http get response status code : {response.status_code}")
+        logger.info(f"Qdrant http get response body : {response.text}")
+        
+        if response.status_code != '200':
+            # do something 
+            pass
+        
+        url_host_collections = os.getenv('QDRANT_COLLECTIONS')
+        headers = {
+                    "Api-key": os.getenv('QDRANT_API_KEY')
+                }
+        response_collection = requests.get(url_host_collections, headers=headers)
+        
+        logger.info(f"Qdrant get collections status code : {response_collection.status_code}")
+        logger.info(f"Qdrant  get collections  : {response_collection.text}")
+        
+        
+        return func(*args,**kwargs)
+        
+    
+    return wrapper
 
