@@ -42,12 +42,17 @@ clasify_chain = clasify_prompt | llm | JsonOutputParser()
 """
 
 ### Nodes
-def retriever(vector_db : dict[str,VectorDB], state : State) -> State:
+def retriever(vector_database : VectorDB, state : State) -> State:
     """Retrieve documents from vector database"""
     
     logger.info(f"Retriever node : \n {state}")
+    
+    retriever_vdb , _ = vector_database.get_retriever_vstore()
+    logger.info(f"Using client for retrieval : {vector_database.client=}")
+    
     question = state["question"]
-    documents = [vdb.retriever.invoke(question) for vdb_client , vdb in vector_db.items()]
+    documents = retriever_vdb.invoke(question)
+    
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     state["documents"] = documents

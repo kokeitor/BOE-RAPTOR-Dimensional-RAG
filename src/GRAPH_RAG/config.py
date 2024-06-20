@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass()
 class ConfigGraph:
+    
     MODEL : ClassVar = {
             "OPENAI": get_open_ai_json,
             "NVIDIA": get_nvdia,
@@ -57,16 +58,17 @@ class ConfigGraph:
     VECTOR_DB: ClassVar = {
         "chromadb": VectorDB(
                                 client="chromadb", 
-                                index_name=os.getenv("CHROMA_COLLECTION_NAME"),
-                                embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
-                                similarity_metric="cosine", 
+                                hg_embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                                 k=3
                                 ),
         "pinecone": VectorDB(
                                 client="pinecone", 
-                                index_name=os.getenv("PINECONE_COLLECTION_NAME"),
-                                embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
-                                similarity_metric="COSINE", 
+                                hg_embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                                k=3
+                                ),
+        "qdrant": VectorDB(
+                                client="qdrant", 
+                                hg_embedding_model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                                 k=3
                                 )
     }
@@ -98,13 +100,15 @@ class ConfigGraph:
         if self.agents_config is not None:
             self.agents = self.get_agents()
             
-        # Graph Retrievers configuration
+        # Graph VDB/Retrievers configuration
         self.vector_db_config = self.config.get("vector_db", None)
         if self.vector_db_config is not None:
             self.vector_db = self.get_vector_db()
+        else:
+            raise ConfigurationFileError(f"Error inside confiuration graph file -> No VectorDB defined fro retrieval") 
 
         # Graph configuration
-        self.iteraciones = self.config.get("iteraciones", len(self.candidatos))
+        self.iteraciones = self.config.get("iteraciones", 10)
         self.thread_id = self.config.get("thread_id", "4")
         self.verbose = self.config.get("verbose", 0)
         
@@ -191,13 +195,27 @@ class ConfigGraph:
             logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
     
-    def get_vector_db(self) -> dict[str,VectorDB]:
-        vector_db = ConfigGraph.VECTOR_DB.copy()
-        for vdb_default in vector_db.keys():
-            for vdb_name, vdb_config in self.vector_db_config.items():
-                if vdb_default == vdb_name:
-                    vector_db[vdb_default] = VectorDB(**vdb_config, client=vdb_default)
-                    logger.info(f"Initializating new retriever -> {vector_db[vdb_default]}")
+    def get_vector_db(self) -> VectorDB:
+        # vector_db = ConfigGraph.VECTOR_DB.copy()
+        """ 
+        vector_db = {}
+        For several retrievers and vdbs
+        for vdb_name, vdb_config in self.vector_db_config.items():
+            try:
+                vector_db[vdb_name] = VectorDB(**vdb_config, client=vdb_name)
+                logger.info(f"Initializating new retriever -> {vector_db[vdb_name]}")
+            except Exception as e:
+                logger.error(f"Error while initializating new retriever -> {vector_db[vdb_name]}")
+        """
+        vdb_name , vdb_config = self.vector_db_config.items()
+        try:
+            vector_db  = VectorDB(**vdb_config, client=vdb_name)
+            logger.info(f"Initializating new retriever -> {vector_db}")
+        except Exception as e:
+            logger.error(f"Error while initializating new retriever -> {vdb_name=} {vdb_config=}")
+                
+        if not vector_db:
+            raise ConfigurationFileError(f"Error inside confiuration graph file -> No VectorDB defined or bad defined for retrieval") 
             
         return vector_db
 

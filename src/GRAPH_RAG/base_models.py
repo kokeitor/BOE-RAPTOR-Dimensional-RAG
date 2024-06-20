@@ -3,9 +3,11 @@ from pydantic import BaseModel
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 from langchain.prompts import PromptTemplate
 from dataclasses import dataclass
-from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
+from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.models import get_hg_emb
 import operator
+from langchain_core.vectorstores import VectorStoreRetriever
+from langchain_core.vectorstores import VectorStore
 
 
 class Analisis(BaseModel):
@@ -26,12 +28,12 @@ class State(TypedDict):
     Represents the state of our graph.
 
     Attributes:
-        question: question
+        question: user question
         generation: LLM generation
-        web_search: whether to add search
-        documents: list of documents 
-        hallucination
-        answer_grade 
+        query_process: 'yes' 'no' -> reprocess or not the user query 
+        documents: list of documents retrieved
+        fact_based_answer : 'yes' 'no' -> LLM generation based on document retrieved (analog to hallucination : 'no' or 'yes')
+        useful_answer : 'yes' 'no' -> LLM generation answer respond or not to the question 
         final_report 
         
     """
@@ -55,23 +57,23 @@ class Agent:
 @dataclass()  
 class VectorDB:
     client : str
-    index_name : str
-    embedding_model : str
-    similarity_metric : str
+    hg_embedding_model : str
     k : int
-    
-    def __post_init__(self):
+        
+    def get_retriever_vstore(self) -> tuple[VectorStoreRetriever,VectorStore]:
         if self.client == 'pinecone':
-            self.retriever, self.vectorstore = get_pinecone_retriever(
-                                    index_name=self.index_name , 
-                                    embedding_model=self.embedding_model, 
+            return  get_pinecone_retriever(
+                                    embedding_model=self.hg_embedding_model, 
                                     search_kwargs={"k" : self.k}
             )
         elif self.client == 'chromadb':
-            self.retriever, self.vectorstore = get_chromadb_retriever(
-                                    index_name=self.index_name , 
-                                    embedding_model=self.embedding_model, 
-                                    collection_metadata= {"hnsw:space": self.similarity_metric},
+            return get_chromadb_retriever(
+                                    embedding_model=self.hg_embedding_model, 
+                                    search_kwargs = {"k" : self.k}
+            )
+        elif self.client == 'qdrant':
+            return get_qdrant_retriever(
+                                    embedding_model=self.hg_embedding_model, 
                                     search_kwargs = {"k" : self.k}
             )
 

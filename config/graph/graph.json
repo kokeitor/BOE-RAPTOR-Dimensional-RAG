@@ -17,19 +17,21 @@
                             "temperature":0
                             },
                 "answer_grader": {
-                                        "name":"NVIDIA",
-                                        "temperature":0
-                                        }
+                                "name":"NVIDIA",
+                                "temperature":0
+                                }
         },
     "vector_db": {
                     "pinecone":{
-                        "embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
-                        "similarity_metric": "COSINE",
+                        "hg_embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
                         "k" : 3
                     },
                     "chromadb" : {
-                        "embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
-                        "similarity_metric": "cosine",
+                        "hg_embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
+                        "k" : 3
+                    },
+                    "qdrant" : {
+                        "hg_embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                         "k" : 3
                     }
     },
