@@ -41,21 +41,15 @@ def main() -> None:
     setup_logging()
 
     retriever, client = get_qdrant_retriever(
-    collection_name = "hola"
+    collection_name = "boe"
                         )
     logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
-    logger.info(f"Client chroma db info {client.get()}")
     retriever.add_documents(documents = [Document(page_content="Hoy hace un tiempo en madrid muy malo", metadata={"atributo":"Tiempo"})])
     logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
-    logger.info(f"Client chroma db info {client.get()}")
-    retriever, client = get_qdrant_retriever(
-    index_name = "hola2",
-    delete_index_name="hola"
-                        )
 
-    
+
     retriever, _ = get_qdrant_retriever(
-    collection_name="BOE",
+    collection_name="boe",
     
             )
     retriever.add_documents(documents = [Document(page_content="El partido de la seleccion es el lunes", metadata={"atributo":"Tiempo"})])
