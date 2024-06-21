@@ -7,10 +7,14 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_community.chat_models import ChatOllama
+import warnings
 
 
 # Logging configuration
 logger = logging.getLogger(__name__)
+
+# Suppress all warnings
+warnings.filterwarnings("ignore")
 
 
 def get_open_ai_json(temperature=0, model='gpt-3.5-turbo'):

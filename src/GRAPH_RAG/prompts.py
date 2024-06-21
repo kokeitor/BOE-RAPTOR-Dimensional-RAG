@@ -1,26 +1,5 @@
 from langchain.prompts import PromptTemplate
 
-routing_prompt_web_search = PromptTemplate(
-    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
-    user question to a vectorstore or web search. Use the vectorstore for questions on spanish BOE documents. \n
-    You do not need to be stringent with the keywords in the question related to these topics. Otherwise, use web-search. Give a binary choice 'web_search' 
-    or 'vectorstore' based on the question. Return the a JSON with a single key 'datasource' and 
-    no premable or explaination. Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
-    input_variables=["question"],
-)
-
-routing_prompt = PromptTemplate(
-    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
-    user question to a vector database or to a question processing tool. \n
-    Use the vector database for questions related on spanish BOE documents. Use this list of topics that you can typically find in the BOE:
-    Legislation, Regulations and Decrees, Government Announcements, Legal Notices, Public Employment, Judicial Appointments and Decisions, Economic and Financial Information,
-    Grants and Subsidies, Sanctions, International Treaties, Intellectual Property Registrations, Company and Business Regulations and Awards and Honors. \n
-    You do not need to be stringent with the keywords in the question related to these topics. Otherwise, use the question processing tool. Give a binary choice 'query_tool' 
-    or 'vectorstore' based on the question. Return the a JSON with a single key 'source' and the binary value with no premable or explaination. 
-    Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
-    input_variables=["question"],
-)
-
 grader_docs_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an AI model designed grade the relevance 
     of a retrieved document to a user question. If the document contains keywords related to the user question, 
@@ -28,8 +7,8 @@ grader_docs_prompt = PromptTemplate(
     Give a binary score 'yes' or 'no' score to indicate whether the document is relevant to the question. \n
     Provide the binary score as a JSON with a single key 'score' and no explanation.
      <|eot_id|><|start_header_id|>user<|end_header_id|>
-    Here is the retrieved document: \n\n {document} \n\n
-    Here is the user question: {question} \n <|eot_id|><|start_header_id|>assistant<|end_header_id|>
+    Here is the retrieved document: {document} 
+    Here is the user question: {question}  <|eot_id|><|start_header_id|>assistant<|end_header_id|>
     """,
     input_variables=["question", "document"])
 
@@ -40,7 +19,7 @@ gen_prompt = PromptTemplate(
     Question: {question} 
     Context: {context} 
     Answer: <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
-    input_variables=["question", "document"],
+    input_variables=["question", "context"],
 )
 
 query_process_prompt = PromptTemplate(
@@ -58,10 +37,7 @@ hallucination_prompt = PromptTemplate(
     an answer is grounded in / supported by a set of facts. Give a binary score 'yes' or 'no' score to indicate 
     whether the answer is grounded in / supported by a set of facts. Provide the binary score as a JSON with a 
     single key 'score' and no preamble or explanation. <|eot_id|><|start_header_id|>user<|end_header_id|>
-    Here are the facts:
-    \n ------- \n
-    {documents} 
-    \n ------- \n
+    Here are the facts: {documents} 
     Here is the answer: {generation}  <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["generation", "documents"],
 )
@@ -71,10 +47,8 @@ grade_answer_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are a grader assessing whether an 
     answer is useful to resolve a question. Give a binary score 'yes' or 'no' to indicate whether the answer is 
     useful to resolve a question. Provide the binary score as a JSON with a single key 'score' and no preamble or explanation.
-     <|eot_id|><|start_header_id|>user<|end_header_id|> Here is the answer:
-    \n ------- \n
-    {generation} 
-    \n ------- \n
+     <|eot_id|><|start_header_id|>user<|end_header_id|> 
+    Here is the answer: {generation} 
     Here is the question: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["generation", "question"],
 )
@@ -87,4 +61,25 @@ clasify_prompt = PromptTemplate(
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Text: {text} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["text","list_labels"],
+)
+
+_routing_prompt_web_search = PromptTemplate(
+    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
+    user question to a vectorstore or web search. Use the vectorstore for questions on spanish BOE documents. \n
+    You do not need to be stringent with the keywords in the question related to these topics. Otherwise, use web-search. Give a binary choice 'web_search' 
+    or 'vectorstore' based on the question. Return the a JSON with a single key 'datasource' and 
+    no premable or explaination. Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+    input_variables=["question"],
+)
+
+_routing_prompt = PromptTemplate(
+    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
+    user question to a vector database or to a question processing tool. \n
+    Use the vector database for questions related on spanish BOE documents. Use this list of topics that you can typically find in the BOE:
+    Legislation, Regulations and Decrees, Government Announcements, Legal Notices, Public Employment, Judicial Appointments and Decisions, Economic and Financial Information,
+    Grants and Subsidies, Sanctions, International Treaties, Intellectual Property Registrations, Company and Business Regulations and Awards and Honors. \n
+    You do not need to be stringent with the keywords in the question related to these topics. Otherwise, use the question processing tool. Give a binary choice 'query_tool' 
+    or 'vectorstore' based on the question. Return the a JSON with a single key 'source' and the binary value with no premable or explaination. 
+    Question to route: {question} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+    input_variables=["question"],
 )

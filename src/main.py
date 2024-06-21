@@ -78,18 +78,18 @@ def main() -> None:
         iteraciones = {"recursion_limit": config_graph.iteraciones}
         
         # itera por todos questions definidos
-        for user_question in config_graph.user_questions:
+        for question in config_graph.user_questions:
             
-            logger.info(f"User Question: {user_question}")
-            inputs = {"question": f"{user_question}"}
+            logger.info(f"User Question: {question.user_question}")
+            logger.info(f"User id question: {question.id}")
+            inputs = {"question": f"{question.user_question}"}
             
             for event in workflow.stream(inputs, iteraciones):
-                for key, value in event.items():
-                    print(f"Finished running: {key}:")
-            print("BOE DICE : " , value["generation"])
+                for key , value in event.items():
+                    logger.debug(f"Graph event {key} - {value}")
 
 
-          
+
 if __name__ == '__main__':
     main()
     # terminal command with script parameters : python app.py --data_path ./config/data.json --mode "graph" --config_path ./config/generation.json
