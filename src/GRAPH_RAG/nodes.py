@@ -26,7 +26,7 @@ def retriever(vector_database : VectorDB, state : State) -> State:
     retriever_vdb , _ = vector_database.get_retriever_vstore()
     logger.info(f"Using client for retrieval : {vector_database.client=}")
     
-    question = state["question"]
+    question = state["question"][-1]
     documents = retriever_vdb.invoke(question)
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
@@ -45,7 +45,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
     logger.info(f"Retrieved Documents Grader Node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=}",'magenta',attrs=["bold"]))
     
-    question = state["question"]
+    question = state["question"][-1]
     documents = state["documents"]
     
     # Grader chain
@@ -87,7 +87,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     logger.info(f"RAG Generator node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏽 -> {agent.model=} : ", 'light_red',attrs=["bold"]))
         
-    question = state["question"]
+    question = state["question"][-1]
     
     # Get the merge context from retrieved docs
     documents = state["documents"]
@@ -103,7 +103,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     # Update Graph State
     state["generation"] = generation
     
-    print(colored(f"Question -> {question}\nResponse -> {generation=}",'light_red',attrs=["bold"]))
+    print(colored(f"\nQuestion -> {question}\nResponse -> {generation}",'light_red',attrs=["bold"]))
     
     return state
 
@@ -114,11 +114,11 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     logger.info(f"Query Reprocessing : \n {state}")
     print(colored(f"\n{agent.agent_name=} 📝 -> {agent.model=} : ", 'light_yelow',attrs=["bold"]))
     
-    question = state["question"]
+    question = state["question"][-1]
     chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
     response = chain.invoke({"question": question})
     reprocesed_question = response["reprocess_question"]
-    state["question"] = reprocesed_question
+    state["question"].append(reprocesed_question)
     
     logger.info(f"{question=} // after reprocessing question -> {response=}")
     print(colored(f"Initial question : {question=}\nAfter reprocessing question : {response=}",'light_yelow',attrs=["bold"]))
@@ -130,9 +130,9 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     """Checks for hallucionation on the response or generation"""
 
     logger.info(f"hallucination_checker node : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_green',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_grey',attrs=["bold"]))
     
-    generation = state["question"]
+    generation = state["question"][-1]
     documents = state["documents"]
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
@@ -144,7 +144,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     # Update Graph State
     state["fact_based_answer"] = fact_based_answer
     
-    print(colored(f"Answer supported by context : {context} -> {response}",'light_green',attrs=["bold"]))
+    print(colored(f"Answer supported by context -> {response}",'light_grey',attrs=["bold"]))
     
     return state
 
@@ -152,10 +152,10 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     """Grades the generation/answer given a question"""
     
     logger.info(f"generation_grader node : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_green',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_grey',attrs=["bold"]))
      
     generation = state["generation"]
-    question = state["question"]
+    question = state["question"][-1]
 
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = garder_chain.invoke({"question": question, "generation": generation})
@@ -165,20 +165,23 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     # Update Graph State
     state["useful_answer"] = grade
     
-    print(colored(f"Useful answer to resolve the question {question} -> {response}",'light_green',attrs=["bold"]))
+    print(colored(f"\nUseful answer to resolve the question -> {response}",'light_grey',attrs=["bold"]))
 
     return state
 
 def final_report(state:State) -> State:
 
     generation = state["generation"]
-    question = state["question"]
+    question = state["question"][-1]
     documents = state["documents"]
-    grade = state["answer_grade"]
+    grade_answer= state["useful_answer"]
+    grade_hall= state["fact_based_answer"]
+    query_process = state["query_process"]
     state["report"] = generation
     
+    
     logger.info(f"Final model response : \n {state}")
-    print(colored(f"\nFinal model report 📝\n\**QUESTION**: {question}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**ANSWER GRADE** : {grade}", 'light_yellow',attrs=["bold"]))
+    print(colored(f"\nFinal model report 📝\n\**QUESTION**: {question}**QUERY REPROCESS**{query_process}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
 
     return state
 
@@ -192,11 +195,11 @@ def route_generate_requery(state : State) -> str:
 
     if query_reprocess == "yes":
         logger.info("Routing to -> 'query_reprocess'")
-        print(colored("\nRouting to -> 'query_reprocess'",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> query_reprocess\n\n",'light_green',attrs=["underline"]))
         return 'reprocess_query'
     if query_reprocess == "no":
         logger.info("Routing to -> 'generator'")
-        print(colored("\nRouting to -> 'generator''",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
         return 'generator'
     
 def route_generate_grade_gen(state : State) -> str:
@@ -207,11 +210,11 @@ def route_generate_grade_gen(state : State) -> str:
     
     if fact_based_answer == "yes":
         logger.info("Routing to -> 'Grader generation'")
-        print(colored("\nRouting to -> 'Grader generation'",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> Grader generation\n\n",'light_green',attrs=["underline"]))
         return 'generation_grader'
     if fact_based_answer == "no":
         logger.info("Routing to -> 'Generation'")
-        print(colored("\nRouting to -> 'Generation'",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
 
     
@@ -223,11 +226,11 @@ def route_generate_final(state : State) -> str:
     
     if useful_answer == "yes":
         logger.info("Routing to -> 'Final Report'")
-        print(colored("\nRouting to -> 'Final Report'",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> Final Report\n\n",'light_green',attrs=["underline"]))
         return 'final_report'
     if useful_answer == "no":
         logger.info("Routing to -> 'Generation'")
-        print(colored("\nRouting to -> 'Generation'",'light_green',attrs=["underline"]))
+        print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
 
     
@@ -244,7 +247,7 @@ def _grade_generation(state : State, agent : Agent, get_chain : Callable = get_c
         str: _description_
     """
     logger.info(f"Grade Generation node : \n {state=}")
-    question = state["question"]
+    question = state["question"][-1]
     generation = state["generation"]
     
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)

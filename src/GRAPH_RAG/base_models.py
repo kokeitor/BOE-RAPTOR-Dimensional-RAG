@@ -37,7 +37,7 @@ class State(TypedDict):
         final_report 
         
     """
-    question : Annotated[str,operator.add]
+    question : Annotated[list[str],operator.add]
     generation : str
     query_process : str
     documents : Union[list[str],None] = None

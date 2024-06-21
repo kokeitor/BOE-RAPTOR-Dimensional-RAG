@@ -82,7 +82,7 @@ def main() -> None:
             
             logger.info(f"User Question: {question.user_question}")
             logger.info(f"User id question: {question.id}")
-            inputs = {"question": f"{question.user_question}"}
+            inputs = {"question": [f"{question.user_question}"]}
             
             for event in workflow.stream(inputs, iteraciones):
                 for key , value in event.items():
