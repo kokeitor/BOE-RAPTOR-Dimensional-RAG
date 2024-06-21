@@ -21,12 +21,12 @@ def retriever(vector_database : VectorDB, state : State) -> State:
     """Retrieve documents from vector database"""
     
     logger.info(f"Retriever node : \n {state}")
-    print(colored(f"\nRetriever node 👩🏿‍💻 : ",'light_blue',attrs=["bold"]))
+    print(colored(f"\nRetriever node 👩🏿‍💻 ",'light_blue',attrs=["bold"]))
     
     retriever_vdb , _ = vector_database.get_retriever_vstore()
     logger.info(f"Using client for retrieval : {vector_database.client=}")
     
-    question = state["question"][-1]
+    question = state["question"]
     documents = retriever_vdb.invoke(question)
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
@@ -45,7 +45,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
     logger.info(f"Retrieved Documents Grader Node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=}",'magenta',attrs=["bold"]))
     
-    question = state["question"][-1]
+    question = state["question"]
     documents = state["documents"]
     
     # Grader chain
@@ -87,7 +87,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     logger.info(f"RAG Generator node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏽 -> {agent.model=} : ", 'light_red',attrs=["bold"]))
         
-    question = state["question"][-1]
+    question = state["question"]
     
     # Get the merge context from retrieved docs
     documents = state["documents"]
@@ -114,7 +114,7 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     logger.info(f"Query Reprocessing : \n {state}")
     print(colored(f"\n{agent.agent_name=} 📝 -> {agent.model=} : ", 'light_yelow',attrs=["bold"]))
     
-    question = state["question"][-1]
+    question = state["question"]
     chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
     response = chain.invoke({"question": question})
     reprocesed_question = response["reprocess_question"]
@@ -132,7 +132,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     logger.info(f"hallucination_checker node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_green',attrs=["bold"]))
     
-    generation = state["question"][-1]
+    generation = state["question"]
     documents = state["documents"]
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
@@ -155,7 +155,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_green',attrs=["bold"]))
      
     generation = state["generation"]
-    question = state["question"][-1]
+    question = state["question"]
 
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = garder_chain.invoke({"question": question, "generation": generation})
@@ -172,7 +172,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
 def final_report(state:State) -> State:
 
     generation = state["generation"]
-    question = state["question"][-1]
+    question = state["question"]
     documents = state["documents"]
     grade = state["answer_grade"]
     state["report"] = generation
@@ -244,7 +244,7 @@ def _grade_generation(state : State, agent : Agent, get_chain : Callable = get_c
         str: _description_
     """
     logger.info(f"Grade Generation node : \n {state=}")
-    question = state["question"][-1]
+    question = state["question"]
     generation = state["generation"]
     
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
