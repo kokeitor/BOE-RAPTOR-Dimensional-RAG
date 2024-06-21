@@ -28,7 +28,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     
     graph = StateGraph(State)
     
-    vector_db = config.vector_db.copy()
+    vector_db = config.vector_db
     docs_grader = config.agents.get("retreived_docs_grader",None)
     query_processor = config.agents.get("reprocess_query",None)
     generator_agent = config.agents.get("generator",None)
@@ -37,7 +37,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 
 
     # Define the nodes
-    graph.add_node("retriever",lambda state: retriever(state=state,vector_database=vector_db)) # pinecone,chromadb,qdrant,pinecone
+    graph.add_node("retriever",lambda state: retriever(state=state,vector_database=vector_db)) 
     graph.add_node("retreived_docs_grader",lambda state: retreived_docs_grader(state=state,agent=docs_grader, get_chain=get_chain))
     graph.add_node("reprocess_query",lambda state: process_query(state=state,agent=query_processor, get_chain=get_chain))
     graph.add_node("generator",lambda state: generator(state=state,agent=generator_agent, get_chain=get_chain))
@@ -56,7 +56,6 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     graph.add_conditional_edges( "generation_grader",lambda state: route_generate_final(state=state))
     graph.add_edge("final_report",END)
     
-
     return graph
 
 def compile_workflow(graph):

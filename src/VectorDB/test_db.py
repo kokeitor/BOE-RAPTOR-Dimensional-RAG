@@ -99,9 +99,7 @@ def try_qdrant_conexion(func : callable):
         logger.info(f"Qdrant get collections status code : {response_collection.status_code}")
         logger.info(f"Qdrant  get collections  : {response_collection.text}")
         
-        
         return func(*args,**kwargs)
         
-    
     return wrapper
 
