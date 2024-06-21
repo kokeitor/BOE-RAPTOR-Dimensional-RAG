@@ -33,7 +33,7 @@ def retriever(vector_database : VectorDB, state : State) -> State:
     logger.debug(f"Retrieved documents : \n {documents}")
     state["documents"] = documents
     
-    print(colored(f"Question = {question}",'light_blue',attrs=["bold"]))
+    print(colored(f"Question = {state['question']}",'light_blue',attrs=["bold"]))
     print(colored(f"Number of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
 
     return state
@@ -103,7 +103,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     # Update Graph State
     state["generation"] = generation
     
-    print(colored(f"\nQuestion -> {question}\nResponse -> {generation}",'light_red',attrs=["bold"]))
+    print(colored(f"\nQuestion -> {state['question']}\nResponse -> {generation}",'light_red',attrs=["bold"]))
     
     return state
 
@@ -165,7 +165,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     # Update Graph State
     state["useful_answer"] = grade
     
-    print(colored(f"\nUseful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
+    print(colored(f"Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
 
     return state
 
