@@ -130,7 +130,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     """Checks for hallucionation on the response or generation"""
 
     logger.info(f"hallucination_checker node : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_grey',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_cyan',attrs=["bold"]))
     
     generation = state["question"][-1]
     documents = state["documents"]
@@ -144,7 +144,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     # Update Graph State
     state["fact_based_answer"] = fact_based_answer
     
-    print(colored(f"Answer supported by context -> {response}",'light_grey',attrs=["bold"]))
+    print(colored(f"Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
     
     return state
 
@@ -152,7 +152,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     """Grades the generation/answer given a question"""
     
     logger.info(f"generation_grader node : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_grey',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_cyan',attrs=["bold"]))
      
     generation = state["generation"]
     question = state["question"][-1]
@@ -165,14 +165,14 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     # Update Graph State
     state["useful_answer"] = grade
     
-    print(colored(f"\nUseful answer to resolve the question -> {response}",'light_grey',attrs=["bold"]))
+    print(colored(f"\nUseful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
 
     return state
 
 def final_report(state:State) -> State:
 
     generation = state["generation"]
-    question = state["question"][-1]
+    questions = state["question"]
     documents = state["documents"]
     grade_answer= state["useful_answer"]
     grade_hall= state["fact_based_answer"]
@@ -181,7 +181,7 @@ def final_report(state:State) -> State:
     
     
     logger.info(f"Final model response : \n {state}")
-    print(colored(f"\nFinal model report 📝\n\**QUESTION**: {question}**QUERY REPROCESS**{query_process}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
+    print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**QUERY REPROCESS**{query_process}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
 
     return state
 
