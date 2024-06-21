@@ -176,6 +176,7 @@ def final_report(state:State) -> State:
     question = state["question"]
     documents = state["documents"]
     grade = state["answer_grade"]
+    state["report"] = generation
     
     logger.info(f"Final model response : \n {state}")
     print(colored(f"\nFinal model report 📝\n\**QUESTION**: {question}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**ANSWER GRADE** : {grade}", 'light_yellow',attrs=["bold"]))

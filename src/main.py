@@ -36,44 +36,25 @@ def main() -> None:
     os.environ['QDRANT_HOST'] = os.getenv('QDRANT_HOST')
     os.environ['QDRANT_COLLECTION_NAME'] = os.getenv('QDRANT_COLLECTION_NAME')
     os.environ['QDRANT_COLLECTIONS'] = os.getenv('QDRANT_COLLECTIONS')
+    os.environ['APP_MODE'] = os.getenv('APP_MODE')
         
     # Logger set up
     setup_logging()
-
-    retriever, client = get_qdrant_retriever(
-    collection_name = "boe"
-                        )
-    logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
-    retriever.add_documents(documents = [Document(page_content="Hoy hace un tiempo en madrid muy malo", metadata={"atributo":"Tiempo"})])
-    logger.info(f"invoke retreiver chroma : {retriever.invoke('Que timepo hace hoy en madrid?')}")
-
-
-    retriever, _ = get_qdrant_retriever(
-    collection_name="boe",
     
-            )
-    retriever.add_documents(documents = [Document(page_content="El partido de la seleccion es el lunes", metadata={"atributo":"Tiempo"})])
-    logger.info(f"invoke retreiver pinecone : {retriever.invoke('futbol')}")
-    """
      # With scripts parameters mode
     parser = get_arg_parser()
     args = parser.parse_args()
     CONFIG_PATH = args.config_path
-    OPENAI_API_KEY = args.token
     DATA_PATH = args.data_path
     MODE = args.mode
     
-    # Without scripts parameters mode
-    if OPENAI_API_KEY:
-        os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
-    else:
-        os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+    # With ENV VARS 
     if not CONFIG_PATH:
-        CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'config/graph', 'graph.json') 
+        CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..','config/graph', 'graph.json') 
     if not DATA_PATH:
-        DATA_PATH = os.path.join(os.path.dirname(__file__), 'config/graph', 'querys.json') 
+        DATA_PATH = os.path.join(os.path.dirname(__file__), '..', 'config/graph', 'querys.json') 
     if not MODE:
-        MODE = 'graph'
+        MODE = os.getenv('APP_MODE')
         
     logger.info(f"{DATA_PATH=}")
     logger.info(f"{CONFIG_PATH=}")
@@ -104,7 +85,7 @@ def main() -> None:
                 for key, value in event.items():
                     print(f"Finished running: {key}:")
             print("BOE DICE : " , value["generation"])
-    """
+
 
           
 if __name__ == '__main__':

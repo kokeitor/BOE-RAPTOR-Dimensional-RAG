@@ -32,6 +32,17 @@ def get_current_spanish_date_iso():
     spanish_tz = pytz.timezone('Europe/Madrid')
     return str(datetime.now(spanish_tz).strftime("%Y-%m-%d %H:%M:%S"))
 
+def merge_page_content(docs : list[Document]) -> str:
+    """Merge Document page_content list into unique str 
+
+    Args:
+        docs (list[Document])
+
+    Returns:
+        str
+    """
+    return "\n\n".join(doc.page_content for doc in docs)
+
 
 def get_id() -> str:
     return str(uuid.uuid4())
@@ -44,22 +55,11 @@ def get_arg_parser() -> argparse.ArgumentParser:
         argparse.ArgumentParser
     """
     parser = argparse.ArgumentParser( 
-                    prog='Analisis Cvs',
-                    description='Obten un analisis del Cv segun la oferta de empleo deseada usando LLms')
-    parser.add_argument('--data_path', type=str, required=False, help='Ruta del archivo de datos con el cv y oferta [json format]')
-    parser.add_argument('--mode', type=str, required=True, help='Modo de generacion : "graph" "pipeline" ')
-    parser.add_argument('--config_path', type=str, required=False, help='Ruta del archivo de configuracion [json format]')
+                    prog='BOE',
+                    description='SPANISH BOE CHATBOT')
+    parser.add_argument('--data_path', type=str, required=False, help='Data file path[json format]')
+    parser.add_argument('--mode', type=str, required=False, help='App mode')
+    parser.add_argument('--config_path', type=str, required=False, help='Cofiguration file path [json format]')
     
     return parser
 
-
-def merge_page_content(docs : list[Document]) -> str:
-    """Merge Document page_content list into unique str 
-
-    Args:
-        docs (list[Document])
-
-    Returns:
-        str
-    """
-    return "\n\n".join(doc.page_content for doc in docs)

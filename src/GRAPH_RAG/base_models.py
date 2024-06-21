@@ -43,7 +43,7 @@ class State(TypedDict):
     documents : Union[list[str],None] = None
     fact_based_answer : str
     useful_answer : int
-    final_report : str
+    report : str
     
 @dataclass()  
 class Agent:

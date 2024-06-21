@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Union, Optional, Callable, ClassVar
 from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
-from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseOutputParser 
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.chains import get_chain
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
@@ -55,6 +55,7 @@ class ConfigGraph:
         "hallucination_grader": Agent(agent_name="hallucination_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=hallucination_prompt,parser=JsonOutputParser),
         "answer_grader": Agent(agent_name="answer_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grade_answer_prompt,parser=JsonOutputParser),
     }
+    
     VECTOR_DB: ClassVar = {
         "chromadb": VectorDB(
                                 client="chromadb", 
@@ -122,10 +123,10 @@ class ConfigGraph:
     
     def get_data(self) -> list[dict[str,str]]:
         if not os.path.exists(self.data_path):
-            logger.exception(f"Archivo de configuración no encontrado en {self.data_path}")
-            raise FileNotFoundError(f"Archivo de configuración no encontrado en {self.data_path}")
+            logger.exception(f"Config file not found in {self.data_path}")
+            raise FileNotFoundError(f"Config file not found in {self.data_path}")
         with open(file=self.data_path, mode='r', encoding='utf-8') as file:
-            logger.info(f"Leyendo candidatos en archivo : {self.data_path} : ")
+            logger.info(f"User question in file : {self.data_path} : ")
             try:
                 data = json.load(file)
             except Exception as e:
@@ -142,9 +143,9 @@ class ConfigGraph:
                     if model is not None:
                         get_model = ConfigGraph.MODEL.get(model, None)
                         if get_model is None:
-                            logger.error(f"The Model defined for agemt : {agent} isnt't available -> using OpenAI model")
+                            logger.error(f"The Model defined for aget : {agent} isnt't available -> using NVDIA llama3 70B model")
                             get_model = get_nvdia
-                            prompt = self.get_model_agent_prompt(model ='OPENAI', agent = agent)
+                            prompt = self.get_model_agent_prompt(model ='NVIDIA', agent = agent)
                         else:
                             prompt = self.get_model_agent_prompt(model = model, agent = agent)
                     else:
@@ -155,7 +156,8 @@ class ConfigGraph:
                         model=model,
                         get_model=get_model,
                         temperature=model_temperature,
-                        prompt=prompt
+                        prompt=prompt,
+                        parser=self.get_agent_parser(agent=agent)
                     )
                 else:
                     pass
@@ -163,6 +165,7 @@ class ConfigGraph:
         return agents
 
     def get_model_agent_prompt(self, model : str, agent : str) -> Union[PromptTemplate,str]:
+        """Get specific parser for each graph agent"""
         if model == 'OPENAI':
             if agent == "docs_grader":
                 return ''
@@ -194,6 +197,15 @@ class ConfigGraph:
         else:
             logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
+        
+    def get_agent_parser(self , agent :str) -> BaseOutputParser:
+        """Get specific parser for each graph agent"""
+        parser = ConfigGraph.AGENTS.get(agent, None)
+        if not parser:
+            logger.exception(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
+            raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
+        return parser
+   
     
     def get_vector_db(self) -> VectorDB:
         # vector_db = ConfigGraph.VECTOR_DB.copy()
@@ -207,12 +219,12 @@ class ConfigGraph:
             except Exception as e:
                 logger.error(f"Error while initializating new retriever -> {vector_db[vdb_name]}")
         """
-        vdb_name , vdb_config = self.vector_db_config.items()
+        logger.info(f"Vector DB config file {self.vector_db_config}")
         try:
-            vector_db  = VectorDB(**vdb_config, client=vdb_name)
+            vector_db  = VectorDB(**self.vector_db_config)
             logger.info(f"Initializating new retriever -> {vector_db}")
         except Exception as e:
-            logger.error(f"Error while initializating new retriever -> {vdb_name=} {vdb_config=}")
+            logger.error(f"Error while initializating new retriever -> {self.vector_db_config=}")
                 
         if not vector_db:
             raise ConfigurationFileError(f"Error inside confiuration graph file -> No VectorDB defined or bad defined for retrieval") 
