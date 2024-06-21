@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Union, Optional, Callable, ClassVar
 from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
-from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseOutputParser 
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseOutputParser ,BaseTransformOutputParser
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.chains import get_chain
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
@@ -198,13 +198,14 @@ class ConfigGraph:
             logger.exception(f"Error inside confiuration graph file -> Model {model} not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
         
-    def get_agent_parser(self , agent :str) -> BaseOutputParser:
+    def get_agent_parser(self , agent :str) -> BaseTransformOutputParser:
         """Get specific parser for each graph agent"""
-        parser = ConfigGraph.AGENTS.get(agent, None)
-        if not parser:
+        agent = ConfigGraph.AGENTS.get(agent, None)
+        if not agent:
             logger.exception(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
-        return parser
+        else:
+            return agent.parser
    
     
     def get_vector_db(self) -> VectorDB:

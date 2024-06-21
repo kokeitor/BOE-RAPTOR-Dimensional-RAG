@@ -68,7 +68,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
     documents = state["documents"]
     
     # Grader chain
-    grader_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    grader_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     
     # Score each doc
     relevant_docs = []
@@ -109,7 +109,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
     # RAG generation
-    rag_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    rag_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     generation = rag_chain.invoke({"context": context, "question": question})
     logger.info(f"RAG Context : \n {context}")
     logger.info(f"RAG Question : \n {question}")
@@ -126,7 +126,7 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
 
     logger.info(f"Query Reprocessing : \n {state}")
     question = state["question"]
-    chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
     response = chain.invoke({"question": question})
     reprocesed_question = response["reprocess_question"]
     state["question"] = reprocesed_question
@@ -143,7 +143,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     documents = state["documents"]
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
-    hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = hall_chain.invoke({"documents": context, "generation": generation})
     fact_based_answer = response["score"]
     logger.info(f"hallucination grade : {response=}")
@@ -160,7 +160,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     generation = state["question"]
     question = state["question"]
 
-    garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature)
+    garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = garder_chain.invoke({"question": question, "generation": generation})
     grade = response["score"]
     logger.info(f"Answer grade : {response=}")

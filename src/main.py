@@ -37,6 +37,8 @@ def main() -> None:
     os.environ['QDRANT_COLLECTION_NAME'] = os.getenv('QDRANT_COLLECTION_NAME')
     os.environ['QDRANT_COLLECTIONS'] = os.getenv('QDRANT_COLLECTIONS')
     os.environ['APP_MODE'] = os.getenv('APP_MODE')
+    os.environ['NVIDIA_API_KEY'] = os.getenv('NVIDIA_API_KEY')
+ 
         
     # Logger set up
     setup_logging()

@@ -29,11 +29,11 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     graph = StateGraph(State)
     
     vector_db = config.vector_db
-    docs_grader = config.agents.get("retreived_docs_grader",None)
-    query_processor = config.agents.get("reprocess_query",None)
+    docs_grader = config.agents.get("docs_grader",None)
+    query_processor = config.agents.get("query_processor",None)
     generator_agent = config.agents.get("generator",None)
-    hallucination_grader = config.agents.get("hallucination_checker",None)
-    answer_grader = config.agents.get("generation_grader",None)
+    hallucination_grader = config.agents.get("hallucination_grader",None)
+    answer_grader = config.agents.get("answer_grader",None)
 
 
     # Define the nodes
