@@ -95,8 +95,6 @@ def get_qdrant_retriever(
                         get_embedding_model : callable = get_hg_emb, 
                         embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" ,
                         search_kwargs : dict = {"k" : 3},
-                        new_collection : bool = False,
-                        check_collection : bool = True,
                         get_collections : bool = True
                             ) -> tuple[VectorStoreRetriever,VectorStore]:
     
@@ -110,17 +108,14 @@ def get_qdrant_retriever(
         distance=qdrant_client.http.models.Distance.COSINE
     )
 
-    # Delete and create a new collection
-    if new_collection:
-        client.recreate_collection(
-            collection_name=collection_name,
-            vectors_config=vectors_config
-            
-        )
-        
-    if check_collection:
-        client.collection_exists(collection_name=collection_name)
+    # Checks if collection exists and if not create it 
+    if client.collection_exists(collection_name=collection_name):
         logger.info(f"Checking if Qdrant collection : {collection_name} exists -> {client.collection_exists(collection_name=collection_name)}")
+    else:
+        client.create_collection(
+        collection_name=collection_name,
+        vectors_config=vectors_config
+        )
         
     if get_collections:
         client.collection_exists(collection_name=collection_name)
