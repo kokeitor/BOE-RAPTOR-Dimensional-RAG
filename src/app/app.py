@@ -5,13 +5,13 @@ from langchain_core.messages import AIMessage, HumanMessage
 from dotenv import load_dotenv
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from src.GRAPH_RAG.models import get_open_ai_json
-from src.GRAPH_RAG.config import ConfigGraph
-from src.GRAPH_RAG.chains import get_chain
-from src.GRAPH_RAG.base_models import Question
-from src.GRAPH_RAG.graph import create_graph, compile_workflow
-from src.GRAPH_RAG.prompts import question_chat_history_prompt
-from src.GRAPH_RAG.graph_utils import get_id, get_current_spanish_date_iso
+from GRAPH_RAG.models import get_open_ai_json
+from GRAPH_RAG.config import ConfigGraph
+from GRAPH_RAG.chains import get_chain
+from GRAPH_RAG.base_models import Question
+from GRAPH_RAG.graph import create_graph, compile_workflow
+from GRAPH_RAG.prompts import question_chat_history_prompt
+from GRAPH_RAG.graph_utils import get_id, get_current_spanish_date_iso
 
 load_dotenv()
 
