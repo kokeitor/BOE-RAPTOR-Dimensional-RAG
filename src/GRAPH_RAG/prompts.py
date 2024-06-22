@@ -1,6 +1,7 @@
 from langchain.prompts import PromptTemplate
 
 # NVIDIA FORMAT 
+
 grader_docs_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an AI model designed grade the relevance 
     of a retrieved document to a user question. If the document contains keywords related to the user question, 
@@ -16,10 +17,11 @@ grader_docs_prompt = PromptTemplate(
 gen_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant for question-answering tasks. 
     Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. 
-    Use three sentences maximum and keep the answer concise <|eot_id|><|start_header_id|>user<|end_header_id|>
+    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.
+    <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question} 
     Context: {context} 
-    Answer: <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+    <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["question", "context"],
 )
 
@@ -85,6 +87,7 @@ _routing_prompt = PromptTemplate(
     input_variables=["question"],
 )
 
+
 # OPENAI FORMAT
 
 grader_docs_prompt_openai = PromptTemplate(
@@ -101,7 +104,7 @@ grader_docs_prompt_openai = PromptTemplate(
 gen_prompt_openai = PromptTemplate(
     template="""You are an assistant for question-answering tasks. 
     Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. 
-    Use three sentences maximum and keep the answer concise.
+    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.
     Question:\n{question}\n
     Context:\n{context}\n
     """,
@@ -112,7 +115,7 @@ query_process_prompt_openai = PromptTemplate(
     template="""You are an assistant for reprocesssing a user question. 
     You must improve the clarity and comprehension of the user question. Your goal is to reprocess and reformulate the question in a way that retains 
     its original meaning but enhances its clarity. Ensure that the reformulated question is easier to understand and more likely to convey what the user is truly asking.
-    Provide the reprocessed qeustion as a JSON with a single key 'reprocess_question' and no explanation.
+    Provide the reprocessed question as a JSON with a single key 'reprocess_question' and no explanation.
     Question:\n{question}\n """,
     input_variables=["question", "document"],
 )

@@ -92,13 +92,14 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     # RAG generation
     rag_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     generation = rag_chain.invoke({"context": context, "question": question})
+    answer = generation["answer"]
     logger.info(f"RAG Context : \n {context}")
     logger.info(f"RAG Question : \n {question}")
     logger.info(f"RAG Response : \n {generation}")
     
     print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}",'light_red',attrs=["bold"]))
     
-    return {"generation" : generation}
+    return {"generation" : answer}
 
 
 def process_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:

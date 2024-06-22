@@ -56,7 +56,7 @@ class ConfigGraph:
     AGENTS: ClassVar = {
         "docs_grader": Agent(agent_name="docs_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
         "query_processor": Agent(agent_name="query_processor", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
-        "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=StrOutputParser),
+        "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=JsonOutputParser),
         "hallucination_grader": Agent(agent_name="hallucination_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=hallucination_prompt,parser=JsonOutputParser),
         "answer_grader": Agent(agent_name="answer_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grade_answer_prompt,parser=JsonOutputParser),
     }
@@ -96,7 +96,7 @@ class ConfigGraph:
             logger.info(f"Definidos los datos mediante archivo JSON en {self.data_path}")
         
         if len(self.data) > 0:
-            self.user_questions = [self.get_user_question(q=user_q.get("user_question", None)) for user_q in self.data]
+            self.user_questions = [self.get_user_question(q=user_q.get("user_question", None), date=user_q.get("date", None)) for user_q in self.data]
         else:
             logger.exception("No se han proporcionado candidatos en el archivo JSON con el correcto fomato [ [cv : '...', oferta : '...'] , [...] ] ")
             raise JsonlFormatError()
@@ -148,7 +148,7 @@ class ConfigGraph:
                     if model is not None:
                         get_model = ConfigGraph.MODEL.get(model, None)
                         if get_model is None:
-                            logger.error(f"The Model defined for aget : {agent} isnt't available -> using NVDIA llama3 70B model")
+                            logger.error(f"The Model defined for agent : {agent} isnt't available -> using NVDIA llama3 70B model")
                             get_model = get_nvdia
                             prompt = self.get_model_agent_prompt(model ='NVIDIA', agent = agent)
                         else:
@@ -237,5 +237,9 @@ class ConfigGraph:
             
         return vector_db
 
-    def get_user_question(self, q : str) -> Question:
-        return Question(id=get_id(), user_question=q)
+    def get_user_question(self, q : Union[str,None] = None, date : Union[str,None] = None) -> Question:
+        if q and date:
+            return Question(id=get_id(), user_question=q, date=date)
+        else:
+            raise ConfigurationFileError(f"Error inside confiuration Query file -> Query and/or date data not provided") 
+        
