@@ -57,14 +57,18 @@ def run_app(config_graph : ConfigGraph) -> None:
         logger.debug(f"compile_graph type: {type(config_graph.compile_graph)}")
         
         # response = config_graph.compile_graph.invoke(inputs, config_graph.iteraciones)
+        logger.warning(f"human_question -> {human_question}")
         logger.warning(f"Type {type(config_graph.compile_graph.stream(inputs, config_graph.iteraciones))}")
         logger.warning(f"Type {type(config_graph)}")
         logger.warning(f"Type {type(config_graph.compile_graph)}")
 
         for event in config_graph.compile_graph.stream(inputs, config_graph.iteraciones):
+            logger.info(f"Graph event {event}")
+            
             for key , value in event.items():
-                logger.debug(f"Graph event {key} - {value}")
-        
+                logger.info(f"Graph event {key} - {value}")
+                
+
         return value
 
     
