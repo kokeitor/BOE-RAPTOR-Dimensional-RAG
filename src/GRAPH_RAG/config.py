@@ -78,28 +78,31 @@ class ConfigGraph:
                                 k=3
                                 )
     }
-    config_path: Optional[str] = None
-    data_path: Optional[str] = None
+    config_path: Union[str, None] = None
+    data_path: Union[str, None] = None
     
     def __post_init__(self):
+        
         if self.config_path is None:
             logger.exception("No se ha proporcionado ninguna configuración para la generación usando Agents")
             raise AttributeError("No se ha proporcionado ninguna configuración para la generación usando Agents")
+        
         if self.data_path is None:
-            logger.exception("No se han proporcionado datos para analizar para la generación usando Agents")
-            raise AttributeError("No se han proporcionado datos para analizar para la generación usando Agents")
+            logger.warning("No se han proporcionado datos para analizar para la generación usando Agents")
+            #  raise AttributeError("No se han proporcionado datos para analizar para la generación usando Agents")
+            
         if self.config_path is not None:
             self.config = self.get_config()
             logger.info(f"Definida configuracion mediante archivo JSON en {self.config_path}")
-        if self.config_path is not None:
+            
+        if self.data_path is not None:
             self.data = self.get_data()
             logger.info(f"Definidos los datos mediante archivo JSON en {self.data_path}")
-        
-        if len(self.data) > 0:
-            self.user_questions = [self.get_user_question(q=user_q.get("user_question", None), date=user_q.get("date", None)) for user_q in self.data]
-        else:
-            logger.exception("No se han proporcionado candidatos en el archivo JSON con el correcto fomato [ [cv : '...', oferta : '...'] , [...] ] ")
-            raise JsonlFormatError()
+            if len(self.data) > 0:
+                self.user_questions = [self.get_user_question(q=user_q.get("user_question", None), date=user_q.get("date", None)) for user_q in self.data]
+            else:
+                logger.exception("No se han proporcionado candidatos en el archivo JSON con el correcto fomato [ [cv : '...', oferta : '...'] , [...] ] ")
+                raise JsonlFormatError()
         
         # Graph Agents configuration
         self.agents_config = self.config.get("agents", None)

@@ -3,6 +3,7 @@ import os
 import logging.config
 import logging.handlers
 from langgraph.graph import StateGraph, END
+from langgraph.graph.graph import CompiledGraph
 from langchain_core.runnables.graph import CurveStyle, MermaidDrawMethod, NodeColors
 from GRAPH_RAG.base_models import (
     State
@@ -83,7 +84,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     return graph
 
 
-def compile_workflow(graph):
+def compile_workflow(graph : StateGraph) -> CompiledGraph:
     workflow = graph.compile()
     return workflow
 

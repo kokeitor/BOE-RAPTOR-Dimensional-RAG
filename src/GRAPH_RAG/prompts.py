@@ -150,6 +150,17 @@ clasify_prompt_openai = PromptTemplate(
     input_variables=["text","list_labels"],
 )
 
+question_chat_history_prompt = PromptTemplate(
+    template="""You are an assistant specialized in creating a new question that contains information about the actual user question and the 
+    chat history or conversation with the user. The new question must synthesize the chat history but adding the new user question.
+    Provide the new user question as a JSON with a single key 'new_user_question'.
+    Chat history: {chat_history}
+    Actual user question: {user_question} 
+    """,
+    input_variables=["chat_history", "user_question"]
+)
+
+
 _routing_prompt_web_search_openai = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an expert at routing a 
     user question to a vectorstore or web search. Use the vectorstore for questions on spanish BOE documents. \n

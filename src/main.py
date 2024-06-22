@@ -71,13 +71,13 @@ def main() -> None:
         
         logger.info("Creating graph and compiling workflow...")
         graph = create_graph(config=config_graph)
-        workflow = compile_workflow(graph)
-        save_graph(workflow)
+        compiled_graph = compile_workflow(graph)
+        # save_graph(workflow)
         logger.info("Graph and workflow created")
         
         thread = {"configurable": {"thread_id": config_graph.thread_id}}
         iteraciones = {"recursion_limit": config_graph.iteraciones}
-        """
+        
         # itera por todos questions definidos
         for question in config_graph.user_questions:
             
@@ -85,10 +85,10 @@ def main() -> None:
             logger.info(f"User id question: {question.id}")
             inputs = {"question": [f"{question.user_question}"], "date" : question.date}
             
-            for event in workflow.stream(inputs, iteraciones):
+            for event in compiled_graph.stream(inputs, iteraciones):
                 for key , value in event.items():
                     logger.debug(f"Graph event {key} - {value}")
-        """
+        
 
 
 
