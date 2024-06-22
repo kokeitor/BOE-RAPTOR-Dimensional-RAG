@@ -3,6 +3,8 @@ import json
 import logging
 from langchain.prompts import PromptTemplate
 from dataclasses import dataclass
+from langgraph.graph import StateGraph
+from langgraph.graph.graph import CompiledGraph
 from typing import Union, Optional, Callable, ClassVar
 from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
@@ -78,8 +80,11 @@ class ConfigGraph:
                                 k=3
                                 )
     }
+    
     config_path: Union[str, None] = None
     data_path: Union[str, None] = None
+    graph : Union[StateGraph, None]
+    compile_graph : Union[CompiledGraph, None] = None
     
     def __post_init__(self):
         

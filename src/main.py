@@ -4,7 +4,7 @@ from termcolor import colored
 from dotenv import load_dotenv
 from langchain.schema import Document
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
-from GRAPH_RAG.graph import create_graph, compile_workflow, save_graph
+from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.graph_utils import (
                         setup_logging,
@@ -70,8 +70,8 @@ def main() -> None:
         config_graph = ConfigGraph(config_path=CONFIG_PATH, data_path=DATA_PATH)
         
         logger.info("Creating graph and compiling workflow...")
-        graph = create_graph(config=config_graph)
-        compiled_graph = compile_workflow(graph)
+        config_graph.graph = create_graph(config=config_graph)
+        config_graph.compile_graph = compile_graph(config_graph.graph)
         # save_graph(workflow)
         logger.info("Graph and workflow created")
         
@@ -85,7 +85,7 @@ def main() -> None:
             logger.info(f"User id question: {question.id}")
             inputs = {"question": [f"{question.user_question}"], "date" : question.date}
             
-            for event in compiled_graph.stream(inputs, iteraciones):
+            for event in config_graph.compile_graph.stream(inputs, iteraciones):
                 for key , value in event.items():
                     logger.debug(f"Graph event {key} - {value}")
         
