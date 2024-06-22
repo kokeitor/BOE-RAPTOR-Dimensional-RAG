@@ -57,8 +57,15 @@ def run_app(config_graph : ConfigGraph) -> None:
         logger.debug(f"compile_graph type: {type(config_graph.compile_graph)}")
         
         # response = config_graph.compile_graph.invoke(inputs, config_graph.iteraciones)
+        logger.warning(f"Type {type(config_graph.compile_graph.stream(inputs, config_graph.iteraciones))}")
+        logger.warning(f"Type {type(config_graph)}")
+        logger.warning(f"Type {type(config_graph.compile_graph)}")
+
+        for event in config_graph.compile_graph.stream(inputs, config_graph.iteraciones):
+            for key , value in event.items():
+                logger.debug(f"Graph event {key} - {value}")
         
-        return config_graph.compile_graph.stream(inputs, config_graph.iteraciones)
+        return value
 
     
     
@@ -88,7 +95,7 @@ def run_app(config_graph : ConfigGraph) -> None:
 
         with st.chat_message("AI"):
             # ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
-            ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
-            st.session_state.chat_history.append(AIMessage(content=ai_response))
+            ai_response = get_response(user_query, st.session_state.chat_history)
+            st.write(ai_response)
 
         st.session_state.chat_history.append(AIMessage(content=ai_response))
