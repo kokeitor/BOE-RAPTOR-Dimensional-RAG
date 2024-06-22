@@ -83,7 +83,7 @@ class ConfigGraph:
     
     config_path: Union[str, None] = None
     data_path: Union[str, None] = None
-    graph : Union[StateGraph, None]
+    graph : Union[StateGraph, None] = None
     compile_graph : Union[CompiledGraph, None] = None
     
     def __post_init__(self):

@@ -11,13 +11,8 @@ from GRAPH_RAG.models import get_open_ai_json
 from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.base_models import Question
-from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.prompts import question_chat_history_prompt
 from GRAPH_RAG.graph_utils import get_id, get_current_spanish_date_iso
-
-
-# Add the src directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # Loading env variables
@@ -40,18 +35,33 @@ def run_app(config_graph : ConfigGraph) -> None:
                 prompt : PromptTemplate = question_chat_history_prompt,
                 config_graph : ConfigGraph = config_graph
                 ):
-
+        """ 
         chain = get_chain(prompt_template=prompt, get_model=model, temperature=0, parser=JsonOutputParser)
         response = chain.invoke({"chat_history":chat_history, "user_question":user_query})
-        human_question = Question(id=get_id(), user_question= response["new_user_question"], date=get_current_spanish_date_iso())
+        new_question = response["new_user_question"]
+        logger.info(f"Response -> {response}")
+        """
+        human_question = Question(id=get_id(), user_question= user_query, date=get_current_spanish_date_iso())
         
         logger.info(f"User Question: {human_question.user_question}")
         logger.info(f"User id question: {human_question.id}")
         inputs = {"question": [f"{human_question.user_question}"], "date" : human_question.date}
         
+        # Ensure the config is correctly passed
+        if not isinstance(config_graph, ConfigGraph):
+            raise ValueError("config_graph is not an instance of ConfigGraph")
+        if not hasattr(config_graph, 'compile_graph') or not hasattr(config_graph.compile_graph, 'stream'):
+            raise AttributeError("config_graph does not have compile_graph or stream method")
+
+        # Debugging: Log the type of compile_graph
+        logger.debug(f"compile_graph type: {type(config_graph.compile_graph)}")
+        
+        # response = config_graph.compile_graph.invoke(inputs, config_graph.iteraciones)
+        
         return config_graph.compile_graph.stream(inputs, config_graph.iteraciones)
 
-
+    
+    
     # session state
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
@@ -77,7 +87,8 @@ def run_app(config_graph : ConfigGraph) -> None:
             st.markdown(user_query)
 
         with st.chat_message("AI"):
+            # ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
             ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
-            # st.write(ai_response)
+            st.session_state.chat_history.append(AIMessage(content=ai_response))
 
         st.session_state.chat_history.append(AIMessage(content=ai_response))
