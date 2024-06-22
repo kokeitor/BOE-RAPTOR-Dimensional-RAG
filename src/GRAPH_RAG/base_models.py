@@ -38,6 +38,7 @@ class State(TypedDict):
         final_report 
         
     """
+    date : str
     question : Annotated[list[str],operator.add]
     generation : str
     query_process : str

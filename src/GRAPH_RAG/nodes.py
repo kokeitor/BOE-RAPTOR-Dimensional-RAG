@@ -32,9 +32,8 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     
-    print(colored(f"Question = {state['question']}",'light_blue',attrs=["bold"]))
-    print(colored(f"Number of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
-    
+    print(colored(f"Date = {state['date']}\nQuestion = {state['question']}\nNumber of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
+
     return {"documents": documents}
 
 
@@ -97,7 +96,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     logger.info(f"RAG Question : \n {question}")
     logger.info(f"RAG Response : \n {generation}")
     
-    print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}",'light_red',attrs=["bold"]))
+    print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
     
     return {"generation" : answer}
 
