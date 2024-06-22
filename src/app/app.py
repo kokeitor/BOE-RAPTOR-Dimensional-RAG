@@ -14,14 +14,18 @@ from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.prompts import question_chat_history_prompt
 from GRAPH_RAG.graph_utils import get_id, get_current_spanish_date_iso
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Add the src directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+# Loading env variables
 load_dotenv()
 
+
+# Logger initializer
 logger = logging.getLogger(__name__)
 
-
-print("Current Working Directory:", os.getcwd())
 
 # app config
 st.set_page_config(page_title="Streamlit Boe Chatbot", page_icon="🤖")
