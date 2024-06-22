@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 import streamlit as st
 from langchain_core.messages import AIMessage, HumanMessage
 from dotenv import load_dotenv
@@ -13,9 +14,14 @@ from GRAPH_RAG.graph import create_graph, compile_workflow
 from GRAPH_RAG.prompts import question_chat_history_prompt
 from GRAPH_RAG.graph_utils import get_id, get_current_spanish_date_iso
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 load_dotenv()
 
 logger = logging.getLogger(__name__)
+
+
+print("Current Working Directory:", os.getcwd())
 
 # app config
 st.set_page_config(page_title="Streamlit Boe Chatbot", page_icon="🤖")
@@ -84,6 +90,3 @@ if user_query is not None and user_query != "":
         # st.write(ai_response)
 
     st.session_state.chat_history.append(AIMessage(content=ai_response))
-
-
-print("Current Working Directory:", os.getcwd())
