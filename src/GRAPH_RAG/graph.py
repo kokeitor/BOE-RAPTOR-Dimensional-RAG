@@ -1,13 +1,14 @@
 import logging
+import os
 import logging.config
 import logging.handlers
 from langgraph.graph import StateGraph, END
-from langchain_core.output_parsers import JsonOutputParser,StrOutputParser
+from langchain_core.runnables.graph import CurveStyle, MermaidDrawMethod, NodeColors
 from GRAPH_RAG.base_models import (
-    State,
-    Analisis
+    State
 )
 from GRAPH_RAG.config import ConfigGraph
+from GRAPH_RAG.graph_utils import get_current_spanish_date_iso
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.nodes import (
     retriever,
@@ -61,3 +62,10 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 def compile_workflow(graph):
     workflow = graph.compile()
     return workflow
+
+def save_graph(compile_graph) -> None:
+    """Save graph as png in the default figure graph directory"""
+    figure_path = os.path.join(os.path.dirname(__file__), '../..','data/figures/graphs', f'{get_current_spanish_date_iso}_graph.png') 
+    print(figure_path)
+    with open(figure_path, 'rb') as f:
+        f.write(compile_graph.get_graph().draw_mermaid_png(draw_method=MermaidDrawMethod.API))
