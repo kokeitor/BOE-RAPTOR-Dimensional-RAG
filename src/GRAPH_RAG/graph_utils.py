@@ -32,6 +32,13 @@ def get_current_spanish_date_iso():
     spanish_tz = pytz.timezone('Europe/Madrid')
     return str(datetime.now(spanish_tz).strftime("%Y-%m-%d %H:%M:%S"))
 
+
+def get_current_spanish_date_iso_file_name_format():
+    """Get the current date and time in the Europe/Madrid time zone"""
+    spanish_tz = pytz.timezone('Europe/Madrid')
+    return str(datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S"))
+
+
 def merge_page_content(docs : list[Document]) -> str:
     """Merge Document page_content list into unique str 
 
