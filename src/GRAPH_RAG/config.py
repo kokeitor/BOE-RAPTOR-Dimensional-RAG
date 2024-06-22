@@ -15,7 +15,12 @@ from GRAPH_RAG.prompts import (
     gen_prompt,
     query_process_prompt,
     hallucination_prompt,
-    grade_answer_prompt
+    grade_answer_prompt,
+    grader_docs_prompt_openai,
+    gen_prompt_openai,
+    query_process_prompt_openai,
+    hallucination_prompt_openai,
+    grade_answer_prompt_openai
     )
 from GRAPH_RAG.base_models import (
     Analisis,
@@ -168,15 +173,15 @@ class ConfigGraph:
         """Get specific parser for each graph agent"""
         if model == 'OPENAI':
             if agent == "docs_grader":
-                return ''
+                return grader_docs_prompt_openai
             elif agent == "query_processor":
-                return ''            
+                return query_process_prompt_openai        
             elif agent == "generator":
-                return ''        
+                return gen_prompt_openai      
             elif agent == "hallucination_grader":
-                return ''
+                return hallucination_prompt_openai
             elif agent == "answer_grader":
-                return ''
+                return grade_answer_prompt_openai
             else:
                 logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
                 raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")      

@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 ### Nodes
-def retriever(vector_database : VectorDB, state : State) -> State:
+def retriever(vector_database : VectorDB, state : State) -> dict:
     """Retrieve documents from vector database"""
     
     logger.info(f"Retriever node : \n {state}")
@@ -31,15 +31,14 @@ def retriever(vector_database : VectorDB, state : State) -> State:
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
-    state["documents"] = documents
     
     print(colored(f"Question = {state['question']}",'light_blue',attrs=["bold"]))
     print(colored(f"Number of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
+    
+    return {"documents": documents}
 
-    return state
 
-
-def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
     """Determines whether the retrieved documents are relevant to the question"""
     
     logger.info(f"Retrieved Documents Grader Node : \n {state}")
@@ -69,19 +68,16 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
         # Document not relevant
         else:
             logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
-            
+               
     # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
     if len(relevant_docs) == 0:  
-        state["query_reprocess"] = 'yes'
-        state["documents"] = None
+        return {"documents": None, "query_reprocess" : 'no'}
+        
     else:
-        state["query_reprocess"] = 'no'
-        state["documents"] = relevant_docs
+        return {"documents": relevant_docs, "query_reprocess" : 'no'}
+    
 
-    return state
-
-
-def generator(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+def generator(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
     """Generate answer using RAG on retrieved documents"""
     
     logger.info(f"RAG Generator node : \n {state}")
@@ -100,15 +96,12 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     logger.info(f"RAG Question : \n {question}")
     logger.info(f"RAG Response : \n {generation}")
     
-    # Update Graph State
-    state["generation"] = generation
+    print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}",'light_red',attrs=["bold"]))
     
-    print(colored(f"\nQuestion -> {state['question']}\nResponse -> {generation}",'light_red',attrs=["bold"]))
-    
-    return state
+    return {"generation" : generation}
 
 
-def process_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+def process_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
     """Reprocess a user query to improve docs retrieval"""
 
     logger.info(f"Query Reprocessing : \n {state}")
@@ -118,15 +111,14 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
     response = chain.invoke({"question": question})
     reprocesed_question = response["reprocess_question"]
-    state["question"].append(reprocesed_question)
-    
+
     logger.info(f"{question=} // after reprocessing question -> {response=}")
     print(colored(f"Initial question : {question=}\nAfter reprocessing question : {response=}",'light_yelow',attrs=["bold"]))
+    
+    return {"question" : reprocesed_question}
 
-    return state
 
-
-def hallucination_checker(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+def hallucination_checker(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
     """Checks for hallucionation on the response or generation"""
 
     logger.info(f"hallucination_checker node : \n {state}")
@@ -140,15 +132,13 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     response = hall_chain.invoke({"documents": context, "generation": generation})
     fact_based_answer = response["score"]
     logger.info(f"hallucination grade : {response=}")
-    
-    # Update Graph State
-    state["fact_based_answer"] = fact_based_answer
-    
+
     print(colored(f"Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
     
-    return state
+    return {"fact_based_answer" : fact_based_answer}
 
-def generation_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> State:
+
+def generation_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
     """Grades the generation/answer given a question"""
     
     logger.info(f"generation_grader node : \n {state}")
@@ -162,14 +152,13 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     grade = response["score"]
     logger.info(f"Answer grade : {response=}")
     
-    # Update Graph State
-    state["useful_answer"] = grade
-    
     print(colored(f"Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
+    
+    return { "useful_answer" : grade}
 
-    return state
 
-def final_report(state:State) -> State:
+def final_report(state : State) -> dict:
+    """Returns and writes the final response of the model in a custom format"""
 
     generation = state["generation"]
     questions = state["question"]
@@ -177,13 +166,11 @@ def final_report(state:State) -> State:
     grade_answer= state["useful_answer"]
     grade_hall= state["fact_based_answer"]
     query_process = state["query_process"]
-    state["report"] = generation
-    
     
     logger.info(f"Final model response : \n {state}")
     print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**QUERY REPROCESS**{query_process}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
-
-    return state
+   
+    return {"report" : generation}
 
 
 ### Conditional edge functions
@@ -191,13 +178,12 @@ def route_generate_requery(state : State) -> str:
     """Route to generation or to reprocess question """
     
     logger.info(f"Router Generation or Reprocess Query : \n {state}")
-    query_reprocess = state["query_reprocess"]
 
-    if query_reprocess == "yes":
+    if state["query_reprocess"] == "yes":
         logger.info("Routing to -> 'query_reprocess'")
         print(colored("\n\nRouting to -> query_reprocess\n\n",'light_green',attrs=["underline"]))
         return 'reprocess_query'
-    if query_reprocess == "no":
+    if state["query_reprocess"] == "no":
         logger.info("Routing to -> 'generator'")
         print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
         return 'generator'
@@ -206,13 +192,12 @@ def route_generate_grade_gen(state : State) -> str:
     """Route to generation or to grade the generation/answer"""
     
     logger.info(f"Router Generation or Grader Generation : \n {state}")
-    fact_based_answer = state["fact_based_answer"]
-    
-    if fact_based_answer == "yes":
+
+    if state["fact_based_answer"] == "yes":
         logger.info("Routing to -> 'Grader generation'")
         print(colored("\n\nRouting to -> Grader generation\n\n",'light_green',attrs=["underline"]))
         return 'generation_grader'
-    if fact_based_answer == "no":
+    if state["fact_based_answer"] == "no":
         logger.info("Routing to -> 'Generation'")
         print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
@@ -222,13 +207,12 @@ def route_generate_final(state : State) -> str:
     """Route to generation or to final report"""
     
     logger.info(f"Router Generation or Final report : \n {state}")
-    useful_answer = state["useful_answer"]
     
-    if useful_answer == "yes":
+    if state["useful_answer"] == "yes":
         logger.info("Routing to -> 'Final Report'")
         print(colored("\n\nRouting to -> Final Report\n\n",'light_green',attrs=["underline"]))
         return 'final_report'
-    if useful_answer == "no":
+    if state["useful_answer"] == "no":
         logger.info("Routing to -> 'Generation'")
         print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
