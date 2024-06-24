@@ -9,6 +9,7 @@ from GRAPH_RAG.base_models import (
     Agent
 )
 from GRAPH_RAG.chains import get_chain
+from GRAPH_RAG.agents import get_openai_agent
 from GRAPH_RAG.graph_utils import get_current_spanish_date_iso, merge_page_content
 
 
@@ -17,6 +18,34 @@ logger = logging.getLogger(__name__)
 
 
 ### Nodes
+
+def process_user_input_agent(state : State, get_agent : callable = get_openai_agent ) -> dict:
+    """Agent node that process a input user query and decides using a search boe info tool or to 
+    generate a direct-raw response if the input is not boe related"""
+    
+    logger.info(f"Initial Agent node : \n {state}")
+    print(colored(f"\nInitial Agent node : ",'light_green'))
+    
+    # Input user question
+    user_query = state["user_input"]
+    agent_intermediate_steps = state["agent_intermediate_steps"]
+    
+    # Input format for agent 
+    inputs = {
+    "user_query": str(user_query),
+    "agent_intermediate_steps": [agent_intermediate_steps]
+        }
+
+    agent = get_agent()
+    agent_response = agent.invoke(inputs)
+    
+    logger.info(f"Agent Response : \n {agent_response}")
+    
+    print(colored(f"\user_query -> {state['user_query'][-1]}\nAgent Response -> {agent_response}\n",'light_green'))
+
+    return {"agent_output" : agent_response}
+
+
 def retriever(vector_database : VectorDB, state : State) -> dict:
     """Retrieve documents from vector database"""
     
@@ -174,6 +203,20 @@ def final_report(state : State) -> dict:
 
 
 ### Conditional edge functions
+def route_retrieve_final(state : State) -> str:
+    """Route to retrieve node or to final report"""
+    
+    logger.info(f"Router Retrieval or Final Report : \n {state}")
+
+    if state["query_reprocess"] == "yes":
+        logger.info("Routing to -> 'query_reprocess'")
+        print(colored("\n\nRouting to -> query_reprocess\n\n",'light_green',attrs=["underline"]))
+        return 'reprocess_query'
+    if state["query_reprocess"] == "no":
+        logger.info("Routing to -> 'generator'")
+        print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
+        return 'generator'
+    
 def route_generate_requery(state : State) -> str:
     """Route to generation or to reprocess question """
     

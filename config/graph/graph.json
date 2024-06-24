@@ -1,19 +1,19 @@
 {
     "agents":{
               "docs_grader": {
-                            "name":"NVIDIA",
+                            "name":"OPENAI",
                             "temperature":0
                             },
               "query_processor": {
-                            "name":"NVIDIA",
+                            "name":"OPENAI",
                             "temperature":0
                             },
               "generator": {
-                              "name":"NVIDIA",
+                              "name":"OPENAI",
                               "temperature":0
                               },
                 "hallucination_grader": {
-                            "name":"NVIDIA",
+                            "name":"OPENAI",
                             "temperature":0
                             },
                 "answer_grader": {

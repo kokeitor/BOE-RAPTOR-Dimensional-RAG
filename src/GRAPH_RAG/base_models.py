@@ -1,7 +1,8 @@
-from typing import Union, Optional, Callable, ClassVar, TypedDict, Annotated
-from pydantic import BaseModel
+from typing import Union, Optional, Callable, ClassVar, TypedDict, Annotated, Literal
+from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 from langchain.prompts import PromptTemplate
+from langchain_core.agents import AgentAction, AgentFinish
 from dataclasses import dataclass
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.models import get_hg_emb
@@ -39,6 +40,9 @@ class State(TypedDict):
         
     """
     date : str
+    user_input : str
+    agent_output: Union[AgentAction, AgentFinish, None] = None
+    agent_intermediate_steps: Annotated[Union[list[tuple[AgentAction, str]],None], operator.add] = None
     question : Annotated[list[str],operator.add]
     generation : str
     query_process : str
@@ -78,4 +82,35 @@ class VectorDB:
                                     embedding_model=self.hg_embedding_model, 
                                     search_kwargs = {"k" : self.k}
             )
+             
 
+# Agent BaseModels outputs [NOT IMPLEMENTED AT DATE : 20242406]
+
+class RouteQuery(BaseModel):
+    """Route a user query to the most relevant datasource."""
+
+    datasource: Literal["vectorstore", "web_search"] = Field(
+        ...,
+        description="Given a user question choose to route it to web search or a vectorstore.",
+    )
+
+class GradeDocuments(BaseModel):
+    """Binary score for relevance check on retrieved documents."""
+
+    binary_score: str = Field(
+        description="Documents are relevant to the question, 'yes' or 'no'"
+    )
+
+class GradeHallucinations(BaseModel):
+    """Binary score for hallucination present in generation answer."""
+
+    binary_score: str = Field(
+        description="Answer is grounded in the facts, 'yes' or 'no'"
+    )
+
+class GradeAnswer(BaseModel):
+    """Binary score to assess answer addresses question."""
+
+    binary_score: str = Field(
+        description="Answer addresses the question, 'yes' or 'no'"
+    )

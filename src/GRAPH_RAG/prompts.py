@@ -1,4 +1,7 @@
 from langchain.prompts import PromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain import hub
+
 
 # NVIDIA FORMAT 
 
@@ -26,9 +29,9 @@ gen_prompt = PromptTemplate(
 )
 
 query_process_prompt = PromptTemplate(
-    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant for reprocesssing a user question. 
-    You must improve the clarity and comprehension of the user question. Your goal is to reprocess and reformulate the question in a way that retains 
-    its original meaning but enhances its clarity. Ensure that the reformulated question is easier to understand and more likely to convey what the user is truly asking.
+    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are a question re-writer that converts an \n
+    input question to a better version that is optimized for vectorstore retrieval. \n
+    Look at the input and try to reason about the underlying semantic intent / meaning.\n
     Provide the reprocessed qeustion as a JSON with a single key 'reprocess_question' and no explanation.
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question} \n <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
@@ -90,6 +93,21 @@ _routing_prompt = PromptTemplate(
 
 # OPENAI FORMAT
 
+agent_promt = hub.pull("hwchase17/openai-functions-agent")
+
+agent_custom_prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """You are very powerful assistant, but don't know from Spanish 
+                BOE (Boletín Oficial del Estado) that is the official state gazette of Spain where legal documents, including laws,
+                decrees, official announcements, and government resolutions are publish""",
+        ),
+        ("user", "{input}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ]
+)
+
 grader_docs_prompt_openai = PromptTemplate(
     template="""You are an AI model designed grade the relevance 
     of a retrieved document to a user question. If the document contains keywords related to the user question, 
@@ -112,9 +130,9 @@ gen_prompt_openai = PromptTemplate(
 )
 
 query_process_prompt_openai = PromptTemplate(
-    template="""You are an assistant for reprocesssing a user question. 
-    You must improve the clarity and comprehension of the user question. Your goal is to reprocess and reformulate the question in a way that retains 
-    its original meaning but enhances its clarity. Ensure that the reformulated question is easier to understand and more likely to convey what the user is truly asking.
+    template="""You are a question re-writer that converts an input question to a better version that is optimized for vectorstore retrieval. \n
+    Look at the input and try to reason about the underlying semantic intent / meaning.\n
+    Provide the reprocessed qeustion as a JSON with a single key 'reprocess_question' and no explanation.
     Provide the reprocessed question as a JSON with a single key 'reprocess_question' and no explanation.
     Question:\n{question}\n """,
     input_variables=["question", "document"],
