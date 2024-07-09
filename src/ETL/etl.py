@@ -123,11 +123,28 @@ class LabelGenerator:
             Text: {text}""",
             input_variables=["text", "labels"]
         )
+        self.alternative_prompt = PromptTemplate(
+            template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide 10 possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 100.
+            The scores for the rest of the labels must be 0. Provide the output as a JSON with the label names as keys and their similarity scores as values.
+            Text: {text}""",
+            input_variables=["text", "labels"]
+        )
         self.llama_prompt = PromptTemplate(
             template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).\n
             Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
             You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
             Provide the output as a JSON with three keys : 'Label1','Label2','Label3'and for each label another two keys : "Label" and "Score" the similarity score value.\n
+            <|eot_id|><|start_header_id|>user<|end_header_id|>
+            Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+            input_variables=["text", "labels"]
+        )
+        self.alternative_llama_prompt = PromptTemplate(
+            template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide 10 possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 100.
+            The scores for the rest of the labels must be 0. Provide the output as a JSON with the label names as keys and their similarity scores as values.
             <|eot_id|><|start_header_id|>user<|end_header_id|>
             Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
             input_variables=["text", "labels"]
@@ -145,9 +162,9 @@ class LabelGenerator:
             raise AttributeError("Model Name not correct")
 
         if self.model_label == "NVIDIA-LLAMA3":
-            self.chain = self.llama_prompt | self.model | JsonOutputParser()
+            self.chain = self.alternative_llama_prompt | self.model | JsonOutputParser()
         elif self.model_label == "GPT":
-            self.chain = self.prompt | self.model | JsonOutputParser()
+            self.chain = self.alternative_prompt | self.model | JsonOutputParser()
             
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
@@ -180,7 +197,15 @@ class LabelGenerator:
             generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
             logger.info(f"Generating labels with model : {self.model_label} // using : {self.tokenizer}")
             logger.info(f"Generation by model : {generation}")
-
+            
+            try:
+                doc.metadata['label_scores'] = generation
+                logger.info(f"LLM output {generation=}")
+            except Exception as e:
+                doc.metadata['label'] = {"Model_Errro": e}
+                logger.exception(f"LLM Error message:  : {e}")
+                
+           """ 
             try:
                 doc.metadata['label_1_label'] = generation["Label1"]["Label"]
                 doc.metadata['label_1_score'] = generation["Label1"]["Score"]
@@ -196,6 +221,7 @@ class LabelGenerator:
                 doc.metadata['label_3_label'] = 'ERROR'
                 doc.metadata['label_3_score'] = 0
                 logger.exception(f"LLM Error message:  : {e}")
+           """
 
         return docs
 
@@ -209,6 +235,9 @@ class Pipeline:
         self.label_generator = self._create_label_generator()
         self.storer = self._create_storer()
         self.database = database
+        self.database_config = self.config.get("google_sheet_database", None)
+        self.api_max_tries = self.database_config.get("api_call_max_tries", 15)
+        self.database.api_call_max_tries = self.api_max_tries
 
     def _parse_config(self) -> Dict:
         if not os.path.exists(self.config_path):
@@ -384,11 +413,10 @@ class Pipeline:
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
-        # Saving in bbdd [google sheets] -> only if we have less than 20 docs because of too much googlw sheets api calls
-        self.database_config = self.config.get("google_sheet_database", None)
-        self.api_max_tries = self.database_config.get("api_call_max_tries", 10)
-        if labeled_docs < self.api_max_tries:
-            for doc in labeled_docs:
+        # Saving in bbdd [google sheets] -> only part of the docs per pipeline call because -> google sheets api call limit (restore eah minute)
+        logger.info(f"api_max_tries = {self.api_max_tries}")
+        for i,doc in enumerate(labeled_docs):
+            if i+1 < self.database.api_call_max_tries:
                 record = {"text": doc.page_content}
                 record.update(doc.metadata)
                 logger.info(f"Prev the insertion in BBDD -> {record}")
@@ -397,7 +425,10 @@ class Pipeline:
                                 range=self.database.get_last_row_range(), 
                                 values=[GoogleSheet.get_record(chunk=chunk)]
                                 )
-            logger.info(f"Inserting into BBDD -> {chunk}")
+                logger.info(f"Inserting into BBDD -> {chunk}")
+            else:
+                logger.warning(f"Api google sheet [database modde] limit reach -> {self.api_max_tries},\nno more chunks stored in {os.getenv('GOOGLE_DOCUMENT_NAME')},\n last stored -> {chunk=}")
+                break
         return labeled_docs
     
         

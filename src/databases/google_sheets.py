@@ -19,11 +19,12 @@ class GoogleSheet:
     """
     COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     
-    def __init__(self, credentials: Union[str, dict], document: str, sheet_name: str):
+    def __init__(self, credentials: Union[str, dict], document: str, sheet_name: str, api_call_max_tries : int = 15 ):
         self.gc = gspread.service_account(credentials)  # from a json file
         # self.gc = gspread.service_account_from_dict(credentials)  # from a python dict
         self.sh = self.gc.open(document)
         self.sheet = self.sh.worksheet(sheet_name)
+        self.api_call_max_tries = api_call_max_tries
 
     @staticmethod
     def get_record(chunk: ClassifyChunk) -> list:
@@ -51,7 +52,7 @@ class GoogleSheet:
             chunk.label_3_score
         ]
 
-    def exponential_backoff(self, func, *args, max_retries=15, **kwargs):
+    def exponential_backoff(self, func, *args, max_retries=self.max_retries, **kwargs):
         retries = 0
         while retries < max_retries:
             try:
