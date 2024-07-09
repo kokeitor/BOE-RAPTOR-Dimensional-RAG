@@ -31,3 +31,12 @@ def get_current_spanish_date_iso():
     # Get the current date and time in the Europe/Madrid time zone
     spanish_tz = pytz.timezone('Europe/Madrid')
     return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
+
+# Parse config
+def parse_config(config_path) -> dict:
+    logger.info(f"Path config : {config_path}")
+    if not os.path.exists(config_path):
+        raise FileNotFoundError(f"Config file not found at {config_path}")
+    with open(config_path, encoding='utf-8') as file:
+        config = json.load(file)
+    return config
