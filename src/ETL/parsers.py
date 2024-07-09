@@ -1,45 +1,8 @@
 import os
-import tiktoken
-import pytz
-from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
-from dotenv import load_dotenv
-from typing import Dict, List, Union, Optional
 from langchain.schema import Document
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_community.embeddings import GPT4AllEmbeddings
-from langchain_community.chat_message_histories import ChatMessageHistory
 from llama_parse import LlamaParse
 from llama_index.core import SimpleDirectoryReader
-from datetime import datetime, timezone
-from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 import logging
-from ETL.utils import get_current_spanish_date_iso
-
-
-# Load environment variables from .env file
-load_dotenv()
-
-
-# Set environment variables
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
-os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
-os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
-
-
-# Tokenizers
-TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
-tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
-TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
-tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
-
-
-# Embedding model
-EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 
 # Logging configuration
@@ -47,7 +10,8 @@ logger = logging.getLogger("parser_module_logger")  # Child logger [for this mod
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 class Parser:
-    def __init__(self, directory_path: str, 
+    def __init__(self, 
+                 directory_path: str, 
                  file_type: str = ".pdf", 
                  recursive_parser: bool = True, 
                  result_type: str = "markdown", 
@@ -68,7 +32,7 @@ class Parser:
             required_exts=[file_type]
         )
         
-    def invoke(self) -> List[Document]:
+    def invoke(self) -> list[Document]:
         
         self.llama_parsed_docs = self.reader.load_data()  # returns List[llama doc objt]
         self.lang_parsed_docs = [d.to_langchain_format() for d in self.llama_parsed_docs]

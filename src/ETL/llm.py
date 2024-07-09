@@ -7,8 +7,8 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from dotenv import load_dotenv
 import os
 
-
 ### LLM MODElS
+""" 
 load_dotenv()
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name=os.getenv('EMBEDDING_MODEL'))
 EMBEDDING_MODEL_GPT4 = GPT4AllEmbeddings(model_name =os.getenv('EMBEDDING_MODEL_GPT4'))
@@ -16,7 +16,7 @@ LOCAL_LLM = os.getenv('LOCAL_LLM')
 
 llm = ChatOllama(model=LOCAL_LLM, format="json", temperature=0)
 gen_llm = ChatOllama(model=LOCAL_LLM, temperature=0)
-
+"""
 clasify_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant specialized in categorizing documents from the Spanish 
     "Boletín Oficial del Estado" (BOE). Your task is to classify the provided text using the specified list of labels. The posible labels are: {list_labels}
@@ -26,6 +26,7 @@ clasify_prompt = PromptTemplate(
     Text: {text} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
     input_variables=["text","list_labels"],
 )
-
 ### calsifier grader
-clasify_chain = clasify_prompt | llm | JsonOutputParser()
+# clasify_chain = clasify_prompt | llm | JsonOutputParser()
+
+

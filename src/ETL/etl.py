@@ -28,47 +28,29 @@ import ETL.nlp
 import warnings
 import matplotlib
 from ETL.utils import get_current_spanish_date_iso, setup_logging
+from databases.google_sheets import GoogleSheet
+from ETL.models import ClassifyChunk
 
 
 # Set the default font to DejaVu Sans
 matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
-
 # Suppress the specific FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
-
-
-# Load environment variables from .env file
-load_dotenv()
-
-
-# Set environment variables
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
-os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
-os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
-os.environ['EMBEDDING_MODEL'] = os.getenv('EMBEDDING_MODEL')
-
-
-# Tokenizers
-TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
-tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
-TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
-tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
-
-# Embedding model
-EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name=os.getenv('EMBEDDING_MODEL'))
-
 
 # Logging configuration
 logger = logging.getLogger("ETL_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Tokenizers
+TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
+tokenizer_gpt2 = GPT2Tokenizer.from_pretrained('gpt2')
+TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
+tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
 
 
 class Storer:
@@ -206,13 +188,14 @@ class LabelGenerator:
 
 
 class Pipeline:
-    def __init__(self, config_path: str):
+    def __init__(self, config_path: str, database : GoogleSheet):
         self.config_path = config_path
         self.config = self._parse_config()
         self.parser = self._create_parser()
         self.splitter = self._create_splitter()
         self.label_generator = self._create_label_generator()
         self.storer = self._create_storer()
+        self.database = database
 
     def _parse_config(self) -> Dict:
         if not os.path.exists(self.config_path):
@@ -232,7 +215,7 @@ class Pipeline:
             api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
         )
 
-    def _create_processor(self, docs: List[Document]) -> nlp.BoeProcessor:
+    def _create_processor(self, docs: List[Document]) -> ETL.nlp.BoeProcessor:
         txt_process_config = self.config.get('TextPreprocess', None)
         if txt_process_config is not None:
             spc_words = txt_process_config.get('spc_words', None)
@@ -315,7 +298,7 @@ class Pipeline:
         splitter_config = self.config.get('splitter', {})
         return ETL.splitters.Splitter(
             chunk_size=splitter_config.get('chunk_size', 200),
-            embedding_model=self._get_embd_model(embd_model=splitter_config.get('embedding_model', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')),
+            embedding_model=self._get_embd_model(embd_model=splitter_config.get('embedding_model', str(os.getenv('EMBEDDING_MODEL')))),
             tokenizer_model=self._get_tokenizer(tokenizer_model=splitter_config.get('tokenizer_model', 'LLAMA3')),
             threshold=splitter_config.get('threshold', 75),
             max_tokens=splitter_config.get('max_tokens', 500),
@@ -356,9 +339,9 @@ class Pipeline:
 
     def _get_embd_model(self, embd_model: str):
         embd_available = {
-            'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2': HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+            str(os.getenv('EMBEDDING_MODEL')): HuggingFaceEmbeddings(model_name=str(os.getenv('EMBEDDING_MODEL')))
         }
-        return embd_available.get(embd_model, HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"))
+        return embd_available.get(embd_model, HuggingFaceEmbeddings(model_name=str(os.getenv('EMBEDDING_MODEL'))))
 
     def get_dataframe(self,docs :List[Document]) -> pd.DataFrame:
         texts = [d.page_content for d in docs]
@@ -388,6 +371,17 @@ class Pipeline:
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
+        # Saving in bbdd [google sheets]
+        for doc in labeled_docs:
+            record = {"text": doc.page_content}
+            record.update(doc.metadata)
+            logger.info(f"Prev the insertion in BBDD -> {record}")
+            chunk = ClassifyChunk(**record)
+            self.database.write_data(
+                            range=self.database.get_last_row_range(), 
+                            values=[GoogleSheet.get_record(chunk=chunk)]
+                            )
+        logger.info(f"Inserting into BBDD -> {chunk}")
         return labeled_docs
     
         

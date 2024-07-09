@@ -24,23 +24,8 @@ import logging
 from copy import deepcopy
 import matplotlib
 
-
 # Set the default font to DejaVu Sans
 matplotlib.rcParams['font.family'] = 'DejaVu Sans'
-
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Set environment variables
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
-os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
-os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
 # Logging configuration
 logger = logging.getLogger("nlp_module_logger")  # Child logger [for this module]

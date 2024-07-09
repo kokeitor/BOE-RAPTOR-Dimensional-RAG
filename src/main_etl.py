@@ -4,6 +4,7 @@ from termcolor import colored
 from dotenv import load_dotenv
 from ETL.utils import get_current_spanish_date_iso, setup_logging
 from ETL.etl import Pipeline
+from databases.google_sheets import GoogleSheet
 
 
 # Logging configuration
@@ -35,13 +36,26 @@ def main() -> None:
     os.environ['EMBEDDING_MODEL'] = os.getenv('EMBEDDING_MODEL')
     os.environ['EMBEDDING_MODEL_GPT4'] = os.getenv('EMBEDDING_MODEL_GPT4')
     os.environ['LOCAL_LLM'] = os.getenv('LOCAL_LLM')
+    os.environ['LOCAL_LLM'] = os.getenv('GOOGLE_BBDD_FILE_NAME_CREDENTIALS')
+    os.environ['GOOGLE_DOCUMENT_NAME'] = os.getenv('GOOGLE_DOCUMENT_NAME')
+    os.environ['GOOGLE_SHEET_NAME'] = os.getenv('GOOGLE_SHEET_NAME')
  
         
     # Logger set up
     setup_logging()
     
+    # BBDD google sheet
+    GOOGLE_SECRETS_FILE_NAME = os.path.join('.secrets',os.getenv('GOOGLE_BBDD_FILE_NAME_CREDENTIALS')) # only for local performance
+    GOOGLE_DOCUMENT_NAME = os.environ['GOOGLE_DOCUMENT_NAME']# google sheet document name
+    GOOGLE_SHEET_NAME = os.environ['GOOGLE_SHEET_NAME'] # google sheet name
+    logger.info(f"Secrets BBDD path : {GOOGLE_SECRETS_FILE_NAME=}")
+    
+    # Google Sheet database object
+    # bbdd_credentials = st.secrets["google"]["google_secrets"] # Google api credentials [drive and google sheets as bddd]
+    BBDD = GoogleSheet(credentials=GOOGLE_SECRETS_FILE_NAME, document=GOOGLE_DOCUMENT_NAME, sheet_name=GOOGLE_SHEET_NAME)
+    
     ETL_CONFIG_PATH = os.path.join(os.path.abspath("./config/etl"),"etl.json")
-    pipeline = Pipeline(config_path=ETL_CONFIG_PATH)
+    pipeline = Pipeline(config_path=ETL_CONFIG_PATH, database=BBDD)
     result = pipeline.run()
 
     text = """ En este apartado se valorará, en su caso, el grado reconocido como personal
