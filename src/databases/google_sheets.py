@@ -3,7 +3,7 @@ import pandas as pd
 import logging
 from typing import Union
 from ETL.models import ClassifyChunk
-from ETL.utils import get_current_spanish_date_iso, get_id
+from ETL.utils import get_current_spanish_date_iso
 
 
 # Logger initializer

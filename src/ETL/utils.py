@@ -40,3 +40,6 @@ def parse_config(config_path) -> dict:
     with open(config_path, encoding='utf-8') as file:
         config = json.load(file)
     return config
+
+def get_id() -> str:
+    return str(uuid.uuid4())
