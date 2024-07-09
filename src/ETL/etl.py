@@ -119,7 +119,7 @@ class LabelGenerator:
             template="""You are an assistant specialized in categorizing documents from the SpanishcBoletín Oficial del Estado (BOE).\n
             Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
             You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
-            Provide the values as a JSON with three keys : 'Label_1','Label_2','Label_3'and for each label two keys : "Label" for the the label name and "Score" the similarity score value.\n
+            Provide the output as a JSON with three keys : 'Label1','Label2','Label3'and for each label another two keys : "Label" and "Score" the similarity score value.\n
             Text: {text}""",
             input_variables=["text", "labels"]
         )
@@ -127,7 +127,7 @@ class LabelGenerator:
             template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).\n
             Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
             You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
-            Provide the values as a JSON with three keys : 'Label_1','Label_2','Label_3'and for each label two keys : "Label" for the the label name and "Score" the similarity score value.\n
+            Provide the output as a JSON with three keys : 'Label1','Label2','Label3'and for each label another two keys : "Label" and "Score" the similarity score value.\n
             <|eot_id|><|start_header_id|>user<|end_header_id|>
             Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
             input_variables=["text", "labels"]
@@ -182,12 +182,12 @@ class LabelGenerator:
             logger.info(f"Generation by model : {generation}")
 
             try:
-                doc.metadata['label_1_label'] = generation["Label_1"]["Label"]
-                doc.metadata['label_1_score'] = generation["Label_1"]["Score"]
-                doc.metadata['label_2_label'] = generation["Label_2"]["Label"]
-                doc.metadata['label_2_score'] = generation["Label_2"]["Score"]
-                doc.metadata['label_3_label'] = generation["Label_3"]["Label"]
-                doc.metadata['label_3_score'] = generation["Label_3"]["Score"]
+                doc.metadata['label_1_label'] = generation["Label1"]["Label"]
+                doc.metadata['label_1_score'] = generation["Label1"]["Score"]
+                doc.metadata['label_2_label'] = generation["Label2"]["Label"]
+                doc.metadata['label_2_score'] = generation["Label2"]["Score"]
+                doc.metadata['label_3_label'] = generation["Label3"]["Label"]
+                doc.metadata['label_3_score'] = generation["Label3"]["Score"]
             except Exception as e:
                 doc.metadata['label_1_label'] = 'ERROR'
                 doc.metadata['label_1_score'] = 0
