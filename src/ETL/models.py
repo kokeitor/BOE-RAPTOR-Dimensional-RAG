@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
 
 class ClassifyChunk(BaseModel):
@@ -11,9 +11,9 @@ class ClassifyChunk(BaseModel):
     creation_date: Optional[str] = None
     last_modified_date: Optional[str] = None
     fecha_publicacion_boe: Optional[str] = None
-    orden: Optional[list[str]] = None
-    real_decreto: Optional[list[str]] = None
-    ministerios: Optional[list[str]] = None
+    orden: Union[list[str],str, None] = None
+    real_decreto: Union[list[str],str,None] = None
+    ministerios: Union[list[str],str, None] = None
     pdf_id: Optional[str] = None
     chunk_id: Optional[str] = None
     num_tokens: Optional[float] = None
