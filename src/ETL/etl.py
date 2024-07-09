@@ -194,19 +194,30 @@ class LabelGenerator:
             doc.metadata['num_caracteres'] = chunk_len
 
             # Generate labels
+            generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
+
             try:
-                generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
-                if generation.keys() < LabelGenerator.LABELS.split(','):
-                    for key,value in generation.items():
-                        if key not in LabelGenerator.LABELS.split(','):
-                            generation[key] = 0
-                        else:
-                            generation[key] = value
+                generated_labels = self.chain.invoke({"text": chunk_text, "labels": ','.join(self.labels)})
+                
+                if isinstance(generated_labels, dict):
+                    # Update only the existing keys in the generation dictionary
+                    for key, value in generated_labels.items():
+                        if key in generation:
+                            generation[key] = str(value)
+                else:
+                    logger.error("Model output is not a dictionary.")
+                    for key in generation.keys():
+                        generation[key] = "Model_Error: output not a json"
+
                 doc.metadata.update(generation)
                 logger.info(f"LLM output: {generation}")
+                
             except Exception as e:
-                doc.metadata['label'] = {"Model_Error": str(e)}
                 logger.exception(f"LLM Error message: {e}")
+                for key in generation.keys():
+                    generation[key] = f"Model_Error: {e}"
+                doc.metadata.update(generation)
+
             """ 
             try:
                 doc.metadata['label_1_label'] = generation["Label1"]["Label"]
