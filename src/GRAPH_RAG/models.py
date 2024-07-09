@@ -13,6 +13,7 @@ import warnings
 # Logging configuration
 logger = logging.getLogger(__name__)
 
+
 # Suppress all warnings
 warnings.filterwarnings("ignore")
 
@@ -29,6 +30,21 @@ def get_open_ai_json(temperature=0, model='gpt-3.5-turbo'):
                     model=model,
                     temperature = temperature,
                     model_kwargs={"response_format": {"type": "json_object"}},
+                    )
+    return llm
+
+
+def get_open_ai(temperature=0, model='gpt-3.5-turbo'):
+    """
+    _summary_
+    Args:
+        temperature (int, optional): _description_. Defaults to 0.
+        model (str, optional): _description_. Defaults to 'gpt-3.5-turbo'.
+    """
+    logger.info(f"Using Open AI : {model}")
+    llm = ChatOpenAI(
+                    model=model,
+                    temperature = temperature
                     )
     return llm
 

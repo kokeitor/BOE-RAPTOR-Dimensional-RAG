@@ -6,6 +6,8 @@ from langchain.schema import Document
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
+from langchain_core.runnables.config import RunnableConfig
+
 from GRAPH_RAG.graph_utils import (
                         setup_logging,
                         get_arg_parser
@@ -75,8 +77,9 @@ def main() -> None:
         # save_graph(workflow)
         logger.info("Graph and workflow created")
         
-        thread = {"configurable": {"thread_id": config_graph.thread_id}}
-        iteraciones = {"recursion_limit": config_graph.iteraciones}
+
+        # RunnableConfig
+        runnable_config = RunnableConfig(recursion_limit=config_graph.iteraciones, configurable={"thread_id":config_graph.thread_id})
         
         # itera por todos questions definidos
         for question in config_graph.user_questions:
@@ -85,7 +88,7 @@ def main() -> None:
             logger.info(f"User id question: {question.id}")
             inputs = {"question": [f"{question.user_question}"], "date" : question.date}
             
-            for event in config_graph.compile_graph.stream(inputs, iteraciones):
+            for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
                     logger.debug(f"Graph event {key} - {value}")
         

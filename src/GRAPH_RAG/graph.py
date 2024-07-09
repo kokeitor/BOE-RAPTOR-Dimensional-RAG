@@ -3,6 +3,7 @@ import os
 import logging.config
 import logging.handlers
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint import MemorySaver
 from langgraph.graph.graph import CompiledGraph
 from langchain_core.runnables.graph import CurveStyle, MermaidDrawMethod, NodeColors
 from GRAPH_RAG.base_models import (
@@ -85,7 +86,8 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 
 
 def compile_graph(graph : StateGraph) -> CompiledGraph:
-    workflow = graph.compile()
+    checkpointer = MemorySaver()
+    workflow = graph.compile(checkpointer=checkpointer)
     return workflow
 
 

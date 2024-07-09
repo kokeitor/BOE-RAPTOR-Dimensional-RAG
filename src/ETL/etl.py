@@ -27,6 +27,7 @@ import parsers
 import nlp
 import warnings
 import matplotlib
+from ETL.utils import get_current_spanish_date_iso, setup_logging
 
 
 # Set the default font to DejaVu Sans
@@ -50,6 +51,7 @@ os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
 os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+os.environ['EMBEDDING_MODEL'] = os.getenv('EMBEDDING_MODEL')
 
 
 # Tokenizers
@@ -59,29 +61,14 @@ TOKENIZER_LLAMA3 = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B")
 tokenizer_deberta = AutoTokenizer.from_pretrained("microsoft/deberta-base")
 
 # Embedding model
-EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name=os.getenv('EMBEDDING_MODEL'))
 
 
 # Logging configuration
 logger = logging.getLogger("ETL_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
-def setup_logging() -> None:
-    """
-    Function to get root parent configuration logger.
-    Child logger will pass info, debugs... log objects to parent's root logger handlers
-    """
-    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("../../../config/loggers"), "etl.json")
-    
-    with open(CONFIG_LOGGER_FILE, encoding='utf-8') as f:
-        content = json.load(f)
-    logging.config.dictConfig(content)
 
-# util functions
-def get_current_spanish_date_iso():
-    # Get the current date and time in the Europe/Madrid time zone
-    spanish_tz = pytz.timezone('Europe/Madrid')
-    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 
 class Storer:
@@ -404,57 +391,3 @@ class Pipeline:
         return labeled_docs
     
         
-def main() -> None:
-    
-    setup_logging()
-
-    ETL_CONFIG_PATH = os.path.join(os.path.abspath("../../../config/etl"),"etl.json")
-    pipeline = Pipeline(config_path=ETL_CONFIG_PATH)
-    result = pipeline.run()
-
-    text = """ En este apartado se valorará, en su caso, el grado reconocido como personal
-    funcionario de carrera en otras Administraciones Públicas o en la Sociedad Estatal de
-    Correos y Telégrafos, en el Cuerpo o Escala desde el que participa el funcionario o
-    funcionaria de carrera, cuando se halle dentro del intervalo de niveles establecido en el
-    artículo 71.1 del Real Decreto 364/1995, de 10 de marzo, para el subgrupo de titulación
-    en el que se encuentra clasificado el mismo.
-
-    En el supuesto de que el grado reconocido en el ámbito de otras Administraciones
-    Públicas o en la Sociedad Estatal de Correos y Telégrafos exceda del máximo
-    establecido en la Administración General del Estado, de acuerdo con el artículo 71 del
-    Reglamento mencionado en el punto anterior, para el subgrupo de titulación a que
-    pertenezca el funcionario o la funcionaria de carrera, deberá valorársele el grado máximo
-    correspondiente al intervalo de niveles asignado a su subgrupo de titulación en la
-    Administración General del Estado.
-
-    El funcionario o la funcionaria de carrera que considere tener un grado personal
-    consolidado, o que pueda ser consolidado durante el periodo de presentación de
-    instancias, deberá recabar del órgano o unidad a que se refiere el apartado 1 de la Base
-    Quinta, que dicha circunstancia quede expresamente reflejada en el anexo
-    correspondiente al certificado de méritos (anexo II)."""
-
-    """
-    s = Splitter(
-        embedding_model=EMBEDDING_MODEL,
-        tokenizer_model=tokenizer_llama3,
-        threshold=75,
-        max_tokens=500,
-        verbose=1,
-        buffer_size=3,
-        max_big_chunks=4,
-        splitter_mode='CUSTOM',
-        embedding_for_research='HG',
-        score_threshold_for_research=0.82,
-    )
-    doc = Document(page_content=text, metadata={"hola": '1'})
-    split_docs = s.invoke(docs=[doc])
-
-    # Example of usage:
-    pipeline = Pipeline(config_path='path_to_config.json')
-    result = pipeline.run()
-    
-    """
-    
-
-if __name__ == '__main__':
-    main()

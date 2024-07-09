@@ -11,28 +11,11 @@ from pydantic import BaseModel, Field
 import logging
 import logging.config
 import logging.handlers
-
-# Load environment variables from .env file
-load_dotenv()
-
-# BOE DOWNLOAD DATA
-BOE_WEB_URL = 'https://boe.es'
-BOE_SAVE_PATH = os.path.abspath("../../../data")
+from ETL.utils import get_current_spanish_date_iso, setup_logging
 
 # Logging configuration
 logger = logging.getLogger("Download_web_files_module")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
-
-
-def setup_logging() -> None:
-    """
-    Function to get root parent configuration logger.
-    Child logger will pass info, debugs... log objects to parent's root logger handlers
-    """
-    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("../../../config/loggers"), "download.json")
-    with open(CONFIG_LOGGER_FILE) as f:
-        content = json.load(f)
-    logging.config.dictConfig(content)
 
 
 class WebDownloadData(BaseModel):
@@ -158,27 +141,3 @@ class Downloader:
         # create file and write content
         with open(path, 'wb') as file:
             file.write(content)
-
-
-def main() -> None:
-    # set up the root logger configuration
-    setup_logging()
-
-    # set the child logger level
-    logger.setLevel(logging.INFO)
-
-    data = WebDownloadData(
-        web_url=BOE_WEB_URL,
-        local_dir=BOE_SAVE_PATH,
-        fecha_desde='2024-04-15',
-        fecha_hasta='2024-04-15',
-        batch=20
-    )
-
-    logger.info(f"Download information: {data.model_dump()}")
-    downloader = Downloader(information=data)
-    downloader.download()
-
-
-if __name__ == "__main__":
-    main()

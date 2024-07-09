@@ -23,6 +23,7 @@ from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 import logging
 import matplotlib
+from ETL.utils import get_current_spanish_date_iso, setup_logging
 
 
 # Set the default font to DejaVu Sans
@@ -54,12 +55,6 @@ EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraph
 # Logging configuration
 logger = logging.getLogger("splitters_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
-
-# util functions
-def get_current_spanish_date_iso():
-    # Get the current date and time in the Europe/Madrid time zone
-    spanish_tz = pytz.timezone('Europe/Madrid')
-    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 
 class CustomSemanticSplitter:

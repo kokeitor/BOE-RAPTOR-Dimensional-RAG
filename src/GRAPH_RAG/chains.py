@@ -2,6 +2,7 @@ import logging
 import logging.config
 import logging.handlers
 from typing import List, Dict
+from pydantic import BaseModel, Field
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
@@ -32,3 +33,21 @@ def get_chain(
     chain = prompt_template | model | parser()
     
     return chain
+  
+def get_structured_chain( 
+                output_model : BaseModel,
+                prompt_template: str, 
+                get_model: callable = get_nvdia,
+                temperature : float = 0.0
+              ) -> LLMChain:
+    """Retorna la langchain chain con una estructura de salida fijada por un basemodel.
+    De esta forma no es necesario un parser"""
+    if not prompt_template and not isinstance(prompt_template,PromptTemplate):
+      raise LangChainError()
+    
+    logger.info(f"Initializing Structured LangChain Chain using : {get_model.__name__}")
+    model = get_model(temperature=temperature)
+    structured_llm_model = model.with_structured_output(output_model)
+    structured_chain = prompt_template | structured_llm_model 
+    
+    return structured_chain

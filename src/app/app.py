@@ -61,22 +61,21 @@ def run_app(config_graph : ConfigGraph) -> None:
         logger.warning(f"Type {type(config_graph.compile_graph.stream(inputs, config_graph.iteraciones))}")
         logger.warning(f"Type {type(config_graph)}")
         logger.warning(f"Type {type(config_graph.compile_graph)}")
+        
+        # state = config_graph.compile_graph.invoke(inputs)
+        # response = state["generation"]
+        
+        stream_iterator = config_graph.compile_graph.stream(inputs) # final_report -> report
+        for event in stream_iterator:
+            logger.info(f"event : {event}")
 
-        for event in config_graph.compile_graph.stream(inputs, config_graph.iteraciones):
-            logger.info(f"Graph event {event}")
-            
-            for key , value in event.items():
-                logger.info(f"Graph event {key} - {value}")
-                
-
-        return value
-
+        return stream_iterator
     
     
     # session state
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = [
-            AIMessage(content="Hello, I am a bot. How can I help you?"),
+            AIMessage(content="Hola, Soy el BOE bot. ¿Qué necesitas?"),
         ]
 
         
@@ -98,8 +97,9 @@ def run_app(config_graph : ConfigGraph) -> None:
             st.markdown(user_query)
 
         with st.chat_message("AI"):
-            # ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
-            ai_response = get_response(user_query, st.session_state.chat_history)
-            st.write(ai_response)
+
+            # ai_response = get_response(user_query, st.session_state.chat_history)
+            # st.write(ai_response)
+            ai_response = st.write_stream(get_response(user_query, st.session_state.chat_history))
 
         st.session_state.chat_history.append(AIMessage(content=ai_response))

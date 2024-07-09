@@ -767,3 +767,13 @@ Cuarenta y cinco. La incidencia e
 [INFO|etl|L199] 2024-06-10 00:48:07: Generating labels with model : GPT // using : <Encoding 'cl100k_base'>
 [INFO|etl|L200] 2024-06-10 00:48:07: Generation by model : {'Label_1': {'Label': 'Nombramientos y Ceses', 'Score': 0.85}, 'Label_2': {'Label': 'Publicaciones por Órgano Emisor', 'Score': 0.75}, 'Label_3': {'Label': 'Documentos y Comunicaciones Específicas', 'Score': 0.65}}
 [WARNING|etl|L186] 2024-06-10 00:48:07: Reached max samples : 10 parameter while generating labels
+[INFO|main_download|L40] 2024-07-09 16:13:08: Download information: {'web_url': 'None', 'local_dir': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data', 'fecha_desde': '2024-04-15', 'fecha_hasta': '2024-04-15', 'batch': 210, 'dw_files_paths': []}
+[INFO|download|L38] 2024-07-09 16:13:08: Destino local : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias
+[INFO|download|L45] 2024-07-09 16:13:08: Fecha inicio descarga : 2024-04-15 00:00:00
+[INFO|download|L46] 2024-07-09 16:13:08: Fecha fin descarga: 2024-04-15 00:00:00
+[INFO|download|L61] 2024-07-09 16:13:08: Solicitando None/diario_boe/xml.php?id=BOE-S-20240415 --> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\index.xml
+[INFO|main_download|L42] 2024-07-09 16:13:40: Download information: {'web_url': 'None', 'local_dir': 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data', 'fecha_desde': '2024-04-15', 'fecha_hasta': '2024-04-15', 'batch': 210, 'dw_files_paths': []}
+[INFO|download|L38] 2024-07-09 16:13:40: Destino local : C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias
+[INFO|download|L45] 2024-07-09 16:13:40: Fecha inicio descarga : 2024-04-15 00:00:00
+[INFO|download|L46] 2024-07-09 16:13:40: Fecha fin descarga: 2024-04-15 00:00:00
+[INFO|download|L61] 2024-07-09 16:13:40: Solicitando None/diario_boe/xml.php?id=BOE-S-20240415 --> C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\data\boe\dias\2024\04\15\index.xml

@@ -13,6 +13,7 @@ from llama_index.core import SimpleDirectoryReader
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 import logging
+from ETL.utils import get_current_spanish_date_iso
 
 
 # Load environment variables from .env file
@@ -44,13 +45,6 @@ EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraph
 # Logging configuration
 logger = logging.getLogger("parser_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
-
-
-# util functions
-def get_current_spanish_date_iso():
-    # Get the current date and time in the Europe/Madrid time zone
-    spanish_tz = pytz.timezone('Europe/Madrid')
-    return datetime.now(spanish_tz).strftime("%Y%m%d%H%M%S")
 
 class Parser:
     def __init__(self, directory_path: str, 
