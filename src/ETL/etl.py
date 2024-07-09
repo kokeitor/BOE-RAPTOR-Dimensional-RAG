@@ -112,7 +112,7 @@ class LabelGenerator:
         self.model_label = model
         self.max_samples = max_samples
         self.tokenizer = tokenizer
-        self.labels = self.labels = labels if labels else LabelGenerator.LABELS.split(',')
+        self.labels = labels if labels is not None else LabelGenerator.LABELS.split(',')
 
         self.prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -196,6 +196,12 @@ class LabelGenerator:
             # Generate labels
             try:
                 generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+                if generation.keys() < LabelGenerator.LABELS.split(','):
+                    for key,value in generation.items():
+                        if key not in LabelGenerator.LABELS.split(','):
+                            generation[key] = 0
+                        else:
+                            generation[key] = value
                 doc.metadata.update(generation)
                 logger.info(f"LLM output: {generation}")
             except Exception as e:
