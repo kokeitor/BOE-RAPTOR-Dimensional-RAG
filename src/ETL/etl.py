@@ -112,7 +112,7 @@ class LabelGenerator:
         self.model_label = model
         self.max_samples = max_samples
         self.tokenizer = tokenizer
-        self.labels = labels if labels is not None else LabelGenerator.LABELS.split(',')
+        self.labels = labels if labels is not None else LabelGenerator.LABELS.replace("\n", "").split(',')
 
         self.prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -195,7 +195,6 @@ class LabelGenerator:
 
             # Generate labels
             generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
-
             try:
                 generated_labels = self.chain.invoke({"text": chunk_text, "labels": ','.join(self.labels)})
                 
@@ -204,13 +203,14 @@ class LabelGenerator:
                     for key, value in generated_labels.items():
                         if key in generation:
                             generation[key] = str(value)
+                    logger.info(f"LLM output: {generation}")
                 else:
-                    logger.error("Model output is not a dictionary.")
+                    logger.error(f"Model output is not a dictionary analysing -> {doc.page_content}\n {doc.metadata}")
+                    logger.error(f"LLM output: {generation}")
                     for key in generation.keys():
                         generation[key] = "Model_Error: output not a json"
-
+                        
                 doc.metadata.update(generation)
-                logger.info(f"LLM output: {generation}")
                 
             except Exception as e:
                 logger.exception(f"LLM Error message: {e}")
@@ -237,7 +237,6 @@ class LabelGenerator:
             """
 
         return docs
-
 
 
 class Pipeline:
