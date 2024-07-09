@@ -92,34 +92,33 @@ class Storer:
         full_path = os.path.join(self.store_path, name_format)
         self._store_dataframe(df,full_path, self.file_format)
         
-        
 class LabelGenerator:
-    LABELS = """Leyes Orgánicas,Reales Decretos y Reales Decretos-Leyes,Tratados y Convenios Internacionales,Leyes de Comunidades Autónomas,Reglamentos y Normativas Generales,
-    Nombramientos y Ceses,Promociones y Situaciones Especiales,Convocatorias y Resultados de Oposiciones,Anuncios de Concursos y Adjudicaciones de Plazas,
-    Ayudas, Subvenciones y Becas,Convenios Colectivos y Cartas de Servicio,Planes de Estudio y Normativas Educativas,Convenios Internacionales y Medidas Especiales,
-    Edictos y Notificaciones Judiciales,Procedimientos y Citaciones Judiciales,Licitaciones y Adjudicaciones Públicas,Avisos y Notificaciones Oficiales,
-    Anuncios Comerciales y Convocatorias Privadas,Sentencias y Autos del Tribunal Constitucional,Orden de Publicaciones y Sumarios,Publicaciones por Órgano Emisor,
-    Jerarquía y Autenticidad de Normativas,Publicaciones en Lenguas Cooficiales,Interpretaciones y Documentos Oficiales,Informes y Comunicaciones de Interés General,
-    Documentos y Estrategias Nacionales,Medidas de Emergencia y Seguridad Nacional,Anuncios de Regulaciones Específicas,Normativas Temporales y Urgentes,
-    Medidas y Políticas Sectoriales,Todos los Tipos de Leyes (Nacionales y Autonómicas),Todos los Tipos de Decretos (Legislativos y no Legislativos),
+    LABELS = """Leyes Orgánicas,Reales Decretos y Reales Decretos-Leyes,Tratados y Convenios Internacionales,
+    Leyes de Comunidades Autónomas,Reglamentos y Normativas Generales,Nombramientos y Ceses,
+    Promociones y Situaciones Especiales,Convocatorias y Resultados de Oposiciones,Anuncios de Concursos y Adjudicaciones de Plazas,
+    Ayudas, Subvenciones y Becas,Convenios Colectivos y Cartas de Servicio,Planes de Estudio y Normativas Educativas,
+    Convenios Internacionales y Medidas Especiales,Edictos y Notificaciones Judiciales,Procedimientos y Citaciones Judiciales,
+    Licitaciones y Adjudicaciones Públicas,Avisos y Notificaciones Oficiales,Anuncios Comerciales y Convocatorias Privadas,
+    Sentencias y Autos del Tribunal Constitucional,Orden de Publicaciones y Sumarios,Publicaciones por Órgano Emisor,
+    Jerarquía y Autenticidad de Normativas,Publicaciones en Lenguas Cooficiales,Interpretaciones y Documentos Oficiales,
+    Informes y Comunicaciones de Interés General,Documentos y Estrategias Nacionales,Medidas de Emergencia y Seguridad Nacional,
+    Anuncios de Regulaciones Específicas,Normativas Temporales y Urgentes,Medidas y Políticas Sectoriales,
+    Todos los Tipos de Leyes (Nacionales y Autonómicas),Todos los Tipos de Decretos (Legislativos y no Legislativos),
     Convocatorias y Resultados Generales (Empleo y Educación),Anuncios y Avisos (Oficiales y Privados),
-    Judicial y Procedimientos Legales,Sentencias y Declaraciones Judiciales,Publicaciones Multilingües y Cooficiales,Informes y Estrategias de Política,
-    Emergencias Nacionales y Medidas Excepcionales,Documentos y Comunicaciones Específicas"""
+    Judicial y Procedimientos Legales,Sentencias y Declaraciones Judiciales,Publicaciones Multilingües y Cooficiales,
+    Informes y Estrategias de Política,Emergencias Nacionales y Medidas Excepcionales,Documentos y Comunicaciones Específicas"""
 
-    def __init__(self, tokenizer = TOKENIZER_GPT3, labels: Optional[List[str]] = None, model: str = 'GPT', max_samples: int = 10):
+    def __init__(self, tokenizer, labels: Optional[List[str]] = None, model: str = 'GPT', max_samples: int = 10):
         self.model_label = model
         self.max_samples = max_samples
         self.tokenizer = tokenizer
-        if labels is None:
-            self.labels = LabelGenerator.LABELS
-        else:
-            self.labels = labels
+        self.labels = self.labels = labels if labels else LabelGenerator.LABELS.split(',')
 
         self.prompt = PromptTemplate(
-            template="""You are an assistant specialized in categorizing documents from the SpanishcBoletín Oficial del Estado (BOE).\n
-            Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
-            You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
-            Provide the output as a JSON with three keys : 'Label1','Label2','Label3'and for each label another two keys : "Label" and "Score" the similarity score value.\n
+            template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide three possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
+            Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
             Text: {text}""",
             input_variables=["text", "labels"]
         )
@@ -132,57 +131,58 @@ class LabelGenerator:
             input_variables=["text", "labels"]
         )
         self.llama_prompt = PromptTemplate(
-            template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).\n
-            Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
-            You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
-            Provide the output as a JSON with three keys : 'Label1','Label2','Label3'and for each label another two keys : "Label" and "Score" the similarity score value.\n
-            <|eot_id|><|start_header_id|>user<|end_header_id|>
-            Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+            template="""systemYou are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide three possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
+            Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
+            user
+            Text: {text}assistant""",
             input_variables=["text", "labels"]
         )
         self.alternative_llama_prompt = PromptTemplate(
-            template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            template="""systemYou are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
             Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
             You must provide 10 possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 100.
             The scores for the rest of the labels must be 0. Provide the output as a JSON with the label names as keys and their similarity scores as values.
-            <|eot_id|><|start_header_id|>user<|end_header_id|>
-            Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+            user
+            Text: {text}assistant""",
             input_variables=["text", "labels"]
         )
+
         models = {
-            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0,model_kwargs={"response_format": {"type": "json_object"}}),
+            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0),
             'NVIDIA-LLAMA3': ChatNVIDIA(model_name='meta/llama3-70b-instruct', temperature=0),
             'LLAMA': ChatOllama(model='llama3', format="json", temperature=0),
             'LLAMA-GRADIENT': ChatOllama(model='llama3-gradient', format="json", temperature=0)
         }
 
         self.model = models.get(self.model_label, None)
-        if self.model is None:
-            logger.exception("AttributeError : Model Name not correct")
+        if not self.model:
+            logger.error("Model Name not correct")
             raise AttributeError("Model Name not correct")
 
         if self.model_label == "NVIDIA-LLAMA3":
             self.chain = self.alternative_llama_prompt | self.model | JsonOutputParser()
         elif self.model_label == "GPT":
             self.chain = self.alternative_prompt | self.model | JsonOutputParser()
-            
+        else:
+            self.chain = self.llama_prompt | self.model | JsonOutputParser()
+
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
-        try :
+        try:
             enc = tiktoken.get_encoding("cl100k_base")
-            num_tokens = len(enc.encode(text))
+            return len(enc.encode(text))
         except Exception as e:
-            num_tokens = len(self.tokenizer(text)["input_ids"])
-            logger.exception(f"{e}")
-        return num_tokens
+            logger.exception(f"Tokenization error: {e}")
+            return len(self.tokenizer(text)["input_ids"])
 
     def invoke(self, docs: List[Document]) -> List[Document]:
-        
         docs_copy = docs.copy()
         
         for i, doc in enumerate(docs_copy):
             if i >= self.max_samples:
-                logger.warning(f"Reached max samples : {self.max_samples} parameter while generating labels")
+                logger.warning(f"Reached max samples: {self.max_samples} while generating labels")
                 break
 
             chunk_text = doc.page_content
@@ -194,18 +194,14 @@ class LabelGenerator:
             doc.metadata['num_caracteres'] = chunk_len
 
             # Generate labels
-            generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
-            logger.info(f"Generating labels with model : {self.model_label} // using : {self.tokenizer}")
-            logger.info(f"Generation by model : {generation}")
-            
             try:
-                doc.metadata['label_scores'] = generation
-                logger.info(f"LLM output {generation=}")
+                generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+                doc.metadata.update(generation)
+                logger.info(f"LLM output: {generation}")
             except Exception as e:
-                doc.metadata['label'] = {"Model_Errro": e}
-                logger.exception(f"LLM Error message:  : {e}")
-                
-           """ 
+                doc.metadata['label'] = {"Model_Error": str(e)}
+                logger.exception(f"LLM Error message: {e}")
+            """ 
             try:
                 doc.metadata['label_1_label'] = generation["Label1"]["Label"]
                 doc.metadata['label_1_score'] = generation["Label1"]["Score"]
@@ -221,9 +217,10 @@ class LabelGenerator:
                 doc.metadata['label_3_label'] = 'ERROR'
                 doc.metadata['label_3_score'] = 0
                 logger.exception(f"LLM Error message:  : {e}")
-           """
+            """
 
         return docs
+
 
 
 class Pipeline:

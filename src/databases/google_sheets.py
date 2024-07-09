@@ -52,9 +52,9 @@ class GoogleSheet:
             chunk.label_3_score
         ]
 
-    def exponential_backoff(self, func, *args, max_retries=self.max_retries, **kwargs):
+    def exponential_backoff(self, func, *args, **kwargs):
         retries = 0
-        while retries < max_retries:
+        while retries < self.api_call_max_tries:
             try:
                 return func(*args, **kwargs)
             except gspread.exceptions.APIError as e:
