@@ -1,6 +1,6 @@
 {
   "parser": {
-    "directory_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boe\\dias\\2024\\04\\15",
+    "directory_path": "./data/boe/dias/2024/04/15",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
@@ -8,7 +8,7 @@
   },
   "splitter": {
               "chunk_size": 200,
-              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\splitter",
+              "storage_path":"./data/figures/splitter",
               "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
               "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
               "threshold": 75,
@@ -50,15 +50,15 @@
                             "apply":true,
                             "delete": false,
                             "plot": true,
-                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text"
+                            "storage_path":"./data/figures/text"
                                       },
                         "bow": { 
                             "apply":true,
-                            "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow"
+                            "storage_path":"./data/figures/text/bow"
                                 },
                         "bow_tf_idf": {
                               "apply":true,
-                              "storage_path":"C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures\\text\\bow_tf_idf"
+                              "storage_path":"./data/figures/text/bow_tf_idf"
                                       }
                       }
   },
@@ -69,7 +69,7 @@
     "max_samples": 10
   },
   "storer": {
-    "store_path": "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boedataset",
+    "store_path": "./data/boedataset",
     "file_name":"train_calpe",
     "file_format": "parquet"
   }

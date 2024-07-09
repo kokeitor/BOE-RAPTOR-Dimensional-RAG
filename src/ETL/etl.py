@@ -224,7 +224,7 @@ class Pipeline:
     def _create_parser(self) -> parsers.Parser:
         parser_config = self.config.get('parser', {})
         return parsers.Parser(
-            directory_path=parser_config.get('directory_path', ''),
+            directory_path=os.path.abspath(parser_config.get('directory_path', './data/boe/dias/')),
             file_type=parser_config.get('file_type', '.pdf'),
             recursive_parser=parser_config.get('recursive_parser', True),
             result_type=parser_config.get('result_type', 'markdown'),
@@ -273,7 +273,7 @@ class Pipeline:
                     elif method_key == 'lemmatizer':
                         processor = processor.lemmatize()
                     elif method_key == 'custom_del':
-                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/process"))
+                        path = os.path.abspath(method_vals.get("storage_path","./data/figures/text/process"))
                         abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
                         logger.info(f"Path to save plot 'custom_del' : {abs_path_name}")
                         _, _ = processor.custom_del(
@@ -284,7 +284,7 @@ class Pipeline:
                             storage_path=abs_path_name
                         )
                     elif method_key == 'bow':
-                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/bow"))
+                        path = os.path.abspath(method_vals.get("storage_path","./data/figures/text/bow"))
                         abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
                         logger.info(f"Path to save plot 'bow' : {abs_path_name}")
                         self.save_figure_from_df(
@@ -293,7 +293,7 @@ class Pipeline:
                             method='BOW'
                         )
                     elif method_key == 'bow_tf_idf':
-                        path = method_vals.get("storage_path", os.path.abspath("../../../data/figures/text/bow"))
+                        path = os.path.abspath(method_vals.get("storage_path", "./data/figures/text/bow"))
                         abs_path_name = os.path.join(path, f"{get_current_spanish_date_iso()}.png")
                         logger.info(f"Path to save plot 'bow_tf_idf' : {abs_path_name}")
                         self.save_figure_from_df(
@@ -323,7 +323,7 @@ class Pipeline:
             buffer_size=splitter_config.get('buffer_size', 3),
             max_big_chunks=splitter_config.get('max_big_chunks', 4),
             splitter_mode=splitter_config.get('splitter_mode', 'CUSTOM'),
-            storage_path=splitter_config.get('storage_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\figures'),
+            storage_path=os.path.abspath(splitter_config.get('storage_path', "./data/figures/splitter")),
             min_initial_chunk_len=splitter_config.get('min_initial_chunk_len',50)
         )
 
@@ -339,7 +339,7 @@ class Pipeline:
     def _create_storer(self) -> Storer:
         storer_config = self.config.get('storer', {})
         return Storer(
-            store_path=storer_config.get('store_path', 'C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyecto\\data\\boedataset'),
+            store_path=os.path.abspath(storer_config.get('store_path', './data/boedataset')),
             file_name=storer_config.get('file_name', 'data'),
             file_format=storer_config.get('file_format', 'csv')
         )
