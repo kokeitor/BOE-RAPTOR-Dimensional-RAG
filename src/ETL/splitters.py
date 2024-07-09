@@ -68,7 +68,7 @@ class CustomSemanticSplitter:
                  verbose: int = 0, 
                  max_tokens: int = 500, 
                  max_big_chunks: int = 3,
-                 storage_path : str = "C:\\Users\\Jorge\\Desktop\\MASTER_IA\\TFM\\proyectoCHROMADB\\data\\figures",
+                 storage_path : str = "./data/figures",
                  min_initial_chunk_len : int = 50):
 
         self.buffer_size = buffer_size
@@ -79,7 +79,7 @@ class CustomSemanticSplitter:
         self.verbose = verbose
         self.threshold = threshold
         self.namespace_id = uuid.NAMESPACE_DNS
-        self.storage_path = storage_path
+        self.storage_path = os.path.abspath(storage_path)
         self.min_initial_chunk_len = min_initial_chunk_len
 
     def _prepare_texts(self, doc: Document) -> List[Dict]:

@@ -70,7 +70,7 @@
   },
   "storer": {
     "store_path": "./data/boedataset",
-    "file_name":"train_calpe",
+    "file_name":"train_test",
     "file_format": "parquet"
   }
 }
