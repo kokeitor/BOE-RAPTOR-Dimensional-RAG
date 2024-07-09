@@ -384,17 +384,20 @@ class Pipeline:
         split_docs = self.splitter.invoke(processed_docs)
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
-        # Saving in bbdd [google sheets]
-        for doc in labeled_docs:
-            record = {"text": doc.page_content}
-            record.update(doc.metadata)
-            logger.info(f"Prev the insertion in BBDD -> {record}")
-            chunk = ClassifyChunk(**record)
-            self.database.write_data(
-                            range=self.database.get_last_row_range(), 
-                            values=[GoogleSheet.get_record(chunk=chunk)]
-                            )
-        logger.info(f"Inserting into BBDD -> {chunk}")
+        # Saving in bbdd [google sheets] -> only if we have less than 20 docs because of too much googlw sheets api calls
+        self.database_config = self.config.get("google_sheet_database", None)
+        self.api_max_tries = self.database_config.get("api_call_max_tries", 10)
+        if labeled_docs < self.api_max_tries:
+            for doc in labeled_docs:
+                record = {"text": doc.page_content}
+                record.update(doc.metadata)
+                logger.info(f"Prev the insertion in BBDD -> {record}")
+                chunk = ClassifyChunk(**record)
+                self.database.write_data(
+                                range=self.database.get_last_row_range(), 
+                                values=[GoogleSheet.get_record(chunk=chunk)]
+                                )
+            logger.info(f"Inserting into BBDD -> {chunk}")
         return labeled_docs
     
         

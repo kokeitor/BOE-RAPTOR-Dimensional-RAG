@@ -72,6 +72,9 @@
     "store_path": "./data/boedataset",
     "file_name":"train_test",
     "file_format": "parquet"
+  },
+  "google_sheet_database": {
+    "api_call_max_tries": 10
   }
 }
 
