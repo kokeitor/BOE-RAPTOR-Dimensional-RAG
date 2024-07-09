@@ -33,11 +33,6 @@ os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
 os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
 os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
 
-#util functions
-def get_current_utc_date_iso():
-    # Get the current date and time in UTC and format it directly
-    return datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
-
 
 """
 BERT_TOKENIZER = AutoTokenizer.from_pretrained("google-bert/bert-base-cased")

@@ -51,7 +51,7 @@ class GoogleSheet:
             chunk.label_3_score
         ]
 
-    def exponential_backoff(self, func, *args, max_retries=5, **kwargs):
+    def exponential_backoff(self, func, *args, max_retries=15, **kwargs):
         retries = 0
         while retries < max_retries:
             try:
