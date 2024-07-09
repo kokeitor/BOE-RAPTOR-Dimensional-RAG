@@ -22,9 +22,9 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_openai import ChatOpenAI
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
-import splitters
-import parsers
-import nlp
+import ETL.splitters
+import ETL.parsers
+import ETL.nlp
 import warnings
 import matplotlib
 from ETL.utils import get_current_spanish_date_iso, setup_logging
@@ -221,9 +221,9 @@ class Pipeline:
             config = json.load(file)
         return config
 
-    def _create_parser(self) -> parsers.Parser:
+    def _create_parser(self) -> ETL.parsers.Parser:
         parser_config = self.config.get('parser', {})
-        return parsers.Parser(
+        return ETL.parsers.Parser(
             directory_path=os.path.abspath(parser_config.get('directory_path', './data/boe/dias/')),
             file_type=parser_config.get('file_type', '.pdf'),
             recursive_parser=parser_config.get('recursive_parser', True),
@@ -238,7 +238,7 @@ class Pipeline:
             spc_words = txt_process_config.get('spc_words', None)
             special_char = txt_process_config.get('spc_caracters', None)
             preprocess_task = txt_process_config.get('task_name', "Default")
-            processor = nlp.BoeProcessor(task=preprocess_task, docs=docs, spc_caracters=special_char, spc_words=spc_words)
+            processor = ETL.nlp.BoeProcessor(task=preprocess_task, docs=docs, spc_caracters=special_char, spc_words=spc_words)
             
             txt_process_methods = txt_process_config.get('methods', None)
             logger.info(f"Configuration of TextPreprocess for task : {preprocess_task} found")
@@ -306,14 +306,14 @@ class Pipeline:
         else:
             logger.warning("Configuration of TextPreprocess not found, applying default one")
             preprocess_task = "Default process config"
-            processor = nlp.BoeProcessor(task=preprocess_task, docs=docs)
+            processor = ETL.nlp.BoeProcessor(task=preprocess_task, docs=docs)
 
         return processor
 
 
-    def _create_splitter(self) -> splitters.Splitter:
+    def _create_splitter(self) -> ETL.splitters.Splitter:
         splitter_config = self.config.get('splitter', {})
-        return splitters.Splitter(
+        return ETL.splitters.Splitter(
             chunk_size=splitter_config.get('chunk_size', 200),
             embedding_model=self._get_embd_model(embd_model=splitter_config.get('embedding_model', 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')),
             tokenizer_model=self._get_tokenizer(tokenizer_model=splitter_config.get('tokenizer_model', 'LLAMA3')),
