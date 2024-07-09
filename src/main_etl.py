@@ -39,7 +39,7 @@ def main() -> None:
     os.environ['LOCAL_LLM'] = os.getenv('GOOGLE_BBDD_FILE_NAME_CREDENTIALS')
     os.environ['GOOGLE_DOCUMENT_NAME'] = os.getenv('GOOGLE_DOCUMENT_NAME')
     os.environ['GOOGLE_SHEET_NAME'] = os.getenv('GOOGLE_SHEET_NAME')
- 
+    os.environ['NVIDIA_API_KEY'] = os.getenv('NVIDIA_API_KEY')
         
     # Logger set up
     setup_logging()

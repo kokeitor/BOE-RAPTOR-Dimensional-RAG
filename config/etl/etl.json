@@ -65,7 +65,7 @@
   "label_generator": {
     "tokenizer_model": "GPT35",
     "labels": null,
-    "model": "GPT",
+    "model": "NVIDIA-LLAMA3",
     "max_samples": 10
   },
   "storer": {

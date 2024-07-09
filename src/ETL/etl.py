@@ -30,6 +30,7 @@ import matplotlib
 from ETL.utils import get_current_spanish_date_iso, setup_logging
 from databases.google_sheets import GoogleSheet
 from ETL.models import ClassifyChunk
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
 
 # Set the default font to DejaVu Sans
@@ -115,16 +116,25 @@ class LabelGenerator:
             self.labels = labels
 
         self.prompt = PromptTemplate(
-            template="""system You are an assistant specialized in categorizing documents from the Spanish
-            Boletín Oficial del Estado (BOE). Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}
-            You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
-            Provide the values as a JSON with three keys : 'Label_1','Label_2','Label_3'and for each label two keys : "Label" for the the label name and "Score" the similarity score value.
-            user
-            Text: {text} assistant""",
+            template="""You are an assistant specialized in categorizing documents from the SpanishcBoletín Oficial del Estado (BOE).\n
+            Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
+            You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
+            Provide the values as a JSON with three keys : 'Label_1','Label_2','Label_3'and for each label two keys : "Label" for the the label name and "Score" the similarity score value.\n
+            Text: {text}""",
+            input_variables=["text", "labels"]
+        )
+        self.llama_prompt = PromptTemplate(
+            template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).\n
+            Your task is to classify the provided text using the specified list of labels. The posible labels are: {labels}\n
+            You must provide three posible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.\n
+            Provide the values as a JSON with three keys : 'Label_1','Label_2','Label_3'and for each label two keys : "Label" for the the label name and "Score" the similarity score value.\n
+            <|eot_id|><|start_header_id|>user<|end_header_id|>
+            Text: {text}<|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
             input_variables=["text", "labels"]
         )
         models = {
-            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0),
+            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0,model_kwargs={"response_format": {"type": "json_object"}}),
+            'NVIDIA-LLAMA3': ChatNVIDIA(model_name='meta/llama3-70b-instruct', temperature=0),
             'LLAMA': ChatOllama(model='llama3', format="json", temperature=0),
             'LLAMA-GRADIENT': ChatOllama(model='llama3-gradient', format="json", temperature=0)
         }
@@ -134,8 +144,11 @@ class LabelGenerator:
             logger.exception("AttributeError : Model Name not correct")
             raise AttributeError("Model Name not correct")
 
-        self.chain = self.prompt | self.model | JsonOutputParser()
-
+        if self.model_label == "NVIDIA-LLAMA3":
+            self.chain = self.llama_prompt | self.model | JsonOutputParser()
+        elif self.model_label == "GPT":
+            self.chain = self.prompt | self.model | JsonOutputParser()
+            
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
         try :
