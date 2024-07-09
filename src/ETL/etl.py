@@ -113,7 +113,7 @@ class LabelGenerator:
         self.max_samples = max_samples
         self.tokenizer = tokenizer
         _labels = labels if labels is not None else LabelGenerator.LABELS.replace("\n", "").split(',')
-        self.labels = [l.trim() for l in _labels]
+        self.labels = [l.strip() for l in _labels]
 
         self.prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
