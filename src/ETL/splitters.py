@@ -25,22 +25,12 @@ import logging
 import matplotlib
 from ETL.utils import get_current_spanish_date_iso, setup_logging
 
-
 # Set the default font to DejaVu Sans
 matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Set environment variables
-os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
-os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
-os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
-os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
+# Logging configuration
+logger = logging.getLogger("splitters_module_logger")  # Child logger [for this module]
+# LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 # Tokenizers
 TOKENIZER_GPT3 = tiktoken.encoding_for_model("gpt-3.5")
@@ -52,9 +42,6 @@ tokenizer_roberta = AutoTokenizer.from_pretrained("PlanTL-GOB-ES/roberta-base-bn
 # Embedding model
 EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
-# Logging configuration
-logger = logging.getLogger("splitters_module_logger")  # Child logger [for this module]
-# LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 
 class CustomSemanticSplitter:
