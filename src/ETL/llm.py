@@ -159,6 +159,7 @@ class LabelGenerator:
                     for key, value in generated_labels.items():
                         if key in generation:
                             generation[key] = str(value)
+                            logger.info(f"Value output by LLM : {str(value)} inserted to label : {key}")
                     logger.info(f"LLM output: {generation}")
                 else:
                     logger.error(f"Model output is not a dictionary analysing -> {doc.page_content}\n {doc.metadata}")
