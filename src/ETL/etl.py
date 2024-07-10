@@ -72,6 +72,7 @@ class Storer:
       return str(uuid.uuid4())
 
     def _store_dataframe(self, df: pd.DataFrame, path: str, file_format: str) -> None:
+        logger.info(f"Number of classify docs to store inside {file_format=} -> {df.shape}")
         if file_format == "parquet":
             df.to_parquet(path, index=False)
         elif file_format == "csv":
@@ -114,6 +115,7 @@ class LabelGenerator:
         self.tokenizer = tokenizer
         _labels = labels if labels is not None else LabelGenerator.LABELS.replace("\n", "").split(',')
         self.labels = [l.strip() for l in _labels]
+        logger.info(f"Classifier Labels -> {self.labels}")
 
         self.prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -121,7 +123,8 @@ class LabelGenerator:
             You must provide three possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
             Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
             Text: {text}""",
-            input_variables=["text", "labels"]
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
         )
         self.alternative_prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -129,7 +132,8 @@ class LabelGenerator:
             You must provide 10 possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 100.
             The scores for the rest of the labels must be 0. Provide the output as a JSON with the label names as keys and their similarity scores as values.
             Text: {text}""",
-            input_variables=["text", "labels"]
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
         )
         self.llama_prompt = PromptTemplate(
             template="""systemYou are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -138,7 +142,8 @@ class LabelGenerator:
             Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
             user
             Text: {text}assistant""",
-            input_variables=["text", "labels"]
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
         )
         self.alternative_llama_prompt = PromptTemplate(
             template="""systemYou are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
@@ -147,7 +152,8 @@ class LabelGenerator:
             The scores for the rest of the labels must be 0. Provide the output as a JSON with the label names as keys and their similarity scores as values.
             user
             Text: {text}assistant""",
-            input_variables=["text", "labels"]
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
         )
 
         models = {
@@ -159,8 +165,8 @@ class LabelGenerator:
 
         self.model = models.get(self.model_label, None)
         if not self.model:
-            logger.error("Model Name not correct")
-            raise AttributeError("Model Name not correct")
+            logger.error("Model Classifier Name not correct")
+            raise AttributeError("Model Classifier Name not correct")
 
         if self.model_label == "NVIDIA-LLAMA3":
             self.chain = self.alternative_llama_prompt | self.model | JsonOutputParser()
@@ -197,8 +203,11 @@ class LabelGenerator:
             # Generate labels
             generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
             try:
-                generated_labels = self.chain.invoke({"text": chunk_text, "labels": ','.join(self.labels)})
+                generated_labels = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+            except Exception as e:
+                logger.exception(f"LLM Error generation error message: {e}")
                 
+            try:
                 if isinstance(generated_labels, dict):
                     # Update only the existing keys in the generation dictionary
                     for key, value in generated_labels.items():
