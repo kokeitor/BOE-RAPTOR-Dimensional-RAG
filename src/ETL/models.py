@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Union
 from datetime import datetime
-from ETL.etl import LabelGenerator
+from ETL.pipeline import LabelGenerator
 
 class ClassifyChunk(BaseModel):
     text: Optional[str] = None

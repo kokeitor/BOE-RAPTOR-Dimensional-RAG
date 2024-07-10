@@ -3,7 +3,7 @@ import logging
 from termcolor import colored
 from dotenv import load_dotenv
 from ETL.utils import get_current_spanish_date_iso, setup_logging
-from ETL.etl import Pipeline
+from ETL.pipeline import Pipeline
 from databases.google_sheets import GoogleSheet
 
 
