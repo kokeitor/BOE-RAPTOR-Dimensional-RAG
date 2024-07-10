@@ -19,5 +19,5 @@ class ClassifyChunk(BaseModel):
     chunk_id: Optional[str] = None
     num_tokens: Optional[float] = None
     num_caracteres: Optional[float] = None
-    labels: dict[str,str] = Field(default={l.strip() : "0" for l in LabelGenerator.LABELS.replace("\n", "").split(',')})
+    scores: dict[str,str] = Field(default={l.strip() : "0" for l in LabelGenerator.LABELS.replace("\n", "").split(',')})
     
