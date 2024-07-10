@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional, Union
 from datetime import datetime
-from ETL.pipeline import LabelGenerator
+from ETL.llm import LabelGenerator
 
 class ClassifyChunk(BaseModel):
     text: Optional[str] = None
@@ -19,5 +19,5 @@ class ClassifyChunk(BaseModel):
     chunk_id: Optional[str] = None
     num_tokens: Optional[float] = None
     num_caracteres: Optional[float] = None
-    labels: dict[str,str] = Field(default_factory={l.strip() : "0" for l in LabelGenerator.LABELS.replace("\n", "").split(',')})
+    labels: dict[str,str] = Field(default={l.strip() : "0" for l in LabelGenerator.LABELS.replace("\n", "").split(',')})
     

@@ -10,8 +10,7 @@ import pandas as pd
 import torch.nn as nn
 import matplotlib.pyplot as plt
 from transformers import AutoTokenizer, DebertaModel, GPT2Tokenizer
-from dotenv import load_dotenv
-from typing import Dict, List, Union, Optional, ClassVar
+from typing import Union, Optional, ClassVar
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.embeddings import GPT4AllEmbeddings
@@ -19,7 +18,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_experimental.text_splitter import SemanticChunker
 from datetime import datetime, timezone
 from langchain_community.chat_message_histories import ChatMessageHistory
-from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 import logging
 import matplotlib
@@ -69,7 +67,7 @@ class CustomSemanticSplitter:
         self.storage_path = os.path.abspath(storage_path)
         self.min_initial_chunk_len = min_initial_chunk_len
 
-    def _prepare_texts(self, doc: Document) -> List[Dict]:
+    def _prepare_texts(self, doc: Document) -> list[dict]:
         
         text = doc.page_content
         self._metadata = doc.metadata.copy()
@@ -98,7 +96,7 @@ class CustomSemanticSplitter:
     def _get_id(self, text: str) -> str:
         return str(uuid.uuid5(self.namespace_id, text))
 
-    def _combine_sentences(self, sentences_to_combine: List[Dict], buffer_size: int = None) -> List[Dict]:
+    def _combine_sentences(self, sentences_to_combine: list[dict], buffer_size: int = None) -> list[dict]:
         
         if buffer_size is None:
             buffer_size = self.buffer_size
@@ -145,10 +143,10 @@ class CustomSemanticSplitter:
         return sentences
 
 
-    def _get_embeddings(self, sentences_to_embd: List[str]) -> List[float]:
+    def _get_embeddings(self, sentences_to_embd: list[str]) -> list[float]:
         return self.embedding_model.embed_documents(sentences_to_embd)
 
-    def _get_similarity(self, embeddings: List[float], similarity: str) -> List[float]:
+    def _get_similarity(self, embeddings: list[float], similarity: str) -> list[float]:
         metrics = {'COSINE': nn.CosineSimilarity(dim=0, eps=1e-08)}
         embedding_tensors = torch.tensor(embeddings)
         similarity_executer = metrics.get(similarity, None)
@@ -162,7 +160,7 @@ class CustomSemanticSplitter:
                 similarity.append(similarity[-1])  # Append the last similarity value to avoid out of range error
         return similarity
 
-    def _get_chunks(self, sentences: List[dict], threshold: int = 75) -> List[Dict]:
+    def _get_chunks(self, sentences: list[dict], threshold: int = 75) -> list[dict]:
         distances = [x["distance_to_next"] for x in sentences]
         breakpoint_distance_threshold = np.percentile(distances, threshold)
         indices_above_thresh = [i for i, x in enumerate(distances) if x > breakpoint_distance_threshold]
@@ -185,13 +183,13 @@ class CustomSemanticSplitter:
             chunks.append({'chunk_text': combined_text, 'chunk_metadata': chunk_metadata})
         return chunks
 
-    def _plot_similarity(self, pdf_id: str, sentences: List[Dict], threshold: int = 75):
+    def _plot_similarity(self, pdf_id: str, sentences: list[dict], threshold: int = 75):
         """
         Plot similarity distances between sentences and save the plots.
 
         Args:
             pdf_id (str): Identifier for the PDF document.
-            sentences (List[Dict]): List of sentence dictionaries with similarity distances.
+            sentences (list[dict]): list of sentence dictionaries with similarity distances.
             threshold (int, optional): Percentile threshold for determining significant distances. Defaults to 75.
         """
         distances = [x["distance_to_next"] for x in sentences]
@@ -251,10 +249,10 @@ class CustomSemanticSplitter:
     def _get_tokens(self, text: str) -> int:
         return len(self.tokenizer(text)["input_ids"])
 
-    def _create_docs(self, chunks: List[Dict]) -> List[Document]:
+    def _create_docs(self, chunks: list[dict]) -> list[Document]:
         return [Document(page_content=chunk_dict['chunk_text'], metadata=chunk_dict['chunk_metadata']) for chunk_dict in chunks]
 
-    def split_documents(self, docs: List[Document]) -> List[Document]:
+    def split_documents(self, docs: list[Document]) -> list[Document]:
         self.docs = docs.copy()
         self.spitted_docs = []
 
@@ -334,7 +332,7 @@ class Splitter:
         }
         return splitter_modes.get(self.splitter_mode)
 
-    def invoke(self, docs: List[Document]) -> List[Document]:
+    def invoke(self, docs: list[Document]) -> list[Document]:
         if isinstance(docs, list):
             return self.splitter.split_documents(docs)
         elif isinstance(docs, Document):

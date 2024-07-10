@@ -8,8 +8,7 @@ from nltk.data import find
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from dotenv import load_dotenv
-from typing import Dict, List, Union, Optional, Tuple, ClassVar
+from typing import Union, Optional, ClassVar
 from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.embeddings import GPT4AllEmbeddings
@@ -83,9 +82,9 @@ class TextPreprocess:
         r'[\uff66-\uff9f]'   # Half-width Katakana
     )
     task: str
-    docs: List[Document]
-    spc_caracters: Optional[List[str]] = field(default_factory=list)
-    spc_words: Optional[List[str]] = None
+    docs: list[Document]
+    spc_caracters: Optional[list[str]] = field(default_factory=list)
+    spc_words: Optional[list[str]] = None
     data: Optional[pd.DataFrame] = None
     
     def __post_init__(self):
@@ -190,8 +189,8 @@ class TextPreprocess:
         data: Optional[Union[pd.DataFrame, str]] = None,
         delete: bool = False,
         plot: bool = False
-    ) -> Tuple[dict, Union[pd.DataFrame, str]]:
-        """Method for custom preprocess/delete characters from List[texts] or text (string)"""
+    ) -> tuple[dict, Union[pd.DataFrame, str]]:
+        """Method for custom preprocess/delete characters from list[texts] or text (string)"""
         
         if data is None:
             data = self.data
@@ -319,7 +318,7 @@ class TextPreprocess:
 class BoeProcessor(TextPreprocess):
     """BOE PREPROCESS DOC AND ADD METADATA TO EACH DOC"""
 
-    def invoke(self, docs: Optional[List[Document]] = None) -> List[Document]:
+    def invoke(self, docs: Optional[list[Document]] = None) -> list[Document]:
         new_docs = []
         
         if docs is None:
@@ -351,7 +350,7 @@ class BoeProcessor(TextPreprocess):
             logger.exception("After preprocessing -> new docs list empty")
             raise ValueError("After preprocessing -> new docs lisr empty")
 
-    def reconstruct_docs(self, corpus: List[str], metadata_list: List[str]) -> List[Document]:
+    def reconstruct_docs(self, corpus: list[str], metadata_list: list[str]) -> list[Document]:
         docs = []
         for i, (text, metadata) in enumerate(zip(corpus, metadata_list)):
             logger.info(f"Page content len before preprocess for doc {i+1} : {len(text)}")
@@ -364,7 +363,7 @@ class BoeProcessor(TextPreprocess):
         """Generate a unique random id and convert it to str"""
         return str(uuid.uuid4())
 
-    def _clean_doc(self, doc: Document) -> Tuple[Dict[str, str], Document]:
+    def _clean_doc(self, doc: Document) -> tuple[dict[str, str], Document]:
         """
         Clean the document by removing specific patterns and extracting titles.
         
@@ -372,7 +371,7 @@ class BoeProcessor(TextPreprocess):
             doc (Document): The document to be cleaned.
 
         Returns:
-            Tuple[Dict[str, str], Document]: A dictionary of titles and the cleaned document.
+            tuple[dict[str, str], Document]: A dictionary of titles and the cleaned document.
         """
         doc_clean = deepcopy(doc)
         doc_text = doc_clean.page_content
@@ -383,7 +382,7 @@ class BoeProcessor(TextPreprocess):
         doc_clean.page_content = clean_text
         return titles, doc_clean
 
-    def _extract_titles(self, text: str) -> Dict[str, str]:
+    def _extract_titles(self, text: str) -> dict[str, str]:
         """
         Extract titles from the document text using predefined patterns.
         
@@ -391,7 +390,7 @@ class BoeProcessor(TextPreprocess):
             text (str): The document text to extract titles from.
 
         Returns:
-            Dict[str, str]: A dictionary of extracted titles.
+            dict[str, str]: A dictionary of extracted titles.
         """
         title_1 = r'^##(?!\#).*$'
         title_2 = r'^###(?!\#).*$'
@@ -417,23 +416,23 @@ class BoeProcessor(TextPreprocess):
 
         return {f"titulo_{i}": t for i, t in enumerate(titles_1 + titles_2 + titles_3) if t}
 
-    def _clean_titles(self, titles: List[str], patterns: List[str]) -> List[str]:
+    def _clean_titles(self, titles: list[str], patterns: list[str]) -> list[str]:
         """
         Clean the titles by removing specific patterns.
         
         Args:
-            titles (List[str]): The list of titles to be cleaned.
-            patterns (List[str]): The patterns to remove from the titles.
+            titles (list[str]): The list of titles to be cleaned.
+            patterns (list[str]): The patterns to remove from the titles.
 
         Returns:
-            List[str]: The cleaned titles.
+            list[str]: The cleaned titles.
         """
         for pattern in patterns:
             titles = [re.sub(pattern, '', t).strip() for t in titles]
             titles = [t for t in titles if t]
         return titles
 
-    def get_del_patrones(self, doc: Document) -> Tuple[str, dict]:
+    def get_del_patrones(self, doc: Document) -> tuple[str, dict]:
         """
         Cleans the document text by removing specific patterns and updating metadata.
 
@@ -441,7 +440,7 @@ class BoeProcessor(TextPreprocess):
             doc (Document): The document to clean.
 
         Returns:
-            Tuple[str, dict]: The cleaned text and updated metadata.
+            tuple[str, dict]: The cleaned text and updated metadata.
         """
         logger.info("Inside get_del_patrones method ... ")
 
@@ -525,7 +524,7 @@ class BoeProcessor(TextPreprocess):
         return new_doc
 
 
-    def _get_date_creation_doc(self, doc: Document) -> Tuple[str, Document]:
+    def _get_date_creation_doc(self, doc: Document) -> tuple[str, Document]:
         doc_copy = deepcopy(doc)
         logger.debug(f"File doc path: {doc_copy.metadata['file_path']}")
         if '/' in doc_copy.metadata["file_path"]:
@@ -539,7 +538,7 @@ class BoeProcessor(TextPreprocess):
         doc_copy.metadata["fecha_publicacion_boe"] = f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}"
         return f"{año_publicacion}-{mes_publicacion}-{dia_publicacion}", doc_copy
 
-    def _put_metadata(self, doc: Document, new_metadata: Dict[str, str]) -> Document:
+    def _put_metadata(self, doc: Document, new_metadata: dict[str, str]) -> Document:
         new_doc = deepcopy(doc)
         for key, value in new_metadata.items():
             new_doc.metadata[key] = value
