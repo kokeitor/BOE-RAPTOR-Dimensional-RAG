@@ -286,7 +286,7 @@ class Pipeline:
                                 )
                 logger.info(f"Inserting into BBDD -> {chunk}")
             else:
-                logger.warning(f"Api google sheet [database modde] limit reach -> {self.api_max_tries},\nno more chunks stored in {os.getenv('GOOGLE_DOCUMENT_NAME')},\n last stored -> {chunk=}")
+                logger.warning(f"Api google sheet [database modde] limit reach -> {self.api_max_tries},\nNo more chunks stored in {os.getenv('GOOGLE_DOCUMENT_NAME')},\nLast chunk stored -> {chunk=}")
                 break
         return labeled_docs
     
