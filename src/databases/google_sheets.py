@@ -45,7 +45,7 @@ class GoogleSheet:
             chunk.num_tokens,
             chunk.num_caracteres,
             ' # '.join([f"{label}:{label_id}" for label_id,label in chunk.label2id.items()]),
-            ' # '.join([label_id for label_id in chunk.classify_label_id])
+            ' # '.join([label_id for label_id in chunk.label])
         ]
 
     def exponential_backoff(self, func, *args, **kwargs):

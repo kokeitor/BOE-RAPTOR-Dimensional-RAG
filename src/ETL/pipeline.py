@@ -279,7 +279,6 @@ class Pipeline:
                 record.update(doc.metadata)
                 logger.info(f"Prev the insertion in BBDD -> {record}")
                 chunk = ClassifyChunk(**record)
-                chunk.scores = {key: str(doc.metadata.get(key, "0")) for key in chunk.scores.keys()}
                 self.database.write_data(
                                 range=self.database.get_last_row_range(), 
                                 values=[GoogleSheet.get_record(chunk=chunk)]
