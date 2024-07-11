@@ -20,7 +20,7 @@ def setup_logging() -> None:
     Function to get root parent configuration logger.
     Child logger will pass info, debugs... log objects to parent's root logger handlers
     """
-    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "finetune.json")
+    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "hg_hub_push.json")
     
     with open(CONFIG_LOGGER_FILE, encoding='utf-8') as f:
         content = json.load(f)

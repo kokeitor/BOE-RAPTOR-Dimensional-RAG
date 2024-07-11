@@ -207,7 +207,7 @@ class LabelGenerator:
             try:
                 id2label = []
                 for _,label in generation.items():
-                    id2label.append(str(self.label2id.get(label)),"999")
+                    id2label.append(str(self.label2id.get(label,"999")))
                 doc.metadata['label'] = id2label
             except Exception as e:
                 logger.exception(f"LLM Error message:  : {e}")
