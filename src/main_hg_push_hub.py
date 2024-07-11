@@ -19,24 +19,27 @@ def main() -> None:
     # Load environment variables from .env file
     load_dotenv()
 
-    os.environ['HG_API_KEY'] = os.getenv('HG_API_KEY')
-    os.environ['HG_REPO_DATASET_ID'] = os.getenv('HG_REPO_DATASET_ID')
-        
-# Ejemplo de uso
-if __name__ == "__main__":
+    os.environ['HG_API_KEY'] = str(os.getenv('HG_API_KEY'))
+    os.environ['HG_REPO_DATASET_ID'] = str(os.getenv('HG_REPO_DATASET_ID'))
     try:
         hg_dataset = HGDataset(
             data_dir_path="./data/boedataset", 
-            hg_api_token=os.getenv('HG_API_KEY'), 
-            repo_id=os.getenv('HG_REPO_DATASET_ID'), 
+            hg_api_token=str(os.getenv('HG_API_KEY')), 
+            repo_id=str(os.getenv('HG_REPO_DATASET_ID')), 
             from_date="2024-04-15", 
             to_date="2024-04-15",
             desire_columns=["text", "chunk_id","label"]
         )
+        
+        hg_dataset.initialize_data()
         dataset = hg_dataset.get_hg_dataset()
-        hg_dataset.hg_dataset.push_to_hub()
+        hg_dataset.push_to_hub()
         print("Dataset cargado y subido correctamente.")
     except DirectoryNotFoundError as e:
         print(e)
     except Exception as e:
         print(f"Ocurrió un error: {e}")
+        
+# Ejemplo de uso
+if __name__ == "__main__":
+    main()
