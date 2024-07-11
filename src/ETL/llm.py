@@ -201,6 +201,7 @@ class LabelGenerator:
             generation = {"label1":"","label3":"","label2":""}
             try:
                 generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+                logger.info(f"LLM output: {generation}")
             except Exception as e:
                 logger.exception(f"LLM Error generation error message: {e}")
                 
@@ -209,6 +210,7 @@ class LabelGenerator:
                 for _,label in generation.items():
                     id2label.append(str(self.label2id.get(label,"999")))
                 doc.metadata['label'] = id2label
+                logger.info(f"for doc {i} id2label : {id2label}")
             except Exception as e:
                 logger.exception(f"LLM Error message:  : {e}")
 

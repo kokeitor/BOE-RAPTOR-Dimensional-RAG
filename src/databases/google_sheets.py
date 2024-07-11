@@ -44,7 +44,7 @@ class GoogleSheet:
             chunk.chunk_id,
             chunk.num_tokens,
             chunk.num_caracteres,
-            ' # '.join([f"{label}:{label_id}" for label_id,label in chunk.label2id.items()]),
+            ' # '.join([f"{label}:{label_id}" for label,label_id in chunk.label2id.items()]),
             ' # '.join([label_id for label_id in chunk.label])
         ]
 
