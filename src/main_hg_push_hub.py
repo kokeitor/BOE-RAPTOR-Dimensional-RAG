@@ -26,15 +26,15 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         hg_dataset = HGDataset(
-            data_dir_path="ruta/al/directorio", 
-            hg_api_token="tu_token_aqui", 
-            repo_id="tu_repo_id_aqui", 
-            from_date="2024-07-12", 
-            to_date="2024-07-12",
-            desire_columns=["columna1", "columna2"]
+            data_dir_path="./data/boedataset", 
+            hg_api_token=os.getenv('HG_API_KEY'), 
+            repo_id=os.getenv('HG_REPO_DATASET_ID'), 
+            from_date="2024-04-15", 
+            to_date="2024-04-15",
+            desire_columns=["text", "chunk_id","label"]
         )
         dataset = hg_dataset.get_hg_dataset()
-        hg_dataset.push_to_hub(repo_id="tu_repo_id_aqui")
+        hg_dataset.hg_dataset.push_to_hub()
         print("Dataset cargado y subido correctamente.")
     except DirectoryNotFoundError as e:
         print(e)
