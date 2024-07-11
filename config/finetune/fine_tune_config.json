@@ -10,7 +10,7 @@
                             "validation_split_name": "validation",
                             "test_split_name": "test",
                             "remove_splits": "None",
-                            "remove_columns": "None",
+                            "remove_columns": "chunk_id",
                             "label_column_name": "label",
                             "max_seq_length": 128,
                             "overwrite_cache": false,
