@@ -66,7 +66,7 @@
     "tokenizer_model": "GPT35",
     "labels": null,
     "model": "GPT",
-    "max_samples": 110
+    "max_samples": 100
   },
   "storer": {
     "store_path": "./data/boedataset",

@@ -1,11 +1,9 @@
 import os
 import requests
-import json
 from requests import Response
 from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
-from typing import Dict, List, Tuple, Union, Optional, Callable, ClassVar
 from dataclasses import dataclass, field
 from pydantic import BaseModel, Field
 import logging
@@ -25,7 +23,7 @@ class WebDownloadData(BaseModel):
     fecha_desde: str
     fecha_hasta: str
     batch: int
-    dw_files_paths: List[str] = Field(default_factory=list)
+    dw_files_paths: list[str] = Field(default_factory=list)
 
 
 ### BOE PDF DOWNLOAD TOOL
