@@ -61,7 +61,7 @@ class LabelGenerator:
         self.tokenizer = tokenizer
         _labels = labels if labels is not None else LabelGenerator.LABELS.replace("\n", "").split(',')
         self.labels = [l.strip() for l in _labels]
-        self.label2id = {label.strip() : label_index for label,label_index in enumerate(_labels)}
+        self.label2id = {label.strip() : label_index for label_index,label in enumerate(_labels)}
         
         logger.info(f"label2id : {self.label2id}")
     
@@ -198,7 +198,7 @@ class LabelGenerator:
                 doc.metadata.update(generation)
 
             """ 
-            generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
+            generation = {"label1":"","label3":"","label2":""}
             try:
                 generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
             except Exception as e:
