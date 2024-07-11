@@ -61,13 +61,25 @@ class LabelGenerator:
         self.tokenizer = tokenizer
         _labels = labels if labels is not None else LabelGenerator.LABELS.replace("\n", "").split(',')
         self.labels = [l.strip() for l in _labels]
-        logger.info(f"Classifier Labels -> {self.labels}")
+        self.label2id = {label.strip() : label_index for label,label_index in enumerate(_labels)}
+        
+        logger.info(f"label2id : {self.label2id}")
+    
 
         self.prompt = PromptTemplate(
             template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
             Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
             You must provide three possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
             Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
+            Text: {text}""",
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
+        )
+        self.new_prompt = PromptTemplate(
+            template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide three possible labels ordered by similarity score with the text content.\n
+            Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3'.\n
             Text: {text}""",
             input_variables=["text", "labels"],
             input_types={"labels":list[str],"text":str}
@@ -82,12 +94,21 @@ class LabelGenerator:
             input_types={"labels":list[str],"text":str}
         )
         self.llama_prompt = PromptTemplate(
-            template="""systemYou are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
             Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
             You must provide three possible labels ordered by similarity score with the text content. The similarity scores must be a number between 0 and 1.
             Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3' and for each label another two keys: "Label" and "Score".
             user
             Text: {text}assistant""",
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
+        )
+        self.llama_new_prompt = PromptTemplate(
+            template="""You are an assistant specialized in categorizing documents from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            You must provide three possible labels ordered by similarity score with the text content.\n
+            Provide the output as a JSON with three keys: 'Label1', 'Label2', 'Label3'.\n
+            Text: {text}""",
             input_variables=["text", "labels"],
             input_types={"labels":list[str],"text":str}
         )
@@ -115,9 +136,9 @@ class LabelGenerator:
             raise AttributeError("Model Classifier Name not correct")
 
         if self.model_label == "NVIDIA-LLAMA3":
-            self.chain = self.alternative_llama_prompt | self.model | JsonOutputParser()
+            self.chain = self.llama_new_prompt | self.model | JsonOutputParser()
         elif self.model_label == "GPT":
-            self.chain = self.alternative_prompt | self.model | JsonOutputParser()
+            self.chain = self.new_prompt | self.model | JsonOutputParser()
         else:
             self.chain = self.llama_prompt | self.model | JsonOutputParser()
 
@@ -146,6 +167,7 @@ class LabelGenerator:
             doc.metadata['num_tokens'] = chunk_tokens
             doc.metadata['num_caracteres'] = chunk_len
 
+            """
             # Generate labels
             generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
             try:
@@ -176,22 +198,19 @@ class LabelGenerator:
                 doc.metadata.update(generation)
 
             """ 
+            generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
             try:
-                doc.metadata['label_1_label'] = generation["Label1"]["Label"]
-                doc.metadata['label_1_score'] = generation["Label1"]["Score"]
-                doc.metadata['label_2_label'] = generation["Label2"]["Label"]
-                doc.metadata['label_2_score'] = generation["Label2"]["Score"]
-                doc.metadata['label_3_label'] = generation["Label3"]["Label"]
-                doc.metadata['label_3_score'] = generation["Label3"]["Score"]
+                generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
             except Exception as e:
-                doc.metadata['label_1_label'] = 'ERROR'
-                doc.metadata['label_1_score'] = 0
-                doc.metadata['label_2_label'] = 'ERROR'
-                doc.metadata['label_2_score'] = 0
-                doc.metadata['label_3_label'] = 'ERROR'
-                doc.metadata['label_3_score'] = 0
+                logger.exception(f"LLM Error generation error message: {e}")
+                
+            try:
+                id2label = []
+                for _,label in generation.items():
+                    id2label.append(str(self.label2id.get(label)),"999")
+                doc.metadata['label'] = id2label
+            except Exception as e:
                 logger.exception(f"LLM Error message:  : {e}")
-            """
 
         return docs
 
