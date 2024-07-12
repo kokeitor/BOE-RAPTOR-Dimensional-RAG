@@ -1,6 +1,4 @@
-Aquí tienes el archivo Markdown mejorado y formateado con guiones y más información:
 
-```markdown
 # Instrucciones para Ejecutar la Herramienta
 
 ## Ejecutar Aplicación Streamlit
@@ -87,7 +85,6 @@ python src/main_etl.py
 ```sh
 python src/main_hg_push_hub.py
 ```
-```
 
 ### Explicación Adicional
 
@@ -96,5 +93,3 @@ python src/main_hg_push_hub.py
 - **Configuración de Herramienta de Descarga**: Configuración necesaria para descargar datos del BOE, incluyendo la configuración de fechas y la ruta de guardado.
 - **Ejecución de Scripts**: Comandos para ejecutar los scripts de descarga, procesamiento (ETL) y fine-tuning del modelo.
 - **Hugging Face Hub**: Comando para subir los archivos procesados a Hugging Face Hub.
-
-Este formato organizado facilita la lectura y ejecución de los comandos necesarios para trabajar con la herramienta.
