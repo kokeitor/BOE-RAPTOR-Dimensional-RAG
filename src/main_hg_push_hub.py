@@ -2,7 +2,7 @@ import os
 import logging
 from RAPTOR.exceptions import DirectoryNotFoundError
 from RAPTOR.utils import setup_logging
-from RAPTOR.hg import HGDataset
+from RAPTOR.hg_push import HGDataset
 from dotenv import load_dotenv
 
 
@@ -28,7 +28,7 @@ def main() -> None:
         repo_id=str(os.getenv('HG_REPO_DATASET_ID')), 
         from_date="2024-07-10", 
         to_date="2024-07-16",
-        desire_columns=["text", "chunk_id","label"]
+        desire_columns=["text", "chunk_id","label","pdf_id"]
     )
     
     hg_dataset.initialize_data()
