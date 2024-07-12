@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from datetime import datetime
 from pydantic import BaseModel, Field
 from RAPTOR.exceptions import DirectoryNotFoundError
+from RAPTOR.utils import get_current_spanish_date_iso
 import logging
 import logging.handlers
 from datasets import DatasetDict
@@ -66,14 +67,18 @@ class HGDataset(BaseModel):
         return combined_df
 
     def _clean_data(self, data: pd.DataFrame) -> pd.DataFrame:
+        columns_to_keep = []
         if self.desire_columns: 
             logger.info(f"Data columns : {data.columns.to_list()}")
-            if self.desire_columns in data.columns.to_list():
-                try:
-                    return data[self.desire_columns]
-                except Exception as e:
-                    logger.exception(f"clean data method exception : {e}")
-        return data
+            for col in self.desire_columns:
+                if col in data.columns.to_list():
+                    columns_to_keep.append(col)
+                    logger.info(f"Data column to keep {col} exist in file columns")
+                else:
+                    logger.warning(f"Data column to keep {col} NOT IN file columns")
+            return data[columns_to_keep]
+        else:
+            return data
 
     @staticmethod
     def parse_date(date_str: str) -> datetime:
@@ -87,26 +92,32 @@ class HGDataset(BaseModel):
         try:
             df_train_val, df_test = train_test_split(self.data, test_size=0.2, random_state=42)
             logger.info("Test df shape: %s", df_test.shape)
-            
             df_train, df_val = train_test_split(df_train_val, test_size=0.1, random_state=42)
             logger.info("Train df shape: %s", df_train.shape)
             logger.info("Validation df shape: %s", df_val.shape)
-            logger.info('---------------------------------------------------\n')
-            
             dataset = DatasetDict({
-                "train": ds.from_pandas(df_train),
-                "validation": ds.from_pandas(df_val),
-                "test": ds.from_pandas(df_test)
+                "train": ds.from_pandas(df_train, preserve_index=False),
+                "validation": ds.from_pandas(df_val, preserve_index=False),
+                "test": ds.from_pandas(df_test, preserve_index=False)
             })
 
             logger.info("\nHG DATASET: %s", dataset)
         except Exception as e:
             logger.error("Error creating HG dataset: %s", e)
             dataset = DatasetDict()
+        
+        try:
+            # Remove columns from each dataset
+            dataset_dict = DatasetDict({
+                split: dataset.remove_columns(['__index_level_0__'])
+                for split, dataset in dataset_dict.items()
+            })
+            dataset_clean = dataset_dict
+        except:
+            dataset_clean = dataset
+        return dataset_clean
 
-        return dataset
-
-    def push_to_hub(self, private: Optional[bool] = False, token: Optional[str] = None, branch: Optional[str] = None, shard_size: Optional[int] = 524288000):
+    def push_to_hub(self, private: Optional[bool] = False, token: Optional[str] = None, branch: Optional[str] = None):
         dataset = self._get_hg_dataset()
 
         if token is None:
@@ -114,6 +125,8 @@ class HGDataset(BaseModel):
 
         dataset.push_to_hub(
             repo_id=self.repo_id,
+            config_name =f"data/{get_current_spanish_date_iso()}/",
+            commit_message=f"Date of push : {get_current_spanish_date_iso()}",
             private=private,
-            token=token,
+            token=token
         )
