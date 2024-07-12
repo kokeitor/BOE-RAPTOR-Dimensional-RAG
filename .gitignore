@@ -1,10 +1,30 @@
+# Ignore virtual environment directory
 /env
+
+# Ignore documentos directory
 /documentos
+
+# Ignore data directory
 /data
+
+# Ignore environment variable files
 .env
-/__pycache__
-/src/package/__pycache__
+
+# Ignore all __pycache__ directories
+__pycache__
+**/__pycache__/
+
+# Ignore logs directory
 /logs
+
+# Ignore notebooks directory
 /src/notebooks
+
+# Ignore tests directory
 /src/tests
+
+# Ignore secrets directory
 /.secrets
+
+# Ignore specific __pycache__ directory
+/src/package/__pycache__
