@@ -26,7 +26,7 @@ def main() -> None:
         data_dir_path="./data/boedataset", 
         hg_api_token=str(os.getenv('HG_API_KEY')), 
         repo_id=str(os.getenv('HG_REPO_DATASET_ID')), 
-        from_date="2024-07-10", 
+        from_date="2024-07-11", 
         to_date="2024-07-16",
         desire_columns=["text", "chunk_id","label","pdf_id"]
     )
