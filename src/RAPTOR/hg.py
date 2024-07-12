@@ -7,7 +7,8 @@ from pydantic import BaseModel, Field
 from RAPTOR.exceptions import DirectoryNotFoundError
 import logging
 import logging.handlers
-from datasets import DatasetDict, Dataset
+from datasets import DatasetDict
+from datasets import Dataset as ds
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -26,25 +27,36 @@ class HGDataset(BaseModel):
         arbitrary_types_allowed = True
 
     def initialize_data(self):
-        self.data = self.clean_data(self.get_data())
+        self.data = self._clean_data(self._get_data())
 
-    def get_data(self) -> pd.DataFrame:
+    def _get_data(self) -> pd.DataFrame:
         if not os.path.isdir(self.data_dir_path):
             raise DirectoryNotFoundError(f"The specified directory '{self.data_dir_path}' does not exist.")
 
         dataframes = []
         for filename in os.listdir(self.data_dir_path):
-            file_date = datetime.strptime(filename.split("_")[0], '%Y%m%d%H%M%S')
-            logger.info(f"file_date parsed to correct format: {file_date}")
+            logger.info(f"filename : {filename}")
+            if "_" in filename and filename[0].isdigit():
+                try:
+                    file_date = datetime.strptime(filename.split("_")[0], '%Y%m%d%H%M%S')
+                except ValueError as e:
+                    logger.error(f"Error al parsear la fecha: {e}")
+                    continue
+                
+                logger.info(f"file_date parsed to correct format: {file_date}")
 
-            if self.parse_date(self.from_date) <= file_date <= self.parse_date(self.to_date):
-                file_path = os.path.join(self.data_dir_path, filename)
-                if filename.endswith('.csv'):
-                    df = pd.read_csv(file_path)
-                    dataframes.append(df)
-                elif filename.endswith('.parquet'):
-                    df = pd.read_parquet(file_path)
-                    dataframes.append(df)
+                if self.parse_date(self.from_date) <= file_date <= self.parse_date(self.to_date):
+                    logger.info(f"File name date {file_date} between : {self.parse_date(self.from_date)} and {self.parse_date(self.to_date)}")
+                    logger.info(f"Trying to append it")
+                    file_path = os.path.join(self.data_dir_path, filename)
+                    if filename.endswith('.csv'):
+                        df = pd.read_csv(file_path)
+                        logger.info(f"Reading CSV file : {file_path}")
+                        dataframes.append(df)
+                    elif filename.endswith('.parquet'):
+                        df = pd.read_parquet(file_path)
+                        logger.info(f"Reading parquet file : {file_path}")
+                        dataframes.append(df)
 
         if dataframes:
             combined_df = pd.concat(dataframes, ignore_index=True)
@@ -53,9 +65,14 @@ class HGDataset(BaseModel):
 
         return combined_df
 
-    def clean_data(self, data: pd.DataFrame) -> pd.DataFrame:
+    def _clean_data(self, data: pd.DataFrame) -> pd.DataFrame:
         if self.desire_columns: 
-            return data[self.desire_columns]
+            logger.info(f"Data columns : {data.columns.to_list()}")
+            if self.desire_columns in data.columns.to_list():
+                try:
+                    return data[self.desire_columns]
+                except Exception as e:
+                    logger.exception(f"clean data method exception : {e}")
         return data
 
     @staticmethod
@@ -66,7 +83,7 @@ class HGDataset(BaseModel):
         except ValueError as e:
             raise ValueError(f"Error al parsear la fecha: {e}")
 
-    def get_hg_dataset(self, split: bool = False) -> DatasetDict:
+    def _get_hg_dataset(self) -> DatasetDict:
         try:
             df_train_val, df_test = train_test_split(self.data, test_size=0.2, random_state=42)
             logger.info("Test df shape: %s", df_test.shape)
@@ -77,9 +94,9 @@ class HGDataset(BaseModel):
             logger.info('---------------------------------------------------\n')
             
             dataset = DatasetDict({
-                "train": Dataset.from_pandas(df_train),
-                "validation": Dataset.from_pandas(df_val),
-                "test": Dataset.from_pandas(df_test)
+                "train": ds.from_pandas(df_train),
+                "validation": ds.from_pandas(df_val),
+                "test": ds.from_pandas(df_test)
             })
 
             logger.info("\nHG DATASET: %s", dataset)
@@ -90,7 +107,7 @@ class HGDataset(BaseModel):
         return dataset
 
     def push_to_hub(self, private: Optional[bool] = False, token: Optional[str] = None, branch: Optional[str] = None, shard_size: Optional[int] = 524288000):
-        dataset = self.get_hg_dataset()
+        dataset = self._get_hg_dataset()
 
         if token is None:
             token = self.hg_api_token
@@ -99,6 +116,4 @@ class HGDataset(BaseModel):
             repo_id=self.repo_id,
             private=private,
             token=token,
-            branch=branch,
-            shard_size=shard_size
         )
