@@ -31,7 +31,7 @@ docker run -p 8000:8000 --name chroma chromadb/chroma
 1. **Navegar hasta el directorio root del proyecto:**
 
 ```sh
-cd C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto
+cd ...\proyecto
 ```
 
 2. **Configurar herramienta de descarga (archivo de configuración JSON):**
