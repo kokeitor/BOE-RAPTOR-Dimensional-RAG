@@ -3,8 +3,10 @@
 
 ## Ejecutar Aplicación Streamlit
 
+streamlit run app [fuera de src dir (siempre desde root project y con virtual env activo)] :
+
 ```sh
-(env) C:\Users\Jorge\Desktop\MASTER_IA\TFM\proyecto\src>streamlit run --server.port 8052 streamlit_app.py
+(env) streamlit run --server.port 8000 src/streamlit.py
 ```
 
 ## Docker
