@@ -108,7 +108,7 @@ class Downloader:
             urls_pdf.append(url)
         return urls_pdf
 
-    def get_files(self, web_url, file_url, local_file_path) -> Tuple[str, Response]:
+    def get_files(self, web_url, file_url, local_file_path) -> tuple[str, Response]:
         """_summary_
 
         Args:

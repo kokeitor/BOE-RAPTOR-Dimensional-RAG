@@ -1,6 +1,6 @@
 {
   "parser": {
-    "directory_path": "./data/boe/dias/2024/04/15",
+    "directory_path": "./data/boe/dias/2024/04/19",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
@@ -11,13 +11,13 @@
               "storage_path":"./data/figures/splitter",
               "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
               "tokenizer_model": "meta-llama/Meta-Llama-3-8B",
-              "threshold": 75,
+              "threshold": 60,
               "max_tokens": 500,
               "verbose": 1,
               "buffer_size": 3,
               "max_big_chunks": 10,
               "splitter_mode": "CUSTOM",
-              "min_initial_chunk_len":50
+              "min_initial_chunk_len":100
   },
   "TextPreprocess": {
                       "spc_caracters": [
@@ -26,7 +26,7 @@
                                           "?", "/", "~", "`", "\n", "\r", "\t", "\b", "\f", "__"
                                       ],
                       "spc_words": [
-                                        "BOE"
+                                        ""
                                       ],
                       "task_name": "classification",
                       "methods": {
