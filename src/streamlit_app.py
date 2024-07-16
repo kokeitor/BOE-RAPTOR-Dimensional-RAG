@@ -63,5 +63,4 @@ def main() -> None:
     run_app(config_graph=config_graph)
     
 if __name__ == '__main__':
-    
     main()
