@@ -88,6 +88,15 @@ python src/main_etl.py
 python src/main_hg_push_hub.py
 ```
 
+- **Fine tunning ejecucion archivo: main_run_classification.py**
+
+  1. Modificacion archivo configuracion : fine_tunning.json
+
+  2. Ejecucion script desde raix proyecto:
+    ```sh
+    python src/main_run_classification.py
+    ```
+
 ### Explicación Adicional
 
 - **Streamlit**: Este comando inicia la aplicación Streamlit en el puerto 8052.

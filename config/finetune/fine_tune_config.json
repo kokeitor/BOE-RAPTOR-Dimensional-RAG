@@ -1,10 +1,10 @@
 {
     "DataTrainingArguments":
                         {
-                            "dataset_name": "koke143/boeset_labelled",
-                            "dataset_config_name": "None",
+                            "dataset_name": "koke143/boedata",
+                            "dataset_config_name": "20240718225326",
                             "do_regression": false,
-                            "text_column_names": "text",
+                            "text_column_names": "label",
                             "text_column_delimiter": " ",
                             "train_split_name": "train",
                             "validation_split_name": "validation",
