@@ -84,17 +84,17 @@ python src/main_etl.py
 
 - **Comando para ejecutar y pushear a HG HUB los archivos CSV o Parquet:**
 
-```sh
-python src/main_hg_push_hub.py
-```
+  ```sh
+  python src/main_hg_push_hub.py
+  ```
 
 - **Fine tunning ejecucion archivo: main_run_classification.py**
 
-  1. Modificacion archivo configuracion : fine_tunning.json
+  1. Modificacion archivo configuracion : fine_tune_config.json
 
-  2. Ejecucion script desde raix proyecto:
+  2. Ejecucion script desde raiz proyecto especificando el archivo de configuracion:
     ```sh
-    python src/main_run_classification.py
+     python /src/main_run_classification.py ./config/finetune/fine_tune_config.json
     ```
 
 ### Explicación Adicional

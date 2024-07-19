@@ -44,6 +44,7 @@ from transformers import (
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.utils import check_min_version, send_example_telemetry
 from transformers.utils.versions import require_version
+from finetune.utils import setup_logging
 
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
@@ -266,15 +267,24 @@ def get_label_list(raw_dataset, split="train") -> List[str]:
 
 
 def main():
+    
+    setup_logging()
+    
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
+    logger.info(f"{parser=}")
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
+        logger.info(f"{sys.argv=}")
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
         model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        logger.info(f"{model_args=}")
+        logger.info(f"{data_args=}")
+        logger.info(f"{training_args=}")
+        
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
