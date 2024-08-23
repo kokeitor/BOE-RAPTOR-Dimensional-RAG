@@ -5,6 +5,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 from RAPTOR.exceptions import DirectoryNotFoundError
 from RAPTOR.utils import get_current_spanish_date_iso
+from ETL.llm import LabelGenerator
 import logging
 import logging.handlers
 
@@ -46,7 +47,6 @@ class RaptorDataset(BaseModel):
         logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
         logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
         
-
     def _get_data(self) -> pd.DataFrame:
         """
         Reads and combines data from .CSV and .parquet files within the specified date range.
@@ -138,5 +138,14 @@ class RaptorDataset(BaseModel):
             return date_obj
         except ValueError as e:
             raise ValueError(f"Error parsing the date: {e}")
+    
+    def put_metadata() -> None:
+        logger.info(f"labels:\n {LabelGenerator.LABELSabels}")
+        labels =  LabelGenerator.LABELS.replace("\n", "").split(',')
+        logger.info(f"labels:\n {labels}")
+        labels = [l.strip() for l in labels]
+        logger.info(f"labels:\n {labels}")
+        label2id = {label.strip() : label_index for label_index,label in enumerate(labels)}
+        logger.info(f"label2id:\n {label2id}")
 
     

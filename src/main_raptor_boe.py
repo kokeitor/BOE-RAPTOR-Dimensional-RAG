@@ -28,6 +28,7 @@ def main() -> None:
     )
     
     raptor_dataset.initialize_data()
+    raptor_dataset.put_metadata()
     
 if __name__ == "__main__":
     main()
