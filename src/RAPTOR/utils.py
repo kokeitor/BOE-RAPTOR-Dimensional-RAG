@@ -15,16 +15,20 @@ logger = logging.getLogger("ETL_module_logger")  # Child logger [for this module
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config
 
 
-def setup_logging() -> None:
+def setup_logging(script : str) -> None:
     """
     Function to get root parent configuration logger.
     Child logger will pass info, debugs... log objects to parent's root logger handlers
     """
-    CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "hg_hub_push.json")
-    
+    if script == "hg_hub_push":
+        CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "hg_hub_push.json")
+    elif script == "raptor_boe":
+        CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "raptor_boe.json")
+        
     with open(CONFIG_LOGGER_FILE, encoding='utf-8') as f:
         content = json.load(f)
     logging.config.dictConfig(content)
+
 
 # util functions
 def get_current_spanish_date_iso():

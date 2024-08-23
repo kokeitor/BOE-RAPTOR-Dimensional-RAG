@@ -36,6 +36,9 @@ class RaptorDataset(BaseModel):
     desire_columns: Optional[List[str]] = Field(default=None, description="Columns to get and not drop from data")
 
     data: Optional[pd.DataFrame] = None  # Define the data attribute
+    
+    class Config:
+        arbitrary_types_allowed = True
 
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""

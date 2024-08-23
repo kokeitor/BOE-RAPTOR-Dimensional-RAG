@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     
     # set up the root logger configuration
-    setup_logging()
+    setup_logging(script="hg_hub_push")
     
     # Load environment variables from .env file
     load_dotenv()
