@@ -28,8 +28,6 @@ def main() -> None:
     )
     
     raptor_dataset.initialize_data()
-    logger.debug(f"Dataset RAPTOR :  {raptor_dataset.data.head()}")
-    logger.debug(f"Dataset RAPTOR columns:  {raptor_dataset.data.columns()}")
     
 if __name__ == "__main__":
     main()

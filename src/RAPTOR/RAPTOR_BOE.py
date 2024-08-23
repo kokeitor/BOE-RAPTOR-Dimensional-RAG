@@ -43,6 +43,9 @@ class RaptorDataset(BaseModel):
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""
         self.data = self._clean_data(self._get_data())
+        logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
+        logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
+        
 
     def _get_data(self) -> pd.DataFrame:
         """

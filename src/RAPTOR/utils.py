@@ -24,6 +24,7 @@ def setup_logging(script : str) -> None:
         CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "hg_hub_push.json")
     elif script == "raptor_boe":
         CONFIG_LOGGER_FILE = os.path.join(os.path.abspath("./config/loggers"), "raptor_boe.json")
+    print(f"CONFIG_LOGGER_FILE : {CONFIG_LOGGER_FILE}")
         
     with open(CONFIG_LOGGER_FILE, encoding='utf-8') as f:
         content = json.load(f)
