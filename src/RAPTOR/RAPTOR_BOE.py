@@ -35,7 +35,8 @@ class ClusterSummaryGenerator:
             input_types={"text":str}
         )
         models = {
-            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0),
+            'GPT_35TURBO': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0),
+            'GPT': ChatOpenAI(model_name='gpt-4o-mini', temperature=0),
             'NVIDIA-LLAMA3': ChatNVIDIA(model_name='meta/llama3-70b-instruct', temperature=0),
             'LLAMA': ChatOllama(model='llama3', format="json", temperature=0),
             'LLAMA-GRADIENT': ChatOllama(model='llama3-gradient', format="json", temperature=0)
@@ -98,16 +99,23 @@ class RaptorDataset(BaseModel):
     data : Optional[pd.DataFrame]
         Data attribute to store combined data from files.
     """
-    data_dir_path: str = Field(default="./", description="Directory where .CSV or .parquet files are")
-    from_date: str = Field(description="First date of the file name to push to the HG hub", examples=["2024-07-12"])
-    to_date: str = Field(description="Last date of the file name to push to the HG hub", examples=["2024-07-12"])
-    desire_columns: Optional[List[str]] = Field(default=None, description="Columns to get and not drop from data")
-
-    data: Optional[pd.DataFrame] = None  # Define the data attribute
-    cluster_summary_generator : ClusterSummaryGenerator = ClusterSummaryGenerator()
+    data_dir_path: str = Field(default="./")
+    from_date: str = Field()
+    to_date: str = Field()
+    desire_columns: Optional[List[str]] = Field(default=None)
+    data: Optional[pd.DataFrame] = None
     
+    # Removing the problematic initialization from the constructor
+    cluster_summary_generator: Optional['ClusterSummaryGenerator'] = None
+
     class Config:
         arbitrary_types_allowed = True
+        copy_on_model_validation = False  # Prevent deep copying
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.cluster_summary_generator = ClusterSummaryGenerator()  # Initialize separately
+
 
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""
@@ -260,13 +268,13 @@ class RaptorDataset(BaseModel):
         logger.info(f"unique labels:\n{unique_labels}")
         
         cluster_text = ""
-        MAX_LEN = 500 # maximum characters for create cluster summary
+        MAX_LEN = 100 # maximum characters for create cluster summary
         for unique_label in unique_labels:
             filter_dataframe = self.data[self.data["label_str"] == unique_label]
             for text in filter_dataframe["text"]:
                 cluster_text = cluster_text + "\n" + str(text)
-            logger.info(f"cluster_text for {unique_label=} :\n{cluster_text}")
-            summary = self.cluster_summary_generator.invoke(text=cluster_text)
+            logger.debug(f"cluster_text for {unique_label=} :\n{cluster_text}")
+            summary = self.cluster_summary_generator.invoke(cluster_text=cluster_text)
             logger.info(f"cluster summary for {unique_label=} :\n{summary}")
             
         
