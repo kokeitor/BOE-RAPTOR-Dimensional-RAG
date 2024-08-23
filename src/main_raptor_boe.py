@@ -2,9 +2,8 @@ import os
 import logging
 from RAPTOR.exceptions import DirectoryNotFoundError
 from RAPTOR.utils import setup_logging
-from RAPTOR.hg_push import HGDataset
+from RAPTOR.RAPTOR_BOE import RaptorDataset
 from dotenv import load_dotenv
-
 
 
 # Logging configuration
@@ -20,20 +19,17 @@ def main() -> None:
     load_dotenv()
 
     os.environ['HG_API_KEY'] = str(os.getenv('HG_API_KEY'))
-    os.environ['HG_REPO_DATASET_ID'] = str(os.getenv('HG_REPO_DATASET_ID'))
     
-    hg_dataset = HGDataset(
+    raptor_dataset = RaptorDataset(
         data_dir_path="./data/boedataset", 
-        hg_api_token=str(os.getenv('HG_API_KEY')), 
-        repo_id=str(os.getenv('HG_REPO_DATASET_ID')), 
         from_date="2024-07-11", 
         to_date="2024-07-16",
-        desire_columns=["text", "chunk_id","label","pdf_id"]
+        desire_columns=None # Means all columns
     )
     
-    hg_dataset.initialize_data()
-    hg_dataset.push_to_hub()
-    print("Dataset cargado y subido correctamente.")
+    raptor_dataset.initialize_data()
+    logger.debug(f"Dataset RAPTOR :  {raptor_dataset.data.head()}")
+    logger.debug(f"Dataset RAPTOR columns:  {raptor_dataset.data.columns()}")
     
 if __name__ == "__main__":
     main()

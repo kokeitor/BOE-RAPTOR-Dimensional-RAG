@@ -20,6 +20,10 @@ __pycache__
 # Ignore notebooks directory
 /src/notebooks
 
+# Ignore finetune notebook
+/src/finetune/fine_tune_notebook.ipynb
+/src/finetune/training.ipynb
+
 # Ignore tests directory
 /src/tests
 
