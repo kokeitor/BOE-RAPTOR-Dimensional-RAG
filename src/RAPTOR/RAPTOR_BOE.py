@@ -12,7 +12,7 @@ import logging.handlers
 import tiktoken
 from langchain.schema import Document
 from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_community.chat_models import ChatOllama
 from langchain_openai import ChatOpenAI
 from typing import Union, Optional
@@ -48,11 +48,11 @@ class ClusterSummaryGenerator:
             raise AttributeError("Model ClusterSummaryGenerator Name not correct")
 
         if self.model_label == "NVIDIA-LLAMA3":
-            self.chain = self.prompt | self.model | JsonOutputParser()
+            self.chain = self.prompt | self.model | StrOutputParser()
         elif self.model_label == "GPT":
-            self.chain = self.prompt | self.model | JsonOutputParser()
+            self.chain = self.prompt | self.model | StrOutputParser()
         else:
-            self.chain = self.prompt | self.model | JsonOutputParser()
+            self.chain = self.prompt | self.model | StrOutputParser()
 
     def _get_tokens(self, text: str) -> int:
         """Returns the number of tokens in a text string."""
@@ -116,16 +116,15 @@ class RaptorDataset(BaseModel):
         super().__init__(**data)
         self.cluster_summary_generator = ClusterSummaryGenerator()  # Initialize separately
 
-
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""
         self.data = self._clean_data(self._get_data())
         self.data["label_str"] = "" # empty column to fill it with label str 
         self._put_metadata()
         logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
-        logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
-        self.data["cluster_summary"] = "" # empty column to fill it with label str
+        self.data["cluster_summary"] = "" # empty column to fill it with cluster summary
         self._get_cluster_summary()
+        logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
         
     def _get_data(self) -> pd.DataFrame:
         """
@@ -267,13 +266,16 @@ class RaptorDataset(BaseModel):
         unique_labels = self.data["label_str"].unique()
         logger.info(f"unique labels:\n{unique_labels}")
         
-        cluster_text = ""
         MAX_LEN = 100 # maximum characters for create cluster summary
         for unique_label in unique_labels:
             filter_dataframe = self.data[self.data["label_str"] == unique_label]
+            cluster_text = ""
             for text in filter_dataframe["text"]:
-                cluster_text = cluster_text + "\n" + str(text)
-            logger.debug(f"cluster_text for {unique_label=} :\n{cluster_text}")
+                if len(cluster_text) < MAX_LEN:
+                    cluster_text = cluster_text + "\n" + str(text)
+                else:
+                    break
+            # logger.info(f"cluster_text for {unique_label=} :\n{cluster_text}")
             summary = self.cluster_summary_generator.invoke(cluster_text=cluster_text)
             logger.info(f"cluster summary for {unique_label=} :\n{summary}")
             
