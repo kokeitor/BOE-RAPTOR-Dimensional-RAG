@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel, Field
@@ -44,6 +45,8 @@ class RaptorDataset(BaseModel):
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""
         self.data = self._clean_data(self._get_data())
+        self.data["label_str"] = ""# empty column to fill it with label str 
+        self._put_metadata()
         logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
         logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
         
@@ -139,13 +142,51 @@ class RaptorDataset(BaseModel):
         except ValueError as e:
             raise ValueError(f"Error parsing the date: {e}")
     
-    def put_metadata() -> None:
-        logger.info(f"labels:\n {LabelGenerator.LABELSabels}")
-        labels =  LabelGenerator.LABELS.replace("\n", "").split(',')
-        logger.info(f"labels:\n {labels}")
-        labels = [l.strip() for l in labels]
-        logger.info(f"labels:\n {labels}")
-        label2id = {label.strip() : label_index for label_index,label in enumerate(labels)}
-        logger.info(f"label2id:\n {label2id}")
+    def _put_metadata(self) -> None:
+        logger.info(f"Initial labels:\n {LabelGenerator.LABELS}")
+        
+        # Clean and split the labels
+        labels = LabelGenerator.LABELS.replace("\n", "").split(',')
+        labels = [label.strip() for label in labels]
+        logger.info(f"Processed labels:\n {labels}")
+        
+        # Create mapping dictionaries
+        label2id = {label: label_index for label_index, label in enumerate(labels)}
+        id2label = {label_index: label for label_index, label in enumerate(labels)}
+        logger.info(f"label2id mapping:\n {label2id}")
+        logger.info(f"id2label mapping:\n {id2label}")
+        
+        # Process each row in the DataFrame
+        for index, row in self.data.iterrows():
+            if pd.notna(row["label"]):  # Corrected the check for NaN
+                
+                logger.debug(f"Processing row index: {index}")
+                logger.info(f"Row columns: {row.keys()}")
+                logger.debug(f"Labels of row {index}: {row['label']}")
+                logger.debug(f"Type of object label: {type(row['label'])}")
+                
+                # Map label ids to label names and add them as a new column to the DataFrame
+                labels_id_int = self._parse_label_id_str(row["label"])
+                label_columns = [id2label.get(id, "NotExist") for id in labels_id_int]
+                logger.info(f"Mapped label columns: {label_columns}")
+                
+                # Add the label string to the DataFrame
+                self.data.at[index, "label_str"] = str(label_columns[0]) if label_columns else "NotExist"
+                logger.info(f"Updated self.data.loc[index,'label_str']: {self.data.at[index, 'label_str']}")
+
+
+    def _parse_label_id_str(self,input_str : str)->None:
+        
+        str_list = input_str.strip("[]").replace("'", "").split(", ")
+
+        int_list = [int(x) for x in str_list]
+        
+        logger.info(f"label id input : {input_str}")
+        logger.info(f"labels parsed : {int_list}")
+        
+        return int_list
+    
+            
+        
 
     
