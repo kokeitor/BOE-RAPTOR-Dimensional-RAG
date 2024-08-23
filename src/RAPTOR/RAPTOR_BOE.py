@@ -9,10 +9,76 @@ from RAPTOR.utils import get_current_spanish_date_iso
 from ETL.llm import LabelGenerator
 import logging
 import logging.handlers
+import tiktoken
+from langchain.schema import Document
+from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_community.chat_models import ChatOllama
+from langchain_openai import ChatOpenAI
+from typing import Union, Optional
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
 
 # Logging configuration
 logger = logging.getLogger(__name__)
+
+class ClusterSummaryGenerator:
+    def __init__(self, model: str = 'GPT'):
+        self.model_label = model
+        self.tokenizer = tiktoken.encoding_for_model("gpt-3.5")
+        
+        self.prompt = PromptTemplate(
+            template="""You are an assistant specializing in summarizing a text from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to create a summary of the provided text. Be precise and try to collect information from as much of the text as possible.
+            Text: {text}""",
+            input_variables=["text"],
+            input_types={"text":str}
+        )
+        models = {
+            'GPT': ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0),
+            'NVIDIA-LLAMA3': ChatNVIDIA(model_name='meta/llama3-70b-instruct', temperature=0),
+            'LLAMA': ChatOllama(model='llama3', format="json", temperature=0),
+            'LLAMA-GRADIENT': ChatOllama(model='llama3-gradient', format="json", temperature=0)
+        }
+
+        self.model = models.get(self.model_label, None)
+        if not self.model:
+            logger.error("Model ClusterSummaryGenerator Name not correct")
+            raise AttributeError("Model ClusterSummaryGenerator Name not correct")
+
+        if self.model_label == "NVIDIA-LLAMA3":
+            self.chain = self.prompt | self.model | JsonOutputParser()
+        elif self.model_label == "GPT":
+            self.chain = self.prompt | self.model | JsonOutputParser()
+        else:
+            self.chain = self.prompt | self.model | JsonOutputParser()
+
+    def _get_tokens(self, text: str) -> int:
+        """Returns the number of tokens in a text string."""
+        try:
+            enc = tiktoken.get_encoding("cl100k_base")
+            return len(enc.encode(text))
+        except Exception as e:
+            logger.exception(f"Tokenization error: {e}")
+            return len(self.tokenizer(text)["input_ids"])
+
+    def invoke(self, cluster_text : str) -> list[Document]:
+        
+        cluster_tokens = self._get_tokens(text=cluster_text)
+
+        # Update metadata
+        logger.info(f'numero tokens del cluster text : {cluster_tokens}')
+        logger.info(f'numero caracteres del cluster text : {len(cluster_text)}')
+
+        try:
+            cluster_summary = self.chain.invoke({"text": cluster_text})
+            logger.info(f"LLM output: {cluster_summary}")
+        except Exception as e:
+            logger.exception(f"LLM Error generation cluster summary of {cluster_text} , \nerror message: {e}")
+            cluster_summary = "Error in generation of the cluster summary"
+                
+        return cluster_summary
+
 
 
 class RaptorDataset(BaseModel):
@@ -38,6 +104,7 @@ class RaptorDataset(BaseModel):
     desire_columns: Optional[List[str]] = Field(default=None, description="Columns to get and not drop from data")
 
     data: Optional[pd.DataFrame] = None  # Define the data attribute
+    cluster_summary_generator : ClusterSummaryGenerator = ClusterSummaryGenerator()
     
     class Config:
         arbitrary_types_allowed = True
@@ -45,10 +112,12 @@ class RaptorDataset(BaseModel):
     def initialize_data(self):
         """Initializes the data attribute by cleaning and combining data from files."""
         self.data = self._clean_data(self._get_data())
-        self.data["label_str"] = ""# empty column to fill it with label str 
+        self.data["label_str"] = "" # empty column to fill it with label str 
         self._put_metadata()
         logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
         logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
+        self.data["cluster_summary"] = "" # empty column to fill it with label str
+        self._get_cluster_summary()
         
     def _get_data(self) -> pd.DataFrame:
         """
@@ -186,7 +255,21 @@ class RaptorDataset(BaseModel):
         
         return int_list
     
+    def _get_cluster_summary(self) -> None:
+        unique_labels = self.data["label_str"].unique()
+        logger.info(f"unique labels:\n{unique_labels}")
+        
+        cluster_text = ""
+        MAX_LEN = 500 # maximum characters for create cluster summary
+        for unique_label in unique_labels:
+            filter_dataframe = self.data[self.data["label_str"] == unique_label]
+            for text in filter_dataframe["text"]:
+                cluster_text = cluster_text + "\n" + str(text)
+            logger.info(f"cluster_text for {unique_label=} :\n{cluster_text}")
+            summary = self.cluster_summary_generator.invoke(text=cluster_text)
+            logger.info(f"cluster summary for {unique_label=} :\n{summary}")
             
         
+            
 
     

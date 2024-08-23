@@ -12,6 +12,12 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     
+    # Load environment variables from .env file
+    load_dotenv()
+
+    # Set environment variables
+    os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
+
     # set up the root logger configuration
     setup_logging(script="raptor_boe")
     
