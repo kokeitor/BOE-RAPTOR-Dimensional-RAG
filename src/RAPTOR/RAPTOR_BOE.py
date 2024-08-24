@@ -17,6 +17,7 @@ from langchain_community.chat_models import ChatOllama
 from langchain_openai import ChatOpenAI
 from typing import Union, Optional
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
+from langchain_community.document_loaders import DataFrameLoader
 
 
 # Logging configuration
@@ -28,8 +29,9 @@ class ClusterSummaryGenerator:
         self.tokenizer = tiktoken.encoding_for_model("gpt-3.5")
         
         self.prompt = PromptTemplate(
-            template="""You are an assistant specializing in summarizing a text from the Spanish Boletín Oficial del Estado (BOE).
-            Your task is to create a summary of the provided text. Be precise and try to collect information from as much of the text as possible.
+            template="""You are an assistant specialized in summarizing texts from the Spanish Boletín Oficial del Estado (BOE).\n 
+            Create a precise and factual summary in Spanish, strictly reflecting the original content without adding \n
+            any comments or interpretations.\n
             Text: {text}""",
             input_variables=["text"],
             input_types={"text":str}
@@ -73,7 +75,7 @@ class ClusterSummaryGenerator:
 
         try:
             cluster_summary = self.chain.invoke({"text": cluster_text})
-            logger.info(f"LLM output: {cluster_summary}")
+            logger.debug(f"LLM output: {cluster_summary}")
         except Exception as e:
             logger.exception(f"LLM Error generation cluster summary of {cluster_text} , \nerror message: {e}")
             cluster_summary = "Error in generation of the cluster summary"
@@ -104,6 +106,7 @@ class RaptorDataset(BaseModel):
     to_date: str = Field()
     desire_columns: Optional[List[str]] = Field(default=None)
     data: Optional[pd.DataFrame] = None
+    documents: Optional[list[Document]] = None
     
     # Removing the problematic initialization from the constructor
     cluster_summary_generator: Optional['ClusterSummaryGenerator'] = None
@@ -121,10 +124,15 @@ class RaptorDataset(BaseModel):
         self.data = self._clean_data(self._get_data())
         self.data["label_str"] = "" # empty column to fill it with label str 
         self._put_metadata()
-        logger.info(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
+        logger.debug(f"Dataset RAPTOR sample:\n{self.data.head(1)}")
         self.data["cluster_summary"] = "" # empty column to fill it with cluster summary
         self._get_cluster_summary()
-        logger.info(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
+        logger.debug(f"Dataset RAPTOR columns:\n{self.data.columns.to_list()}")
+        logger.info(f"Informacion de data :\n{self.data.shape} \n{self.data.head()}\n{self.data.columns}")
+        self._get_documents()
+        logger.info(f"Document list : {self.documents}")
+        logger.info(f"Number of Document object : {self.documents}")
+        logger.info(f"Document sample : {self.documents[0]}")
         
     def _get_data(self) -> pd.DataFrame:
         """
@@ -186,11 +194,11 @@ class RaptorDataset(BaseModel):
         """
         columns_to_keep = []
         if self.desire_columns:
-            logger.info(f"Data columns : {data.columns.to_list()}")
+            logger.debug(f"Data columns : {data.columns.to_list()}")
             for col in self.desire_columns:
                 if col in data.columns.to_list():
                     columns_to_keep.append(col)
-                    logger.info(f"Data column to keep {col} exists in file columns")
+                    logger.debug(f"Data column to keep {col} exists in file columns")
                 else:
                     logger.warning(f"Data column to keep {col} NOT IN file columns")
             return data[columns_to_keep]
@@ -237,18 +245,18 @@ class RaptorDataset(BaseModel):
             if pd.notna(row["label"]):  # Corrected the check for NaN
                 
                 logger.debug(f"Processing row index: {index}")
-                logger.info(f"Row columns: {row.keys()}")
+                logger.debug(f"Row columns: {row.keys()}")
                 logger.debug(f"Labels of row {index}: {row['label']}")
                 logger.debug(f"Type of object label: {type(row['label'])}")
                 
                 # Map label ids to label names and add them as a new column to the DataFrame
                 labels_id_int = self._parse_label_id_str(row["label"])
                 label_columns = [id2label.get(id, "NotExist") for id in labels_id_int]
-                logger.info(f"Mapped label columns: {label_columns}")
+                logger.debug(f"Mapped label columns: {label_columns}")
                 
                 # Add the label string to the DataFrame
                 self.data.at[index, "label_str"] = str(label_columns[0]) if label_columns else "NotExist"
-                logger.info(f"Updated self.data.loc[index,'label_str']: {self.data.at[index, 'label_str']}")
+                logger.debug(f"Updated self.data.loc[index,'label_str']: {self.data.at[index, 'label_str']}")
 
 
     def _parse_label_id_str(self,input_str : str)->None:
@@ -257,16 +265,16 @@ class RaptorDataset(BaseModel):
 
         int_list = [int(x) for x in str_list]
         
-        logger.info(f"label id input : {input_str}")
-        logger.info(f"labels parsed : {int_list}")
+        logger.debug(f"label id input : {input_str}")
+        logger.debug(f"labels parsed : {int_list}")
         
         return int_list
     
     def _get_cluster_summary(self) -> None:
         unique_labels = self.data["label_str"].unique()
-        logger.info(f"unique labels:\n{unique_labels}")
+        logger.debug(f"unique labels:\n{unique_labels}")
         
-        MAX_LEN = 100 # maximum characters for create cluster summary
+        MAX_LEN = 300 # maximum characters for create cluster summary
         for unique_label in unique_labels:
             filter_dataframe = self.data[self.data["label_str"] == unique_label]
             cluster_text = ""
@@ -275,9 +283,14 @@ class RaptorDataset(BaseModel):
                     cluster_text = cluster_text + "\n" + str(text)
                 else:
                     break
-            # logger.info(f"cluster_text for {unique_label=} :\n{cluster_text}")
+            logger.debug(f"cluster_text for {unique_label=} :\n{cluster_text}")
             summary = self.cluster_summary_generator.invoke(cluster_text=cluster_text)
             logger.info(f"cluster summary for {unique_label=} :\n{summary}")
+            self.data.loc[self.data["label_str"] == unique_label, "cluster_summary"] = summary
+             
+    def _get_documents(self) -> None:
+        df_loader = DataFrameLoader(data_frame=self.data , page_content_column="text")
+        self.documents = df_loader.load()
             
         
             
