@@ -29,7 +29,7 @@ class RaptorVectorDB:
             logger.info(f"Connecting to an existing index of PineCone DB cient -> {self.index_name}")
             pinecone_vectorstore = PineconeVectorStore(
                                                     embedding=self.embedding_model,
-                                                    text_key='text',
+                                                    text_key='page_content',
                                                     distance_strategy=DistanceStrategy.COSINE,
                                                     pinecone_api_key=self.api_key,
                                                     index_name=self.index_name

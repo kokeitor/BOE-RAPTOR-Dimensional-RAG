@@ -26,7 +26,7 @@ load_dotenv()
 @VectorDB.test_db.try_retriever(query="¿que dia es hoy?")
 @VectorDB.test_db.try_client_conexion
 def get_chromadb_retriever(
-                            index_name :str = os.getenv("PINECONE_COLLECTION_NAME"), 
+                            index_name :str = os.getenv("PINECONE_INDEX_NAME"), 
                             get_embedding_model : callable = get_hg_emb, 
                             embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
                             collection_metadata : dict[str,str] = {"hnsw:space": "cosine"},

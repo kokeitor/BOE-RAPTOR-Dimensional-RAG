@@ -113,7 +113,6 @@ class RaptorDataset(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-        copy_on_model_validation = False  # Prevent deep copying
 
     def __init__(self, **data):
         super().__init__(**data)

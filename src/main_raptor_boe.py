@@ -45,12 +45,15 @@ def main() -> None:
                     index_name=str(os.getenv('PINECONE_INDEX_NAME')),
                     embd_model=str(os.getenv('EMBEDDING_MODEL'))
                     )
-    db.store_docs(docs=raptor_dataset.documents)
-    query = ""
-    filter_key=""
-    filter_value=""
+    # db.store_docs(docs=raptor_dataset.documents)
+    query = "rendimiento neto del ovino y caprino de carne"
+    filter_key="label_str"
+    filter_value="Planes de Estudio y Normativas Educativas"
     context = db.get_context(query=query, filter_key=filter_key,filter_value=filter_value)
     logger.info(f"{query=} - {filter_key=} - {filter_value=}:\n{context=}")
+    logger.info(f"k=1 : {filter_key=} - {filter_value=}:\n{filter_key=} - {context[0].metadata[filter_key]}")
+    logger.info(f"k=2 : {filter_key=} - {filter_value=}:\n{filter_key=} - {context[1].metadata[filter_key]}")
+    logger.info(f"k=3 : {filter_key=} - {filter_value=}:\n{filter_key=} - {context[2].metadata[filter_key]}")
     
 if __name__ == "__main__":
     main()
