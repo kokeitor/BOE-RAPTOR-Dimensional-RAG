@@ -131,8 +131,8 @@ class RaptorDataset(BaseModel):
         logger.info(f"Informacion de data :\n{self.data.shape} \n{self.data.head()}\n{self.data.columns}")
         self._get_documents()
         logger.info(f"Document list : {self.documents}")
-        logger.info(f"Number of Document object : {self.documents}")
-        logger.info(f"Document sample : {self.documents[0]}")
+        logger.info(f"Number of Document objects : {self.documents}")
+        logger.info(f"Document samples :\n {self.documents[2]}")
         
     def _get_data(self) -> pd.DataFrame:
         """
