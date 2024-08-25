@@ -3,6 +3,7 @@ import logging
 from RAPTOR.exceptions import DirectoryNotFoundError
 from RAPTOR.utils import setup_logging
 from RAPTOR.RAPTOR_BOE import RaptorDataset
+from RAPTOR.raptor_vectordb import RaptorVectorDB
 from dotenv import load_dotenv
 
 
@@ -24,6 +25,7 @@ def main() -> None:
     os.environ['HG_API_KEY'] = str(os.getenv('HG_API_KEY'))
     os.environ['PINECONE_API_KEY'] = str(os.getenv('PINECONE_API_KEY'))
     os.environ['PINECONE_INDEX_NAME'] = str(os.getenv('PINECONE_INDEX_NAME'))
+    os.environ['EMBEDDING_MODEL'] = str(os.getenv('EMBEDDING_MODEL'))
 
     # set up the root logger configuration
     setup_logging(script="raptor_boe")
@@ -38,8 +40,17 @@ def main() -> None:
     raptor_dataset.initialize_data()
     
     # Store in vector database
-    
-    
+    db = RaptorVectorDB(
+                    api_key=str(os.getenv('PINECONE_API_KEY')),
+                    index_name=str(os.getenv('PINECONE_INDEX_NAME')),
+                    embd_model=str(os.getenv('EMBEDDING_MODEL'))
+                    )
+    db.store_docs(docs=raptor_dataset.documents)
+    query = ""
+    filter_key=""
+    filter_value=""
+    context = db.get_context(query=query, filter_key=filter_key,filter_value=filter_value)
+    logger.info(f"{query=} - {filter_key=} - {filter_value=}:\n{context=}")
     
 if __name__ == "__main__":
     main()
