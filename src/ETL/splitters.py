@@ -76,7 +76,8 @@ class CustomSemanticSplitter:
         
         # Iterate splitter until we get initial len chunks reach a minimum size
         # split patterns the text on : Level 1 on '.', '?', and '!' - Level 2 on \n - Level 3 on \n\n
-        split_patterns = [r'(?<=[.?!])\s+',r'\n',r'\n\n']
+        # split_patterns = [r'(?<=[.?!])\s+',r'\n',r'\n\n']
+        split_patterns = [r'\n']
         for split_level,s_pattern in enumerate(split_patterns):
             sentence_list = re.split(s_pattern, text)
             short_sentences = 0

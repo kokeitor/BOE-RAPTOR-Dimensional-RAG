@@ -25,7 +25,7 @@ def main() -> None:
     os.environ['TAVILY_API_KEY'] = os.getenv('TAVILY_API_KEY')
     os.environ['LLAMA_CLOUD_API_KEY'] = os.getenv('LLAMA_CLOUD_API_KEY')
     os.environ['HF_TOKEN'] = os.getenv('HUG_API_KEY')
-    os.environ['PINECONE_COLLECTION_NAME'] = os.getenv('PINECONE_COLLECTION_NAME')
+    os.environ['PINECONE_INDEX_NAME'] = os.getenv('PINECONE_INDEX_NAME')
     os.environ['CHROMA_COLLECTION_NAME'] = os.getenv('CHROMA_COLLECTION_NAME')
     os.environ['QDRANT_API_KEY'] = os.getenv('QDRANT_API_KEY')
     os.environ['QDRANT_HOST'] = os.getenv('QDRANT_HOST')

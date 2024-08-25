@@ -45,7 +45,7 @@ def main() -> None:
                     index_name=str(os.getenv('PINECONE_INDEX_NAME')),
                     embd_model=str(os.getenv('EMBEDDING_MODEL'))
                     )
-    # db.store_docs(docs=raptor_dataset.documents)
+    db.store_docs(docs=raptor_dataset.documents)
     query = "rendimiento neto del ovino y caprino de carne"
     filter_key="label_str"
     filter_value="Planes de Estudio y Normativas Educativas"

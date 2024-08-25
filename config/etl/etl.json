@@ -70,7 +70,7 @@
   },
   "storer": {
     "store_path": "./data/boedataset",
-    "file_name":"train_test",
+    "file_name":"raptor_text",
     "file_format": "csv"
   },
   "google_sheet_database": {

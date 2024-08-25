@@ -16,7 +16,7 @@ class Parser:
                  recursive_parser: bool = True, 
                  result_type: str = "markdown", 
                  verbose: bool = True, 
-                 api_key: str = os.getenv('LLAMA_CLOUD_API_KEY')
+                 api_key: str = os.getenv('LLAMA_CLOUD_API_KEY_RAPTOR')
                  ):
         self.path = directory_path
         self.parser = LlamaParse(

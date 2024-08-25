@@ -112,7 +112,7 @@ class Pipeline:
             recursive_parser=parser_config.get('recursive_parser', True),
             result_type=parser_config.get('result_type', 'markdown'),
             verbose=parser_config.get('verbose', True),
-            api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY'))
+            api_key=parser_config.get('api_key', os.getenv('LLAMA_CLOUD_API_KEY_RAPTOR'))
         )
 
     def _create_processor(self, docs: list[Document]) -> ETL.nlp.BoeProcessor:
