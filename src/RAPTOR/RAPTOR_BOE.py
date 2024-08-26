@@ -23,6 +23,7 @@ from langchain_community.document_loaders import DataFrameLoader
 # Logging configuration
 logger = logging.getLogger(__name__)
 
+
 class ClusterSummaryGenerator:
     def __init__(self, model: str = 'GPT'):
         self.model_label = model
@@ -85,22 +86,7 @@ class ClusterSummaryGenerator:
 
 
 class RaptorDataset(BaseModel):
-    """
-    Class to handle operations related to the Hugging Face Dataset.
-
-    Attributes:
-    -----------
-    data_dir_path : str
-        Directory where .CSV or .parquet files are located.
-    from_date : str
-        Start date of the file name to push to the HG hub.
-    to_date : str
-        End date of the file name to push to the HG hub.
-    desire_columns : Optional[List[str]]
-        Columns to get and not drop from data.
-    data : Optional[pd.DataFrame]
-        Data attribute to store combined data from files.
-    """
+    
     data_dir_path: str = Field(default="./")
     from_date: str = Field()
     to_date: str = Field()
@@ -225,6 +211,20 @@ class RaptorDataset(BaseModel):
             raise ValueError(f"Error parsing the date: {e}")
     
     def _put_metadata(self) -> None:
+        """
+        Processes the label metadata for each row in the DataFrame.
+
+        This method cleans and splits the labels from `LabelGenerator.LABELS`,
+        creates mapping dictionaries (`label2id` and `id2label`), and iterates
+        over each row in the `self.data` DataFrame. For each row, it maps label IDs
+        to label names and adds them as a new column `label_str` to the DataFrame.
+
+        If a row has a label, the label is processed and converted to a string.
+        If no label is present or if the label is NaN, the `label_str` column is 
+        set to "NotExist".
+
+        Logs detailed information about the processing at various steps.
+        """
         logger.info(f"Initial labels:\n {LabelGenerator.LABELS}")
         
         # Clean and split the labels
@@ -240,8 +240,7 @@ class RaptorDataset(BaseModel):
         
         # Process each row in the DataFrame
         for index, row in self.data.iterrows():
-            if pd.notna(row["label"]):  # Corrected the check for NaN
-                
+            if pd.notna(row["label"]):  # Check for NaN in the label column
                 logger.debug(f"Processing row index: {index}")
                 logger.debug(f"Row columns: {row.keys()}")
                 logger.debug(f"Labels of row {index}: {row['label']}")
@@ -255,10 +254,35 @@ class RaptorDataset(BaseModel):
                 # Add the label string to the DataFrame
                 self.data.at[index, "label_str"] = str(label_columns[0]) if label_columns else "NotExist"
                 logger.debug(f"Updated self.data.loc[index,'label_str']: {self.data.at[index, 'label_str']}")
+            else:
+                logger.debug(f"Processing row index: {index}")
+                logger.debug(f"Row columns: {row.keys()}")
+                logger.debug(f"Labels of row {index}: {row['label']}")
+                logger.debug(f"Type of object label: {type(row['label'])}")
+                
+                # Add the label string to the DataFrame
+                self.data.at[index, "label_str"] = "NotExist"
+                logger.debug(f"Updated self.data.loc[index,'label_str']: {self.data.at[index, 'label_str']}")
 
 
-    def _parse_label_id_str(self,input_str : str)->None:
-        
+    def _parse_label_id_str(self, input_str: str) -> list[int]:
+        """
+        Parses a string of label IDs into a list of integers.
+
+        The input string is expected to be in the format "['12', '26', '24']". 
+        This method removes the brackets and quotes, splits the string by commas, 
+        and converts each segment into an integer.
+
+        Parameters:
+        ----------
+        input_str : str
+            A string representing a list of label IDs.
+
+        Returns:
+        -------
+        list[int]
+            A list of integers parsed from the input string.
+        """
         str_list = input_str.strip("[]").replace("'", "").split(", ")
 
         int_list = [int(x) for x in str_list]
@@ -269,10 +293,21 @@ class RaptorDataset(BaseModel):
         return int_list
     
     def _get_cluster_summary(self) -> None:
+        """
+        Generates and stores a summary for each unique label in the DataFrame.
+
+        This method iterates over each unique label in the `label_str` column,
+        aggregates the text associated with each label up to a specified 
+        maximum length (`MAX_LEN`), and generates a summary using the 
+        `cluster_summary_generator`. The summary is then stored in the 
+        `cluster_summary` column of the DataFrame.
+
+        Logs detailed information during the processing and summary generation.
+        """
         unique_labels = self.data["label_str"].unique()
         logger.debug(f"unique labels:\n{unique_labels}")
         
-        MAX_LEN = 300 # maximum characters for create cluster summary
+        MAX_LEN = 300  # Maximum characters for creating the cluster summary
         for unique_label in unique_labels:
             filter_dataframe = self.data[self.data["label_str"] == unique_label]
             cluster_text = ""
@@ -285,10 +320,22 @@ class RaptorDataset(BaseModel):
             summary = self.cluster_summary_generator.invoke(cluster_text=cluster_text)
             logger.info(f"cluster summary for {unique_label=} :\n{summary}")
             self.data.loc[self.data["label_str"] == unique_label, "cluster_summary"] = summary
+
              
     def _get_documents(self) -> None:
-        df_loader = DataFrameLoader(data_frame=self.data , page_content_column="text")
+        """
+        Loads documents from the DataFrame and stores them in the `documents` attribute.
+
+        This method utilizes the `DataFrameLoader` to load documents from the 
+        `self.data` DataFrame, with the text content being extracted from the 
+        `page_content_column`. The loaded documents are stored in the `documents` 
+        attribute of the class.
+
+        Logs the loading process for debugging purposes.
+        """
+        df_loader = DataFrameLoader(data_frame=self.data, page_content_column="text")
         self.documents = df_loader.load()
+
             
         
             

@@ -33,8 +33,8 @@ def main() -> None:
     # Create Raptor data (make cluster summary, process and store in vector database)
     raptor_dataset = RaptorDataset(
         data_dir_path="./data/boedataset", 
-        from_date="2024-07-11", 
-        to_date="2024-07-16",
+        from_date="2024-08-25", 
+        to_date="2024-08-30",
         desire_columns=None # Means all columns
     )
     raptor_dataset.initialize_data()
