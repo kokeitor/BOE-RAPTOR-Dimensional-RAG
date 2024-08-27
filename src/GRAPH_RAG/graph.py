@@ -34,7 +34,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     
     graph = StateGraph(State)
     
-    query_classificator = config.agents.get("query_classificator",None)
+    query_classifier = config.agents.get("query_classificator",None)
     vector_db = config.vector_db
     docs_grader = config.agents.get("docs_grader",None)
     query_processor = config.agents.get("query_processor",None)
@@ -44,7 +44,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 
 
     # Define the nodes
-    graph.add_node("query_classificator",lambda state: query_classificator(state=state,agent=query_processor, get_chain=get_chain)) 
+    graph.add_node("query_classificator",lambda state: query_classificator(state=state,agent=query_classifier, get_chain=get_chain)) 
     graph.add_node("retriever",lambda state: retriever(state=state,vector_database=vector_db)) 
     graph.add_node("retreived_docs_grader",lambda state: retreived_docs_grader(state=state,agent=docs_grader, get_chain=get_chain))
     graph.add_node("reprocess_query",lambda state: process_query(state=state,agent=query_processor, get_chain=get_chain))

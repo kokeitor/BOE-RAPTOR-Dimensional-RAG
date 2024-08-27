@@ -56,6 +56,7 @@ class ConfigGraph:
             }
 
     AGENTS: ClassVar = {
+        "query_classificator": Agent(agent_name="query_classificator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_classify_prompt_openai,parser=JsonOutputParser),
         "docs_grader": Agent(agent_name="docs_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
         "query_processor": Agent(agent_name="query_processor", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
         "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=JsonOutputParser),
@@ -180,7 +181,9 @@ class ConfigGraph:
     def get_model_agent_prompt(self, model : str, agent : str) -> Union[PromptTemplate,str]:
         """Get specific parser for each graph agent"""
         if model == 'OPENAI':
-            if agent == "docs_grader":
+            if agent == 'query_classificator':
+                return query_classify_prompt_openai
+            elif agent == "docs_grader":
                 return grader_docs_prompt_openai
             elif agent == "query_processor":
                 return query_process_prompt_openai        
@@ -194,7 +197,9 @@ class ConfigGraph:
                 logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
                 raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")      
         elif model == 'NVIDIA' or  model =='OLLAMA':
-            if agent == "docs_grader":
+            if agent == 'query_classificator':
+                return query_classify_prompt
+            elif agent == "docs_grader":
                 return grader_docs_prompt
             elif agent == "query_processor":
                 return query_process_prompt        
