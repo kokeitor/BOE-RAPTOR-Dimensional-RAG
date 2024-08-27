@@ -28,6 +28,7 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
     question = state["question"][-1]
     _labels = LabelGenerator.LABELS.replace("\n", "").split(',')
     labels = [l.strip() for l in _labels]
+    print(colored(f"\labels:\n{labels}",'light_red',attrs=["bold"]))
     
     # LLM calling
     classify_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
@@ -53,9 +54,13 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     
     question = state["question"][-1]
     query_label = state["query_label"]
+    print(colored(f"\nAll questions:\n{state["question"]}",'light_blue',attrs=["bold"]))
+    
     if query_label !=  'Otra':
+        print(colored(f"\nInvoking db retriever without metadata filter",'light_blue',attrs=["bold"]))
         documents = retriever_vdb.invoke(input=question)
     else:
+        print(colored(f"\nInvoking db retriever with metadata filter : {query_label}",'light_blue',attrs=["bold"]))
         documents = retriever_vdb.invoke(input=question, filter={"label_str" : query_label})
     
     logger.info(f"Number of retrieved docs : {len(documents)}")

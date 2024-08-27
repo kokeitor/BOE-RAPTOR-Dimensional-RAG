@@ -75,7 +75,7 @@ def get_pinecone_retriever(
         logger.info(f"Connecting to an existing index of PineCone DB cient -> {os.getenv('PINECONE_INDEX_NAME')}")
         pinecone_vectorstore = PineconeVectorStore(
                                                 embedding=get_embedding_model(model=embedding_model),
-                                                text_key='text',
+                                                text_key='page_content',
                                                 distance_strategy=DistanceStrategy.COSINE,
                                                 pinecone_api_key=os.getenv('PINECONE_API_KEY'),
                                                 index_name=os.getenv("PINECONE_INDEX_NAME")
