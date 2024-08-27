@@ -242,7 +242,7 @@ class TextPreprocess:
             plt.xticks(rotation=45)
             plt.grid()
             os.makedirs(os.path.dirname(storage_path), exist_ok=True)
-            plt.savefig(storage_path, format="png",fallback_to_default=True)
+            plt.savefig(storage_path, format="png")
             plt.close()
 
         if data_is_string:

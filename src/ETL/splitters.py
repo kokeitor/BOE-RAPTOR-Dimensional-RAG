@@ -229,7 +229,7 @@ class CustomSemanticSplitter:
         plt.ylabel("Similarity distance between pairwise sentences")
         plot_file = os.path.join(os.path.abspath(self.storage_path), f"{get_current_spanish_date_iso()}_{pdf_id}_similarity_plot.png")
         logger.info(f"Saving similarity plot to -> {plot_file}")
-        plt.savefig(plot_file, format='png',fallback_to_default=True)
+        plt.savefig(plot_file, format='png')
         plt.close()
 
         # Plot histogram of similarity distances
@@ -244,7 +244,7 @@ class CustomSemanticSplitter:
         plt.grid(alpha=0.75)
         plot_file_hist = os.path.join(os.path.abspath(self.storage_path), f"{get_current_spanish_date_iso()}_{pdf_id}_similarity_hist.png")
         logger.info(f"Saving similarity histogram plot to -> {plot_file_hist}")
-        plt.savefig(plot_file_hist, format='png',fallback_to_default=True)
+        plt.savefig(plot_file_hist, format='png')
         plt.close()
 
 

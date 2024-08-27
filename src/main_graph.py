@@ -74,10 +74,9 @@ def main() -> None:
         logger.info("Creating graph and compiling workflow...")
         config_graph.graph = create_graph(config=config_graph)
         config_graph.compile_graph = compile_graph(config_graph.graph)
-        # save_graph(workflow)
+        save_graph(compile_graph=config_graph.compile_graph)
         logger.info("Graph and workflow created")
         
-
         # RunnableConfig
         runnable_config = RunnableConfig(recursion_limit=config_graph.iteraciones, configurable={"thread_id":config_graph.thread_id})
         
@@ -94,11 +93,9 @@ def main() -> None:
         
 
 
-
 if __name__ == '__main__':
     main()
-    # terminal command with script parameters : python app.py --data_path ./config/data.json --mode "graph" --config_path ./config/generation.json
-    # terminal command : python app.py 
+
 
 
 
