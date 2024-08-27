@@ -33,7 +33,7 @@ class State(TypedDict):
     """
     date : str
     question : Annotated[list[str],operator.add]
-    query_label : Annotated[list[str],operator.add]
+    query_label : str
     generation : str
     documents : Union[list[str],None] = None
     fact_based_answer : str

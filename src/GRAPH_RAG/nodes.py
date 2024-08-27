@@ -43,7 +43,7 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
 
 
 def retriever(vector_database : VectorDB, state : State) -> dict:
-    """Retrieve documents from vector database"""
+    """Retrieve documents from vector database"""s
     
     logger.info(f"Retriever node : \n {state}")
     print(colored(f"\nRetriever node 👩🏿‍💻 ",'light_blue',attrs=["bold"]))
@@ -52,13 +52,13 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     logger.info(f"Using client for retrieval : {vector_database.client=}")
     
     question = state["question"][-1]
-    query_label = state["query_label"][-1]
+    query_label = state["query_label"]
     documents = retriever_vdb.invoke(input=question, filter={"label_str" : query_label})
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     
-    print(colored(f"Date = {state['date']}\nQuestion = {state['question']}\nQuery label = {state['query_label'][-1]}\nNumber of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
+    print(colored(f"Date = {state['date']}\nQuestion = {state['question']}\nQuery label = {state['query_label']}\nNumber of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
 
     return {"documents": documents}
 
