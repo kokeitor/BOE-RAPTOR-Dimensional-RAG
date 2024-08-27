@@ -49,7 +49,7 @@ class Parser:
     @exec_time
     async def async_invoke(self) -> list[Document]:
         loop = asyncio.get_event_loop()
-        tasks = [loop.run_in_executor(None, self.reader.load_data, [file]) for file in os.listdir(self.path) if file.endswith(".pdf")]
+        tasks = [loop.run_in_executor(None, self.reader.aload_data, [file]) for file in os.listdir(self.path) if file.endswith(".pdf")]
         llama_parsed_docs = await asyncio.gather(*tasks)
         self.lang_parsed_docs = [d.to_langchain_format() for docs in llama_parsed_docs for d in docs]
         return self.lang_parsed_docs

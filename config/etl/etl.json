@@ -1,6 +1,6 @@
 {
   "parser": {
-    "directory_path": "./data/boe/dias/2024/04/17",
+    "directory_path": "./data/boe/dias/2024/04/16",
     "file_type": ".pdf",
     "recursive_parser": true,
     "result_type": "markdown",
