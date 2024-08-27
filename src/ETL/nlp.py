@@ -18,13 +18,12 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from langchain_community.chat_message_histories import ChatMessageHistory
 import logging
 from copy import deepcopy
 import matplotlib
 
 # Set the default font to DejaVu Sans
-matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['font.family'] = 'DejaVu Sans'  # or another font that includes the glyphs
 
 # Logging configuration
 logger = logging.getLogger("nlp_module_logger")  # Child logger [for this module]
@@ -243,7 +242,7 @@ class TextPreprocess:
             plt.xticks(rotation=45)
             plt.grid()
             os.makedirs(os.path.dirname(storage_path), exist_ok=True)
-            plt.savefig(storage_path, format="png")
+            plt.savefig(storage_path, format="png",fallback_to_default=True)
             plt.close()
 
         if data_is_string:

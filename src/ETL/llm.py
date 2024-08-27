@@ -8,18 +8,17 @@ from langchain.schema import Document
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_community.chat_models import ChatOllama
-from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_openai import ChatOpenAI
 from typing import Union, Optional
 import ETL.parsers
 import ETL.nlp
 import warnings
-import matplotlib
+import matplotlib.pyplot as plt
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
 
 # Set the default font to DejaVu Sans
-matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['font.family'] = 'DejaVu Sans'  # or another font that includes the glyphs
 
 # Suppress the specific FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
@@ -167,37 +166,6 @@ class LabelGenerator:
             doc.metadata['num_tokens'] = chunk_tokens
             doc.metadata['num_caracteres'] = chunk_len
 
-            """
-            # Generate labels
-            generation = {key: "0" for key in self.labels}  # Initialize with all labels and value 0
-            try:
-                generated_labels = self.chain.invoke({"text": chunk_text, "labels": self.labels})
-            except Exception as e:
-                logger.exception(f"LLM Error generation error message: {e}")
-                
-            try:
-                if isinstance(generated_labels, dict):
-                    # Update only the existing keys in the generation dictionary
-                    for key, value in generated_labels.items():
-                        if key in generation:
-                            generation[key] = str(value)
-                            logger.info(f"Value output by LLM : {str(value)} inserted to label : {key}")
-                    logger.info(f"LLM output: {generation}")
-                else:
-                    logger.error(f"Model output is not a dictionary analysing -> {doc.page_content}\n {doc.metadata}")
-                    logger.error(f"LLM output: {generation}")
-                    for key in generation.keys():
-                        generation[key] = "Model_Error: output not a json"
-                        
-                doc.metadata.update(generation)
-                
-            except Exception as e:
-                logger.exception(f"LLM Error message: {e}")
-                for key in generation.keys():
-                    generation[key] = f"Model_Error: {e}"
-                doc.metadata.update(generation)
-
-            """ 
             generation = {"label1":"","label3":"","label2":""}
             try:
                 generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
@@ -217,24 +185,3 @@ class LabelGenerator:
         return docs
 
 
-### LLM MODElS
-""" 
-load_dotenv()
-EMBEDDING_MODEL = HuggingFaceEmbeddings(model_name=os.getenv('EMBEDDING_MODEL'))
-EMBEDDING_MODEL_GPT4 = GPT4AllEmbeddings(model_name =os.getenv('EMBEDDING_MODEL_GPT4'))
-LOCAL_LLM = os.getenv('LOCAL_LLM')
-
-llm = ChatOllama(model=LOCAL_LLM, format="json", temperature=0)
-gen_llm = ChatOllama(model=LOCAL_LLM, temperature=0)
-"""
-clasify_prompt = PromptTemplate(
-    template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|> You are an assistant specialized in categorizing documents from the Spanish 
-    "Boletín Oficial del Estado" (BOE). Your task is to classify the provided text using the specified list of labels. The posible labels are: {list_labels}
-    If the text does not clearly fit any of these labels or requires a more general categorization, assign the label "other".
-    Provide the value label as a JSON with a single key 'Label'.
-    <|eot_id|><|start_header_id|>user<|end_header_id|>
-    Text: {text} <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
-    input_variables=["text","list_labels"],
-)
-### calsifier grader
-# clasify_chain = clasify_prompt | llm | JsonOutputParser()
