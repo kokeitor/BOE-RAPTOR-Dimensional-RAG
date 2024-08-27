@@ -11,14 +11,6 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from langchain_core.vectorstores import VectorStore
 
 
-class Analisis(BaseModel):
-    id : str
-    fecha : str
-    puntuacion: int
-    experiencias: list[dict[str,str]]
-    descripcion: str
-    status: str
-    
 class Question(BaseModel):
     id : Union[str,None] = None
     user_question : str
@@ -40,12 +32,9 @@ class State(TypedDict):
         
     """
     date : str
-    user_input : str
-    agent_output: Union[AgentAction, AgentFinish, None] = None
-    agent_intermediate_steps: Annotated[Union[list[tuple[AgentAction, str]],None], operator.add] = None
     question : Annotated[list[str],operator.add]
+    query_label : Annotated[list[str],operator.add]
     generation : str
-    query_process : str
     documents : Union[list[str],None] = None
     fact_based_answer : str
     useful_answer : int

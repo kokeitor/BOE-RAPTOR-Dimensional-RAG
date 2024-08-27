@@ -5,6 +5,17 @@ from langchain import hub
 
 # NVIDIA FORMAT 
 
+query_classify_prompt =  PromptTemplate(
+            template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            Provide the output as a JSON with one key: 'query_label'.
+             <|eot_id|><|start_header_id|>user<|end_header_id|>
+            Text: {text}
+            <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
+        )
+
 grader_docs_prompt = PromptTemplate(
     template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an AI model designed grade the relevance 
     of a retrieved document to a user question. If the document contains keywords related to the user question, 
@@ -35,7 +46,7 @@ query_process_prompt = PromptTemplate(
     Provide the reprocessed qeustion as a JSON with a single key 'reprocess_question' and no explanation.
     <|eot_id|><|start_header_id|>user<|end_header_id|>
     Question: {question} \n <|eot_id|><|start_header_id|>assistant<|end_header_id|>""",
-    input_variables=["question", "document"],
+    input_variables=["question"],
 )
 
 hallucination_prompt = PromptTemplate(
@@ -93,20 +104,14 @@ _routing_prompt = PromptTemplate(
 
 # OPENAI FORMAT
 
-agent_promt = hub.pull("hwchase17/openai-functions-agent")
-
-agent_custom_prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            """You are very powerful assistant, but don't know from Spanish 
-                BOE (Boletín Oficial del Estado) that is the official state gazette of Spain where legal documents, including laws,
-                decrees, official announcements, and government resolutions are publish""",
-        ),
-        ("user", "{input}"),
-        MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ]
-)
+query_classify_prompt_openai =  PromptTemplate(
+            template="""You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            Provide the output as a JSON with one key: 'query_label'.
+            Text: {text}""",
+            input_variables=["text", "labels"],
+            input_types={"labels":list[str],"text":str}
+        )
 
 grader_docs_prompt_openai = PromptTemplate(
     template="""You are an AI model designed grade the relevance 
@@ -133,9 +138,8 @@ query_process_prompt_openai = PromptTemplate(
     template="""You are a question re-writer that converts an input question to a better version that is optimized for vectorstore retrieval. \n
     Look at the input and try to reason about the underlying semantic intent / meaning.\n
     Provide the reprocessed qeustion as a JSON with a single key 'reprocess_question' and no explanation.
-    Provide the reprocessed question as a JSON with a single key 'reprocess_question' and no explanation.
     Question:\n{question}\n """,
-    input_variables=["question", "document"],
+    input_variables=["question"],
 )
 
 hallucination_prompt_openai = PromptTemplate(

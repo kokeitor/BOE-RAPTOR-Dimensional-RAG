@@ -1,5 +1,9 @@
 {
     "agents":{
+            "query_classificator":{
+                                "name":"OPENAI",
+                                "temperature":0
+                                },
               "docs_grader": {
                             "name":"OPENAI",
                             "temperature":0
@@ -17,7 +21,7 @@
                             "temperature":0
                             },
                 "answer_grader": {
-                                "name":"NVIDIA",
+                                "name":"OPENAI",
                                 "temperature":0
                                 }
         },

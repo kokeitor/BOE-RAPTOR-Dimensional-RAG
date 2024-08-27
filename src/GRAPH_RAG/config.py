@@ -10,9 +10,10 @@ from langchain.chains.llm import LLMChain
 from pydantic import BaseModel, ValidationError
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseOutputParser ,BaseTransformOutputParser
 from GRAPH_RAG.chains import get_chain
-from GRAPH_RAG.chains import get_chain
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever
 from GRAPH_RAG.prompts import (
+    query_classify_prompt_openai,
+    query_classify_prompt,
     grader_docs_prompt,
     gen_prompt,
     query_process_prompt,
@@ -25,7 +26,6 @@ from GRAPH_RAG.prompts import (
     grade_answer_prompt_openai
     )
 from GRAPH_RAG.base_models import (
-    Analisis,
     Question,
     Agent,
     VectorDB

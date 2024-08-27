@@ -9,7 +9,7 @@ from GRAPH_RAG.base_models import (
     Agent
 )
 from GRAPH_RAG.chains import get_chain
-from GRAPH_RAG.agents import get_openai_agent
+from ETL.llm import LabelGenerator
 from GRAPH_RAG.graph_utils import get_current_spanish_date_iso, merge_page_content
 
 
@@ -19,31 +19,27 @@ logger = logging.getLogger(__name__)
 
 ### Nodes
 
-def process_user_input_agent(state : State, get_agent : callable = get_openai_agent ) -> dict:
-    """Agent node that process a input user query and decides using a search boe info tool or to 
-    generate a direct-raw response if the input is not boe related"""
+def query_classificator(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
+    """Classify the input query using BOE labels"""
     
-    logger.info(f"Initial Agent node : \n {state}")
-    print(colored(f"\nInitial Agent node : ",'light_green'))
+    logger.info(f"Query Classificator node : \n {state}")
+    print(colored(f"\n{agent.agent_name=} 👩🏽 -> {agent.model=} : ", 'light_red',attrs=["bold"]))
+        
+    question = state["question"][-1]
+    _labels = LabelGenerator.LABELS.replace("\n", "").split(',')
+    labels = [l.strip() for l in _labels]
     
-    # Input user question
-    user_query = state["user_input"]
-    agent_intermediate_steps = state["agent_intermediate_steps"]
+    # LLM calling
+    classify_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
+    generation = classify_chain.invoke({"text": question, "labels": labels})
+    answer = generation["query_label"]
+    logger.info(f"Query : \n {answer}")
+    logger.info(f"Query label: \n {question}")
+    logger.info(f"Full Response : \n {generation}")
     
-    # Input format for agent 
-    inputs = {
-    "user_query": str(user_query),
-    "agent_intermediate_steps": [agent_intermediate_steps]
-        }
-
-    agent = get_agent()
-    agent_response = agent.invoke(inputs)
+    print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
     
-    logger.info(f"Agent Response : \n {agent_response}")
-    
-    print(colored(f"user_query -> {state['user_query'][-1]}\nAgent Response -> {agent_response}\n",'light_green'))
-
-    return {"agent_output" : agent_response}
+    return {"query_label" : answer}
 
 
 def retriever(vector_database : VectorDB, state : State) -> dict:
@@ -56,12 +52,13 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     logger.info(f"Using client for retrieval : {vector_database.client=}")
     
     question = state["question"][-1]
-    documents = retriever_vdb.invoke(question) # añadir filtro de metadata : .invoke(input=query, filter={filter_key : filter_value})
+    query_label = state["query_label"][-1]
+    documents = retriever_vdb.invoke(input=question, filter={"label_str" : query_label})
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
     
-    print(colored(f"Date = {state['date']}\nQuestion = {state['question']}\nNumber of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
+    print(colored(f"Date = {state['date']}\nQuestion = {state['question']}\nQuery label = {state['query_label'][-1]}\nNumber of retrieved docs =  {len(documents)}",'light_blue',attrs=["bold"]))
 
     return {"documents": documents}
 
@@ -80,29 +77,33 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
     
     # Score each doc
     relevant_docs = []
-    for index_doc , d in enumerate(documents):
-        content = d.page_content
-        logger.info(f"Document content : \n {content}")
+    if len(documents) > 0:
+        for index_doc , d in enumerate(documents):
+            content = d.page_content
+            logger.info(f"Document content : \n {content}")
 
-        score = grader_chain.invoke({"question": question, "document": content})
-        grade = score['score']
-        
-        print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
-        
-        # Document relevant
-        if grade.lower() == "yes":
-            logger.info(f"GRADE: DOCUMENT {index_doc} as RELEVANT")
-            relevant_docs.append(d)
-        # Document not relevant
+            score = grader_chain.invoke({"question": question, "document": content})
+            grade = score['score']
+            
+            print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
+            
+            # Document relevant
+            if grade.lower() == "yes":
+                logger.info(f"GRADE: DOCUMENT {index_doc} as RELEVANT")
+                relevant_docs.append(d)
+            # Document not relevant
+            else:
+                logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
+                
+        # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
+        if len(relevant_docs) == 0:  
+            return {"documents": None, "query_reprocess" : 'yes'}
+            
         else:
-            logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
-               
-    # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
-    if len(relevant_docs) == 0:  
-        return {"documents": None, "query_reprocess" : 'no'}
-        
+            return {"documents": relevant_docs, "query_reprocess" : 'no'}
     else:
-        return {"documents": relevant_docs, "query_reprocess" : 'no'}
+        print(colored(f"Documents retrieved == 0 -> query reprocess neccesary",'magenta',attrs=["bold"]))
+        return {"documents": None, "query_reprocess" : 'yes'}
     
 
 def generator(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
@@ -131,9 +132,9 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
 
 
 def process_query(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
-    """Reprocess a user query to improve docs retrieval"""
+    """Reprocess or process the user query to improve docs retrieval"""
 
-    logger.info(f"Query Reprocessing : \n {state}")
+    logger.info(f"Query Processing : \n {state}")
     print(colored(f"\n{agent.agent_name=} 📝 -> {agent.model=} : ", 'light_yelow',attrs=["bold"]))
     
     question = state["question"][-1]
@@ -194,10 +195,10 @@ def final_report(state : State) -> dict:
     documents = state["documents"]
     grade_answer= state["useful_answer"]
     grade_hall= state["fact_based_answer"]
-    query_process = state["query_process"]
+
     
     logger.info(f"Final model response : \n {state}")
-    print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**QUERY REPROCESS**{query_process}\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
+    print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
    
     return {"report" : generation}
 

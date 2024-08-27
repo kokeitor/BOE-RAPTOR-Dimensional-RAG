@@ -2,7 +2,7 @@ import logging
 import logging.config
 import logging.handlers
 from typing import List, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from langchain.chains.llm import LLMChain
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser

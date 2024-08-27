@@ -13,6 +13,7 @@ from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.graph_utils import get_current_spanish_date_iso_file_name_format
 from GRAPH_RAG.chains import get_chain
 from GRAPH_RAG.nodes import (
+    query_classificator,
     retriever,
     retreived_docs_grader,
     route_generate_requery,
@@ -33,6 +34,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     
     graph = StateGraph(State)
     
+    query_classificator = config.agents.get("query_classificator",None)
     vector_db = config.vector_db
     docs_grader = config.agents.get("docs_grader",None)
     query_processor = config.agents.get("query_processor",None)
@@ -42,6 +44,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
 
 
     # Define the nodes
+    graph.add_node("query_classificator",lambda state: query_classificator(state=state,agent=query_processor, get_chain=get_chain)) 
     graph.add_node("retriever",lambda state: retriever(state=state,vector_database=vector_db)) 
     graph.add_node("retreived_docs_grader",lambda state: retreived_docs_grader(state=state,agent=docs_grader, get_chain=get_chain))
     graph.add_node("reprocess_query",lambda state: process_query(state=state,agent=query_processor, get_chain=get_chain))
@@ -51,7 +54,8 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     graph.add_node("final_report",lambda state: final_report(state=state))
 
     # Add edges to the graph
-    graph.set_entry_point("retriever")
+    graph.set_entry_point("query_classificator")
+    graph.add_edge("query_classificator", "retriever")
     graph.set_finish_point("final_report")
     graph.add_edge("retriever", "retreived_docs_grader")
     graph.add_conditional_edges( 
@@ -62,7 +66,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
                                     "reprocess_query":"reprocess_query",
                                 }
                                 )
-    graph.add_edge("reprocess_query", "retriever")
+    graph.add_edge("reprocess_query", "query_classificator")
     graph.add_edge( "generator","hallucination_checker")
     graph.add_conditional_edges(
                                 source="hallucination_checker",
