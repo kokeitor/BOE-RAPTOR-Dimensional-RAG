@@ -2,7 +2,7 @@ from langchain.agents import create_openai_tools_agent
 from langchain_core.prompts.chat import ChatPromptTemplate
 from GRAPH_RAG.models import get_open_ai
 from GRAPH_RAG.tools import search_tool,final_answer_tool
-from GRAPH_RAG.prompts import agent_promt
+from GRAPH_RAG.prompts import agent_promt,agent_custom_prompt
 from langchain_core.runnables.base import Runnable
 from langchain.agents.format_scratchpad.openai_tools import (
     format_to_openai_tool_messages,

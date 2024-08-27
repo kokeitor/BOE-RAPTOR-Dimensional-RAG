@@ -41,7 +41,7 @@ def process_user_input_agent(state : State, get_agent : callable = get_openai_ag
     
     logger.info(f"Agent Response : \n {agent_response}")
     
-    print(colored(f"\user_query -> {state['user_query'][-1]}\nAgent Response -> {agent_response}\n",'light_green'))
+    print(colored(f"user_query -> {state['user_query'][-1]}\nAgent Response -> {agent_response}\n",'light_green'))
 
     return {"agent_output" : agent_response}
 
@@ -56,7 +56,7 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     logger.info(f"Using client for retrieval : {vector_database.client=}")
     
     question = state["question"][-1]
-    documents = retriever_vdb.invoke(question)
+    documents = retriever_vdb.invoke(question) # añadir filtro de metadata : .invoke(input=query, filter={filter_key : filter_value})
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")

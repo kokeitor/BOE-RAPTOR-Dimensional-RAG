@@ -22,7 +22,7 @@
                                 }
         },
     "vector_db": {
-                        "client":"qdrant",
+                        "client":"pinecone",
                         "hg_embedding_model":"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", 
                         "k" : 3
     },

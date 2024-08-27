@@ -18,12 +18,12 @@ logger = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
 
 
-def get_open_ai_json(temperature=0, model='gpt-3.5-turbo'):
+def get_open_ai_json(temperature=0, model='gpt-4o-mini'):
     """
     _summary_
     Args:
         temperature (int, optional): _description_. Defaults to 0.
-        model (str, optional): _description_. Defaults to 'gpt-3.5-turbo'.
+        model (str, optional): _description_. Defaults to 'gpt-4o-mini'.
     """
     logger.info(f"Using Open AI : {model}")
     llm = ChatOpenAI(
@@ -34,12 +34,12 @@ def get_open_ai_json(temperature=0, model='gpt-3.5-turbo'):
     return llm
 
 
-def get_open_ai(temperature=0, model='gpt-3.5-turbo'):
+def get_open_ai(temperature=0, model='gpt-4o-mini'):
     """
     _summary_
     Args:
         temperature (int, optional): _description_. Defaults to 0.
-        model (str, optional): _description_. Defaults to 'gpt-3.5-turbo'.
+        model (str, optional): _description_. Defaults to 'gpt-4o-mini'.
     """
     logger.info(f"Using Open AI : {model}")
     llm = ChatOpenAI(

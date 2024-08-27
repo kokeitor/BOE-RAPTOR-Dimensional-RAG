@@ -66,23 +66,22 @@ def get_chromadb_retriever(
 @VectorDB.test_db.try_retriever(query="¿hola?")
 @VectorDB.test_db.try_client_conexion
 def get_pinecone_retriever(
-                            index_name :str = os.getenv("CHROMA_COLLECTION_NAME"), 
                             get_embedding_model : callable = get_hg_emb, 
                             embedding_model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" ,
                             search_kwargs : dict = {"k" : 3},
                             ) -> tuple[VectorStoreRetriever,VectorStore]:
 
     try:
-        logger.info(f"Connecting to an existing index of PineCone DB cient -> {index_name}")
+        logger.info(f"Connecting to an existing index of PineCone DB cient -> {os.getenv('PINECONE_INDEX_NAME')}")
         pinecone_vectorstore = PineconeVectorStore(
                                                 embedding=get_embedding_model(model=embedding_model),
                                                 text_key='text',
                                                 distance_strategy=DistanceStrategy.COSINE,
                                                 pinecone_api_key=os.getenv('PINECONE_API_KEY'),
-                                                index_name=index_name
+                                                index_name=os.getenv("PINECONE_INDEX_NAME")
                                                 )
     except Exception as e:
-        logger.error(f"Error while connecting to PineCone DB from existing index : {index_name} -> {e}")
+        logger.error(f"Error while connecting to PineCone DB from existing index : {os.getenv('PINECONE_INDEX_NAME')} -> {e}")
         raise VectorDatabaseError(message="Error while connecting to Chroma DB",exception=e)
         
     retriever = pinecone_vectorstore.as_retriever(search_kwargs = search_kwargs)
