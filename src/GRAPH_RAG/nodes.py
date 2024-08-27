@@ -43,7 +43,7 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
 
 
 def retriever(vector_database : VectorDB, state : State) -> dict:
-    """Retrieve documents from vector database"""s
+    """Retrieve documents from vector database"""
     
     logger.info(f"Retriever node : \n {state}")
     print(colored(f"\nRetriever node 👩🏿‍💻 ",'light_blue',attrs=["bold"]))
@@ -53,7 +53,10 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     
     question = state["question"][-1]
     query_label = state["query_label"]
-    documents = retriever_vdb.invoke(input=question, filter={"label_str" : query_label})
+    if query_label !=  'Otra':
+        documents = retriever_vdb.invoke(input=question)
+    else:
+        documents = retriever_vdb.invoke(input=question, filter={"label_str" : query_label})
     
     logger.info(f"Number of retrieved docs : {len(documents)}")
     logger.debug(f"Retrieved documents : \n {documents}")
@@ -110,7 +113,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     """Generate answer using RAG on retrieved documents"""
     
     logger.info(f"RAG Generator node : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 👩🏽 -> {agent.model=} : ", 'light_red',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 👩🏽 -> {agent.model=}", 'light_red',attrs=["bold"]))
         
     question = state["question"][-1]
     
@@ -135,7 +138,7 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     """Reprocess or process the user query to improve docs retrieval"""
 
     logger.info(f"Query Processing : \n {state}")
-    print(colored(f"\n{agent.agent_name=} 📝 -> {agent.model=} : ", 'light_yelow',attrs=["bold"]))
+    print(colored(f"\n{agent.agent_name=} 📝 -> {agent.model=}", 'blue',attrs=["bold"]))
     
     question = state["question"][-1]
     chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
@@ -143,9 +146,9 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     reprocesed_question = response["reprocess_question"]
 
     logger.info(f"{question=} // after reprocessing question -> {response=}")
-    print(colored(f"Initial question : {question=}\nAfter reprocessing question : {response=}",'light_yelow',attrs=["bold"]))
+    print(colored(f"Initial question : {question=}\nAfter reprocessing question : {response=}",'blue',attrs=["bold"]))
     
-    return {"question" : reprocesed_question}
+    return {"question" : [reprocesed_question]}
 
 
 def hallucination_checker(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
