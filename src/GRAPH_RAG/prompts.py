@@ -8,6 +8,7 @@ from langchain import hub
 query_classify_prompt =  PromptTemplate(
             template="""<|begin_of_text|><|start_header_id|>system<|end_header_id|>You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).
             Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            If the text does not belong to a label, classify it as 'Otra'.
             Provide the output as a JSON with one key: 'query_label'.
              <|eot_id|><|start_header_id|>user<|end_header_id|>
             Text: {text}
@@ -105,8 +106,9 @@ _routing_prompt = PromptTemplate(
 # OPENAI FORMAT
 
 query_classify_prompt_openai =  PromptTemplate(
-            template="""You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).
-            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}
+            template="""You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).\n
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}\n
+            If the text does not belong to a label, classify it as 'Otra'.\n
             Provide the output as a JSON with one key: 'query_label'.
             Text: {text}""",
             input_variables=["text", "labels"],

@@ -101,7 +101,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
             
         else:
             return {"documents": relevant_docs, "query_reprocess" : 'no'}
-    else:
+    elif len(documents) == 0:        
         print(colored(f"Documents retrieved == 0 -> query reprocess neccesary",'magenta',attrs=["bold"]))
         return {"documents": None, "query_reprocess" : 'yes'}
     
