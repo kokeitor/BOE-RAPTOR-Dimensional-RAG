@@ -1,8 +1,10 @@
 import os
 from langchain.schema import Document
 from llama_parse import LlamaParse
+from ETL.utils import exec_time
 from llama_index.core import SimpleDirectoryReader
 import logging
+import asyncio
 
 
 # Logging configuration
@@ -31,7 +33,8 @@ class Parser:
             recursive=recursive_parser,  # recursively search in subdirectories
             required_exts=[file_type]
         )
-        
+    
+    @exec_time
     def invoke(self) -> list[Document]:
         
         self.llama_parsed_docs = self.reader.load_data()  # returns List[llama doc objt]
@@ -42,3 +45,12 @@ class Parser:
         else:
             logger.info(f"Parsed num of docs -> {len(self.lang_parsed_docs) }")
         return self.lang_parsed_docs
+    
+    @exec_time
+    async def async_invoke(self) -> list[Document]:
+        loop = asyncio.get_event_loop()
+        tasks = [loop.run_in_executor(None, self.reader.load_data, [file]) for file in os.listdir(self.path) if file.endswith(".pdf")]
+        llama_parsed_docs = await asyncio.gather(*tasks)
+        self.lang_parsed_docs = [d.to_langchain_format() for docs in llama_parsed_docs for d in docs]
+        return self.lang_parsed_docs
+

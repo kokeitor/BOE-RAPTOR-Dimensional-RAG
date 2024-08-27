@@ -54,9 +54,10 @@ def retriever(vector_database : VectorDB, state : State) -> dict:
     
     question = state["question"][-1]
     query_label = state["query_label"]
-    print(colored(f"\nAll questions:\n{state["question"]}",'light_blue',attrs=["bold"]))
+    print(colored(f"\nAll questions:\n{state['question']}",'light_blue',attrs=["bold"]))
+    print(colored(f"\nLast question:{state['question'][-1]}",'light_blue',attrs=["bold"]))
     
-    if query_label !=  'Otra':
+    if query_label ==  'Otra':
         print(colored(f"\nInvoking db retriever without metadata filter",'light_blue',attrs=["bold"]))
         documents = retriever_vdb.invoke(input=question)
     else:

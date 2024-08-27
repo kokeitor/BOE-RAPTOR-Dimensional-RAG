@@ -57,49 +57,6 @@ def main() -> None:
     ETL_CONFIG_PATH = os.path.join(os.path.abspath("./config/etl"),"etl.json")
     pipeline = Pipeline(config_path=ETL_CONFIG_PATH, database=BBDD)
     result = pipeline.run()
-
-    text = """ En este apartado se valorará, en su caso, el grado reconocido como personal
-    funcionario de carrera en otras Administraciones Públicas o en la Sociedad Estatal de
-    Correos y Telégrafos, en el Cuerpo o Escala desde el que participa el funcionario o
-    funcionaria de carrera, cuando se halle dentro del intervalo de niveles establecido en el
-    artículo 71.1 del Real Decreto 364/1995, de 10 de marzo, para el subgrupo de titulación
-    en el que se encuentra clasificado el mismo.
-
-    En el supuesto de que el grado reconocido en el ámbito de otras Administraciones
-    Públicas o en la Sociedad Estatal de Correos y Telégrafos exceda del máximo
-    establecido en la Administración General del Estado, de acuerdo con el artículo 71 del
-    Reglamento mencionado en el punto anterior, para el subgrupo de titulación a que
-    pertenezca el funcionario o la funcionaria de carrera, deberá valorársele el grado máximo
-    correspondiente al intervalo de niveles asignado a su subgrupo de titulación en la
-    Administración General del Estado.
-
-    El funcionario o la funcionaria de carrera que considere tener un grado personal
-    consolidado, o que pueda ser consolidado durante el periodo de presentación de
-    instancias, deberá recabar del órgano o unidad a que se refiere el apartado 1 de la Base
-    Quinta, que dicha circunstancia quede expresamente reflejada en el anexo
-    correspondiente al certificado de méritos (anexo II)."""
-
-    """
-    s = Splitter(
-        embedding_model=EMBEDDING_MODEL,
-        tokenizer_model=tokenizer_llama3,
-        threshold=75,
-        max_tokens=500,
-        verbose=1,
-        buffer_size=3,
-        max_big_chunks=4,
-        splitter_mode='CUSTOM',
-        embedding_for_research='HG',
-        score_threshold_for_research=0.82,
-    )
-    doc = Document(page_content=text, metadata={"hola": '1'})
-    split_docs = s.invoke(docs=[doc])
-
-    # Example of usage:
-    pipeline = Pipeline(config_path='path_to_config.json')
-    result = pipeline.run()
-    
-    """
     
 
 if __name__ == '__main__':

@@ -8,6 +8,9 @@ import logging
 import logging.config
 import logging.handlers
 from datetime import datetime, timezone
+import time
+import functools
+
 
 
 # Logging configuration
@@ -43,3 +46,15 @@ def parse_config(config_path) -> dict:
 
 def get_id() -> str:
     return str(uuid.uuid4())
+
+def exec_time(func):
+    """Decorator to measure the execution time of a function."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()  # Record the start time
+        result = func(*args, **kwargs)
+        end_time = time.time()  # Record the end time
+        execution_time = end_time - start_time  # Calculate the difference
+        print(f"Execution time of {func.__name__}: {execution_time:.4f} seconds")
+        return result
+    return wrapper
