@@ -85,17 +85,19 @@ class Storer:
 
 
 class Pipeline:
-    def __init__(self, config_path: str, database : GoogleSheet):
+    def __init__(self, config_path: str):
         self.config_path = config_path
         self.config = self._parse_config()
         self.parser = self._create_parser()
         self.splitter = self._create_splitter()
         self.label_generator = self._create_label_generator()
         self.storer = self._create_storer()
+        """ 
         self.database = database
         self.database_config = self.config.get("google_sheet_database", None)
         self.api_max_tries = self.database_config.get("api_call_max_tries", 15)
         self.database.api_call_max_tries = self.api_max_tries
+        """
 
     def _parse_config(self) -> dict:
         if not os.path.exists(self.config_path):

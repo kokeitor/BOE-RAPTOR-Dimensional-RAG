@@ -52,10 +52,10 @@ def main() -> None:
     
     # Google Sheet database object
     # bbdd_credentials = st.secrets["google"]["google_secrets"] # Google api credentials [drive and google sheets as bddd]
-    BBDD = GoogleSheet(credentials=GOOGLE_SECRETS_FILE_NAME, document=GOOGLE_DOCUMENT_NAME, sheet_name=GOOGLE_SHEET_NAME)
+    # BBDD = GoogleSheet(credentials=GOOGLE_SECRETS_FILE_NAME, document=GOOGLE_DOCUMENT_NAME, sheet_name=GOOGLE_SHEET_NAME)
     
     ETL_CONFIG_PATH = os.path.join(os.path.abspath("./config/etl"),"etl.json")
-    pipeline = Pipeline(config_path=ETL_CONFIG_PATH, database=BBDD)
+    pipeline = Pipeline(config_path=ETL_CONFIG_PATH)
     result = pipeline.run()
     
 
