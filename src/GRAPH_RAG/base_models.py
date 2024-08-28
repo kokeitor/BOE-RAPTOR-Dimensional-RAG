@@ -16,7 +16,6 @@ class Question(BaseModel):
     user_question : str
     date : str
     
-
 class State(TypedDict):
     """
     Represents the state of our graph.

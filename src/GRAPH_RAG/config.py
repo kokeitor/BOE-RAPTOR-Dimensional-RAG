@@ -39,6 +39,7 @@ from GRAPH_RAG.models import (
     get_nvdia,
     get_ollama,
     get_open_ai_json,
+    get_groq,
     get_openai_emb,
     get_hg_emb
 )

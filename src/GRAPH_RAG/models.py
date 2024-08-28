@@ -8,6 +8,7 @@ from langchain_openai import ChatOpenAI
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_community.chat_models import ChatOllama
 import warnings
+from langchain_groq import ChatGroq
 
 
 # Logging configuration
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 # Suppress all warnings
 warnings.filterwarnings("ignore")
 
+# LLMs
 
 def get_open_ai_json(temperature=0, model='gpt-4o-mini'):
     """
@@ -78,6 +80,18 @@ def get_ollama(temperature=0, model='llama3'):
                     format="json"
                     )
     return llm
+
+def get_groq(temperature : float = 0.0, model : str = "llama3-70b-8192" ):
+    llm = ChatGroq(
+    model=model,
+    temperature=temperature,
+    max_tokens=None,
+    timeout=None,
+    max_retries=10,
+    )
+    return llm
+
+# Embeddings models
 
 def get_hg_emb(model : str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"):
     """_summary_
