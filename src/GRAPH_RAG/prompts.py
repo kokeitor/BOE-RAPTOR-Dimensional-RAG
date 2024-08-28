@@ -2,6 +2,20 @@ from langchain.prompts import PromptTemplate
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain import hub
 
+# GROQ FORMAT 
+
+generate_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are an assistant for question-answering tasks.\n
+                    Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
+                    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
+                    Context:\n{context}\n""",
+            ),
+            ("human", "{question}"),
+        ]
+    )
 
 # NVIDIA FORMAT 
 

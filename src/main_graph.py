@@ -6,6 +6,10 @@ from langchain.schema import Document
 from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
+from GRAPH_RAG.models import get_groq
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
+
 from langchain_core.runnables.config import RunnableConfig
 
 from GRAPH_RAG.graph_utils import (
@@ -25,7 +29,7 @@ def main() -> None:
 
     # Set environment variables
     os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+    # os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
     os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
     os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
@@ -40,8 +44,29 @@ def main() -> None:
     os.environ['QDRANT_COLLECTIONS'] = os.getenv('QDRANT_COLLECTIONS')
     os.environ['APP_MODE'] = os.getenv('APP_MODE')
     os.environ['NVIDIA_API_KEY'] = os.getenv('NVIDIA_API_KEY')
- 
-        
+    os.environ['GROQ_API_KEY'] = os.getenv('GROQ_API_KEY')
+    llm = get_groq()
+    generate_groq_prompt = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    """You are an assistant for question-answering tasks.\n
+                        Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
+                        Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
+                        Context:\n{context}\n""",
+                ),
+                ("human", "{question}"),
+            ]
+        )
+
+    chain = generate_groq_prompt | llm | JsonOutputParser()
+    print(chain.invoke(
+        {
+            "question": "¿Cuantos años tienes?",
+            "context": "Mi nombre es Pedrito"
+        }
+    ))
+    """ 
     # Logger set up
     setup_logging()
     
@@ -90,9 +115,8 @@ def main() -> None:
             for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
                     logger.debug(f"Graph event {key} - {value}")
+    """
         
-
-
 if __name__ == '__main__':
     main()
 
