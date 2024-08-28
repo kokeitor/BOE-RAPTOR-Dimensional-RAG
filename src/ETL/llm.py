@@ -167,14 +167,15 @@ class LabelGenerator:
             doc.metadata['num_caracteres'] = chunk_len
 
             generation = {"label1":"","label3":"","label2":""}
+            MIN_CHUNK_LEN = 3
             try:
-                if len(chunk_text) > 0:
+                if len(chunk_text) > MIN_CHUNK_LEN:
                     generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
                 logger.info(f"LLM output for chunk of len {len(chunk_text)}:\n{generation=}")
             except Exception as e:
                 logger.exception(f"LLM Error generation error message for chunk of len = {len(chunk_text)}\nCHUNK :{chunk_text}:\nERROR: {e}")
             
-            if len(chunk_text) == 0:
+            if len(chunk_text) <= MIN_CHUNK_LEN:
                 generation = {"label1":"NoChunkText","label3":"NoChunkText","label2":"NoChunkText"}
             try:
                 id2label = []
