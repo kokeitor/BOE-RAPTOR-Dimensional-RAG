@@ -12,7 +12,6 @@ import time
 import functools
 
 
-
 # Logging configuration
 logger = logging.getLogger("ETL_module_logger")  # Child logger [for this module]
 # LOG_FILE = os.path.join(os.path.abspath("../../../logs/download"), "download.log")  # If not using json config

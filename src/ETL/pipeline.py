@@ -24,7 +24,7 @@ from ETL.llm import LabelGenerator
 
 
 # Set the default font to DejaVu Sans
-matplotlib.rcParams['font.family'] = 'DejaVu Sans'
+plt.rcParams['font.family'] = 'DejaVu Sans'
 
 # Suppress the specific FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
@@ -273,6 +273,7 @@ class Pipeline:
         labeled_docs = self.label_generator.invoke(split_docs)
         self.storer.invoke(labeled_docs)
         # Saving in bbdd [google sheets] -> only part of the docs per pipeline call because -> google sheets api call limit (restore eah minute)
+        """ 
         logger.info(f"api_max_tries = {self.api_max_tries}")
         for i,doc in enumerate(labeled_docs):
             if i+1 < self.database.api_call_max_tries:
@@ -288,6 +289,7 @@ class Pipeline:
             else:
                 logger.warning(f"Api google sheet [database modde] limit reach -> {self.api_max_tries},\nNo more chunks stored in {os.getenv('GOOGLE_DOCUMENT_NAME')},\nLast chunk stored -> {chunk=}")
                 break
+        """
         return labeled_docs
     
         

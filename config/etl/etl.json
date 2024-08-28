@@ -1,9 +1,9 @@
 {
   "parser": {
-    "directory_path": "./data/boe/dias/2024/04/17",
+    "directory_path": "./data/boe/dias/2024/04/prueba",
     "file_type": ".pdf",
     "recursive_parser": true,
-    "result_type": "markdown",
+    "result_type": "text",
     "verbose": true
   },
   "splitter": {
@@ -70,7 +70,7 @@
   },
   "storer": {
     "store_path": "./data/boedataset",
-    "file_name":"raptor_text_17",
+    "file_name":"28agosto",
     "file_format": "csv"
   },
   "google_sheet_database": {
