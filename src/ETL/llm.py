@@ -168,12 +168,14 @@ class LabelGenerator:
 
             generation = {"label1":"","label3":"","label2":""}
             try:
-                generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
+                if len(chunk_text) > 0:
+                    generation = self.chain.invoke({"text": chunk_text, "labels": self.labels})
                 logger.info(f"LLM output for chunk of len {len(chunk_text)}:\n{generation=}")
-                
             except Exception as e:
                 logger.exception(f"LLM Error generation error message for chunk of len = {len(chunk_text)}\nCHUNK :{chunk_text}:\nERROR: {e}")
-                
+            
+            if len(chunk_text) == 0:
+                generation = {"label1":"NoChunkText","label3":"NoChunkText","label2":"NoChunkText"}
             try:
                 id2label = []
                 for _,label in generation.items():

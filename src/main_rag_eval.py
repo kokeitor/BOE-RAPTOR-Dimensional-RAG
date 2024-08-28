@@ -25,7 +25,7 @@ def main() -> None:
     # Create Raptor data (make cluster summary, process and store in vector database)
     testset = generate_testset(
         docs_path="./data/boedataset", 
-        from_date="2024-08-27", 
+        from_date="2024-08-28", 
         to_date="2024-08-30"
     )
     print(testset.to_pandas())
