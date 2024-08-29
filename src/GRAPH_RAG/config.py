@@ -204,7 +204,13 @@ class ConfigGraph:
                 logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
                 raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")      
         elif model == 'GROQ':
-            if agent == "generator":
+            if agent == 'query_classificator':
+                return query_classify_groq_prompt
+            elif agent == "docs_grader":
+                return grader_docs_groq_prompt
+            elif agent == "query_processor":
+                return query_process_prompt_openai
+            elif agent == "generator":
                 return generate_groq_prompt
             elif agent == "hallucination_grader":
                     return hall_groq_prompt
