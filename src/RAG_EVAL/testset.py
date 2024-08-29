@@ -1,4 +1,4 @@
-from ragas.testset.generator import TestsetGenerator
+from ragas.testset.generator import TestsetGenerator, TestDataset
 from ragas.testset.evolutions import simple, reasoning, multi_context
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.schema import Document
@@ -8,7 +8,8 @@ import logging.handlers
 from RAPTOR.exceptions import DirectoryNotFoundError
 import pandas as pd
 from langchain_community.document_loaders import DataFrameLoader
-import datetime
+from datetime import datetime
+from ragas.run_config import RunConfig
 from dotenv import load_dotenv
 
 # Logging configuration
@@ -85,32 +86,25 @@ def get_data(docs_path : str, from_date : str, to_date : str) -> pd.DataFrame:
 def generate_testset(
                     docs_path : str,
                     from_date : str,
-                    to_date : str,
-                    generator_llm : ChatOpenAI ,
-                    critic_llm : ChatOpenAI , 
-                    embedding_model : OpenAIEmbeddings
-                    ):
+                    to_date : str
+                    ) -> TestDataset:
     """_summary_
 
     Args:
         docs_path (str): _description_
         from_date (str): "2024-08-25"
         to_date (str): "2024-08-25"
-        generator_llm (ChatOpenAI, optional): _description_. Defaults to ChatOpenAI(model="gpt-4o-mini").
-        critic_llm (ChatOpenAI, optional): _description_. Defaults to ChatOpenAI(model="gpt-4o-mini").
-        embedding_model (OpenAIEmbeddings, optional): _description_. Defaults to OpenAIEmbeddings().
-
     Returns:
         _type_: _description_
     """
     load_dotenv()
     generator_llm = ChatOpenAI(
                         model="gpt-4o-mini",
-                        api_key=os.getenv('OPENAI_API_KEY')
+                        temperature=0.0
                         )
     critic_llm = ChatOpenAI(
                     model="gpt-4o-mini",
-                    api_key=os.getenv('OPENAI_API_KEY')
+                    temperature=0.0
                     )
     
     embedding_model = OpenAIEmbeddings()
@@ -123,9 +117,22 @@ def generate_testset(
     
     docs_df = get_data(docs_path=docs_path,from_date=from_date,to_date=to_date) # dataframe with docs
     df_loader = DataFrameLoader(data_frame=docs_df, page_content_column="text")
-    docs= df_loader.load() # list of docs
+    docs = df_loader.load() # list of docs
+    try:
+        logger.info(f"Number of docs to create RAG testset {len(docs)}")
+    except Exception as e:
+        logger.error(f"{e}")
     
+    # Add filename key to metadata docs
+    for d in docs:
+        d.metadata['filename'] = d.metadata['pdf_id']
+        
     # generate testset
-    testset = generator.generate_with_langchain_docs(docs, test_size=10, distributions={simple: 0.5, reasoning: 0.25, multi_context: 0.25})
+    testset = generator.generate_with_langchain_docs(
+                    docs, 
+                    test_size=10, 
+                    distributions={simple: 0.5, reasoning: 0.25, multi_context: 0.25},
+                    run_config=RunConfig(max_workers=2)
+                    )
     
     return testset
