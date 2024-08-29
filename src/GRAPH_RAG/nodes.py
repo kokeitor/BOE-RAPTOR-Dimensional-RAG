@@ -129,8 +129,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
                     fail_llm = False
                 # LLM output error
                 else:
-                    print(colored(f"\nERROR LLM SCORING RETRIEVE DOC :\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
-                    print(colored(f"Retry chain invoke ... ",'magenta',attrs=["bold"]))
+                    print(colored(f"\nERROR LLM OUTPUT IN SCORING RETRIEVE DOC -> Retry chain invoke ...",'magenta',attrs=["bold"]))
                     
         # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
         if len(relevant_docs) == 0:  
@@ -138,6 +137,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
             
         else:
             return {"documents": relevant_docs, "query_reprocess" : 'no'}
+        
     elif len(documents) == 0:        
         print(colored(f"Documents retrieved == 0 -> query reprocess neccesary",'magenta',attrs=["bold"]))
         return {"documents": None, "query_reprocess" : 'yes'}
@@ -168,7 +168,7 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     logger.info(f"RAG Question : \n {question}")
     logger.info(f"RAG Response : \n {generation}")
     
-    print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
+    print(colored(f"\nQuestion -> {state['question'][-1]}\nContext -> {context}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
     
     return {"generation" : answer}
 
@@ -205,15 +205,22 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
     hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
-    response = hall_chain.invoke({"documents": context, "generation": generation})
     
-    if agent.model == "GROQ":
-        fact_based_answer = response
-    else:
-        fact_based_answer = response["score"]
+    MAX_ITER = 4
+    for _ in range(0,MAX_ITER):
+        response = hall_chain.invoke({"documents": context, "generation": generation})
+    
+        if agent.model == "GROQ":
+            fact_based_answer = response
+        else:
+            fact_based_answer = response["score"]
+        
+        if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no"):
+            break
+        else:
+            print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER -> Retry chain invoke ...",'light_cyan',attrs=["bold"]))
         
     logger.info(f"hallucination grade : {response=}")
-
     print(colored(f"Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
     
     return {"fact_based_answer" : fact_based_answer}
@@ -229,15 +236,22 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     question = state["question"][-1]
 
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
-    response = garder_chain.invoke({"question": question, "generation": generation})
     
-    if agent.model == "GROQ":
-        grade = response
-    else:
-        grade = response["score"]
+    MAX_ITER = 4
+    for _ in range(0,MAX_ITER):
+        response = garder_chain.invoke({"question": question, "generation": generation})
+    
+        if agent.model == "GROQ":
+            grade = response
+        else:
+            grade = response["score"]
+            
+        if (grade.lower() == "yes" or grade.lower() == "no"):
+            break
+        else:
+            print(colored(f"\nERROR LLM OUTPUT IN GENERATION GRADER -> Retry chain invoke ...",'light_cyan',attrs=["bold"]))
         
     logger.info(f"Answer grade : {response=}")
-    
     print(colored(f"Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
     
     return { "useful_answer" : grade}
