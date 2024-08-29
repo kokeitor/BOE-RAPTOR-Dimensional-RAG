@@ -9,7 +9,7 @@ from RAPTOR.exceptions import DirectoryNotFoundError
 import pandas as pd
 from langchain_community.document_loaders import DataFrameLoader
 import datetime
-
+from dotenv import load_dotenv
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -67,6 +67,7 @@ def get_data(docs_path : str, from_date : str, to_date : str) -> pd.DataFrame:
                     if filename.endswith('.csv'):
                         df = pd.read_csv(file_path)
                         logger.info(f"Reading CSV file : {file_path}")
+                        logger.info(f"Dataframe columns : {df.columns}")
                         dataframes.append(df)
                     elif filename.endswith('.parquet'):
                         df = pd.read_parquet(file_path)
@@ -85,9 +86,9 @@ def generate_testset(
                     docs_path : str,
                     from_date : str,
                     to_date : str,
-                    generator_llm : ChatOpenAI = ChatOpenAI(model="gpt-4o-mini") ,
-                    critic_llm : ChatOpenAI = ChatOpenAI(model="gpt-4o-mini") , 
-                    embedding_model : OpenAIEmbeddings = OpenAIEmbeddings()
+                    generator_llm : ChatOpenAI ,
+                    critic_llm : ChatOpenAI , 
+                    embedding_model : OpenAIEmbeddings
                     ):
     """_summary_
 
@@ -102,11 +103,22 @@ def generate_testset(
     Returns:
         _type_: _description_
     """
-
+    load_dotenv()
+    generator_llm = ChatOpenAI(
+                        model="gpt-4o-mini",
+                        api_key=os.getenv('OPENAI_API_KEY')
+                        )
+    critic_llm = ChatOpenAI(
+                    model="gpt-4o-mini",
+                    api_key=os.getenv('OPENAI_API_KEY')
+                    )
+    
+    embedding_model = OpenAIEmbeddings()
+    
     generator = TestsetGenerator.from_langchain(
-        generator_llm,
-        critic_llm,
-        embedding_model
+        generator_llm=generator_llm,
+        critic_llm=critic_llm,
+        embeddings=embedding_model
     )
     
     docs_df = get_data(docs_path=docs_path,from_date=from_date,to_date=to_date) # dataframe with docs

@@ -4,8 +4,6 @@ from RAG_EVAL.testset import generate_testset
 from RAG_EVAL.utils import setup_logging
 from dotenv import load_dotenv
 
-
-
 # Logging configuration
 logger = logging.getLogger(__name__)
 
