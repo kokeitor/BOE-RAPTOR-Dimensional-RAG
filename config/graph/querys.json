@@ -1,7 +1,12 @@
 [
     {
-        "user_question": "¿Qué fecha tiene la resolución de la Subsecretaría sobre la Carrera Diplomática?",
-        "ground_truth": "La resolución tiene fecha del 18 de abril de 2024.",
+        "user_question": "¿Qué establece el artículo 14 del Real Decreto 674/1993 relacionado con los nombramientos en la Carrera Diplomática?",
+        "ground_truth": "Establece que los nombramientos en el nuevo destino se harán conforme a lo dispuesto en dicho artículo.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Cuándo debe realizarse la incorporación a los puestos asignados según la resolución de 18 de abril de 2024?",
+        "ground_truth": "La incorporación debe producirse durante el mes de agosto de 2024.",
         "date": "2024-08-29"
     },
     {
@@ -10,13 +15,8 @@
         "date": "2024-08-29"
     },
     {
-        "user_question": "¿Qué establece el artículo 14 del Real Decreto 674/1993 relacionado con los nombramientos en la Carrera Diplomática?",
-        "ground_truth": "Establece que los nombramientos en el nuevo destino se harán conforme a lo dispuesto en dicho artículo.",
-        "date": "2024-08-29"
-    },
-    {
-        "user_question": "¿Cuándo debe realizarse la incorporación a los puestos asignados según la resolución de 18 de abril de 2024?",
-        "ground_truth": "La incorporación debe producirse durante el mes de agosto de 2024.",
+        "user_question": "¿Qué fecha tiene la resolución de la Subsecretaría sobre la Carrera Diplomática?",
+        "ground_truth": "La resolución tiene fecha del 18 de abril de 2024.",
         "date": "2024-08-29"
     },
     {

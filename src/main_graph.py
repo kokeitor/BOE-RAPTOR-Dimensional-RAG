@@ -110,16 +110,21 @@ def main() -> None:
         runnable_config = RunnableConfig(recursion_limit=config_graph.iteraciones, configurable={"thread_id":config_graph.thread_id})
         
         # itera por todos questions definidos
+        logger.info(f"Total user questions:\n{config_graph.user_questions}")
         for question in config_graph.user_questions:
             
             logger.info(f"User Question: {question.user_question}")
             logger.info(f"User id question: {question.id}")
             inputs = {"question": [f"{question.user_question}"], "date" : question.date}
             
+            """ 
             for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
                     logger.info(f"Graph event {key} - {value}")
-                
+            """
+            state = config_graph.compile_graph.invoke(input=inputs,config=runnable_config)
+            logger.info(f"Final state graph -> {state}")
+            
 if __name__ == '__main__':
     main()
 

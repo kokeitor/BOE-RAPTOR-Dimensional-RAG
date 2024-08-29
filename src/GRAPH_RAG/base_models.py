@@ -14,6 +14,7 @@ from langchain_core.vectorstores import VectorStore
 class Question(BaseModel):
     id : Union[str,None] = None
     user_question : str
+    ground_truth : str
     date : str
     
 class State(TypedDict):
@@ -37,7 +38,6 @@ class State(TypedDict):
     documents : Union[list[str],None] = None
     fact_based_answer : str
     useful_answer : int
-    report : str
     
 @dataclass()  
 class Agent:
