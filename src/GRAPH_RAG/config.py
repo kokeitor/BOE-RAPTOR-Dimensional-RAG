@@ -21,6 +21,7 @@ from GRAPH_RAG.prompts import (
     grade_answer_prompt,
     grader_docs_prompt_openai,
     gen_prompt_openai,
+    generate_groq_prompt,
     query_process_prompt_openai,
     hallucination_prompt_openai,
     grade_answer_prompt_openai
@@ -51,6 +52,7 @@ logger = logging.getLogger(__name__)
 class ConfigGraph:
     
     MODEL : ClassVar = {
+            "GROQ":get_groq,
             "OPENAI": get_open_ai_json,
             "NVIDIA": get_nvdia,
             "OLLAMA": get_ollama
@@ -197,6 +199,9 @@ class ConfigGraph:
             else:
                 logger.exception(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")
                 raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent with name {agent} does not exist in the graph")      
+        elif model == 'GROQ':
+            if agent == "generator":
+                return generate_groq_prompt
         elif model == 'NVIDIA' or  model =='OLLAMA':
             if agent == 'query_classificator':
                 return query_classify_prompt

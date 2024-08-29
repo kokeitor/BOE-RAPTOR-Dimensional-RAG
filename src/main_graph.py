@@ -45,28 +45,31 @@ def main() -> None:
     os.environ['APP_MODE'] = os.getenv('APP_MODE')
     os.environ['NVIDIA_API_KEY'] = os.getenv('NVIDIA_API_KEY')
     os.environ['GROQ_API_KEY'] = os.getenv('GROQ_API_KEY')
-    llm = get_groq()
-    generate_groq_prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    """You are an assistant for question-answering tasks.\n
-                        Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
-                        Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
-                        Context:\n{context}\n""",
-                ),
-                ("human", "{question}"),
-            ]
-        )
+    
+    # Try groq model
 
-    chain = generate_groq_prompt | llm | JsonOutputParser()
-    print(chain.invoke(
-        {
-            "question": "¿Cuantos años tienes?",
-            "context": "Mi nombre es Pedrito"
-        }
-    ))
-    """ 
+    #llm = get_groq()
+    #generate_groq_prompt = ChatPromptTemplate.from_messages(
+    #        [
+    #            (
+    #                "system",
+    #                """You are an assistant for question-answering tasks.\n
+    #                    Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
+    #                    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
+    #                    Context:\n{context}\n""",
+    #            ),
+    #            ("human", "{question}"),
+    #        ]
+    #    )
+    #
+    #chain = generate_groq_prompt | llm | JsonOutputParser()
+    #print(chain.invoke(
+    #    {
+    #        "question": "¿Cuantos años tienes?",
+    #        "context": "Mi nombre es Pedrito"
+    #    }
+    #))
+
     # Logger set up
     setup_logging()
     
@@ -115,7 +118,6 @@ def main() -> None:
             for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
                     logger.debug(f"Graph event {key} - {value}")
-    """
         
 if __name__ == '__main__':
     main()

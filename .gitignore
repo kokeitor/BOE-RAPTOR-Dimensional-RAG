@@ -5,7 +5,10 @@
 /documentos
 
 # Ignore data directory
-/data
+/data/boe
+/data/boedataset
+/data/figures
+/data/notes
 
 # Ignore environment variable files
 .env
