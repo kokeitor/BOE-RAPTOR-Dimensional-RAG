@@ -97,6 +97,10 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
             i = 0
             fail_llm = True
             content = d.page_content
+            metadata = d.metadata
+            chunk_label = metadata["label_str"]
+            cluster_summary = metadata["cluster_summary"]
+            
             logger.info(f"Document content : \n {content}")
 
             while i <= MAX_ITER and fail_llm == True:
@@ -108,15 +112,19 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
                 else:
                     grade = score['score']
                 
-                print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
+                print(colored(f"\nScored doc {index_doc} -- {score=}\n{content=}\n{chunk_label=}\n{cluster_summary=}",'magenta',attrs=["bold"]))
                 
                 # Document relevant
                 if grade.lower() == "yes":
                     logger.info(f"GRADE: DOCUMENT {index_doc} as RELEVANT")
                     relevant_docs.append(d)
                     fail_llm = False
-                # Document not relevant
-                elif grade.lower() == "no":
+                # Document not relevant and retry with cluster summary
+                elif grade.lower() == "no" and i < 2:
+                    logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT TRY WITH content = cluster_summary")
+                    print(colored(f"TRY WITH content = cluster_summary",'magenta',attrs=["bold"]))
+                    content = cluster_summary
+                elif grade.lower() == "no" and i >= 2:
                     logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
                     fail_llm = False
                 # LLM output error
