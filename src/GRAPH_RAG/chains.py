@@ -34,7 +34,7 @@ def get_chain(
     
     return chain
   
-def get_structured_chain( 
+def _get_structured_chain( 
                 output_model : BaseModel,
                 prompt_template: str, 
                 get_model: callable = get_nvdia,

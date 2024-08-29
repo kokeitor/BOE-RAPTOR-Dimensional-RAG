@@ -10,7 +10,7 @@ query_classify_groq_prompt = ChatPromptTemplate.from_messages(
                 "system",
                 """You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).\n
             Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}\n
-            If the text does not belong to a label, classify it as 'Otra'.""",
+            If the text does not belong to a label, classify it as 'Otra'. Provide the label with no preamble or explanation""",
             ),
             ("human", "{text}"),
         ]

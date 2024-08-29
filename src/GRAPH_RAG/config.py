@@ -242,14 +242,16 @@ class ConfigGraph:
         if not ConfigGraph.AGENTS.get(agent, None):
             logger.exception(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
-
+        
         if agent == "GROQ":
-            return StrOutputParser
+            parser = StrOutputParser
         else:
-            return JsonOutputParser
+            parser = StrOutputParser
+            
+        logger.info(f"Agent {agent} -> Parser {parser}")   
+        return parser
 
    
-    
     def get_vector_db(self) -> VectorDB:
         # vector_db = ConfigGraph.VECTOR_DB.copy()
         """ 
