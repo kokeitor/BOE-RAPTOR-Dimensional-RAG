@@ -8,6 +8,10 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.document_loaders import DataFrameLoader
 from RAPTOR.exceptions import DirectoryNotFoundError
 from ragas.run_config import RunConfig
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
+from langchain_core.output_parsers import StrOutputParser
+from RAG_EVAL.utils import get_current_spanish_date_iso
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -62,7 +66,7 @@ def get_data(docs_path: str, from_date: str, to_date: str) -> pd.DataFrame:
 
     return combined_df
 
-def generate_testset(docs_path: str, from_date: str, to_date: str) -> TestDataset:
+def generate_testset(docs_path: str, from_date: str, to_date: str, save_path : str = "./data/rag evaluation/ragas testset") -> TestDataset:
     """
     Generates a test dataset from documents within a specified date range asynchronously.
     """
@@ -109,8 +113,86 @@ def generate_testset(docs_path: str, from_date: str, to_date: str) -> TestDatase
             distributions={simple: 0.5, reasoning: 0.25, multi_context: 0.25},
             run_config=RunConfig(max_workers=64)
         )
-        return testset
+
     except Exception as e:
         logger.error(f"Failed to generate testset: {e}")
-        return None
+        testset = None
+        
+    # translate question and answer 
+    # initialize translator 
+    translator = ChatGroq(
+                            model= "llama3-70b-8192",
+                            temperature=0.0,
+                            max_tokens=None,
+                            timeout=None,
+                            max_retries=10
+                                )
+    transalate_promt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a assistant tasked with accurately translating sentences from English to Spanish,\n 
+                ensuring that the meaning, tone, and context of the original sentence are preserved."""
+            ),
+            ("human", "{sentence}"),
+        ]
+    )
+    transalate_chain = transalate_promt | translator | StrOutputParser()
+    
+    # translate 
+    if testset:
+        testset_df = testset.to_pandas()
+        print(testset_df.head())
+        print(f"Columnas dataframe : {testset_df.columns}")
+        logger.info(f"Columnas dataframe : {testset_df.columns}")
+        logger.info(f"dataframe sample : {testset_df.head()}")
+        logger.info(f"dataframe len : {testset_df.shape}")
+        
+        for index, row in enumerate(testset_df.iterrows()):
+            try:
+                translation = transalate_chain.invoke({"sentence":row["question"]})
+                logger.info(f"llm translation of {row["question"]}:\n{translation=}")  
+                testset_df.loc[index,"question"] = translation
+                testset_df.loc[index,"original_question"] = row["question"]
+            except Exception as e:
+                logger.error(f"llm translation error {e}")  
+            
+        
+    # save testset as csv from pandas dataframe
+    if testset:
+        # Ensure the path exists; if not, create it
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+            logger.info(f"Directory {save_path} created.")
 
+        # Define the full path where the file will be saved
+        full_path = os.path.join(save_path, f"{get_current_spanish_date_iso()}_ragas_testset")
+
+        # Save the DataFrame to a CSV file
+        testset_df.to_csv(full_path, index=False)
+        logger.info(f"DataFrame saved to {full_path}")
+        
+    return testset
+
+def translate(sentence : str) -> str:
+    translator = ChatGroq(
+                            model= "llama3-70b-8192",
+                            temperature=0.0,
+                            max_tokens=None,
+                            timeout=None,
+                            max_retries=10
+                                )
+    transalate_promt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a assistant tasked with accurately translating sentences from English to Spanish,\n 
+                ensuring that the meaning, tone, and context of the original sentence are preserved."""
+            ),
+            ("human", "{sentence}"),
+        ]
+    )
+    transalate_chain = transalate_promt | translator | StrOutputParser()
+    translation = transalate_chain.invoke({"sentence":sentence})
+    logger.info(f"llm translation of {sentence}:\n{translation=}")
+    return translation
