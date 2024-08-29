@@ -13,7 +13,7 @@
                             "temperature":0
                             },
               "generator": {
-                              "name":"GROQ",
+                              "name":"NVIDIA",
                               "temperature":0
                               },
                 "hallucination_grader": {

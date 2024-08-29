@@ -8,6 +8,7 @@ from langchain_openai import ChatOpenAI
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from langchain_community.chat_models import ChatOllama
 import warnings
+from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
 
@@ -17,6 +18,9 @@ logger = logging.getLogger(__name__)
 
 # Suppress all warnings
 warnings.filterwarnings("ignore")
+
+
+load_dotenv()
 
 # LLMs
 
@@ -51,7 +55,7 @@ def get_open_ai(temperature=0, model='gpt-4o-mini'):
     return llm
 
 
-def get_nvdia(temperature=0, model='meta/llama3-70b-instruct'):
+def get_nvdia(temperature=0, model='meta/llama-3.1-405b-instruct'):
     """
     Nvidia llama 3 model
     Args:
@@ -61,7 +65,11 @@ def get_nvdia(temperature=0, model='meta/llama3-70b-instruct'):
     logger.info(f"Using NVIDIA : {model}")
     llm = ChatNVIDIA(
                     model=model,
-                    temperature = temperature
+                    temperature = temperature,
+                    api_key=" os.getenv('NVIDIA_API_KEY')",
+                    top_p=0.7,
+                    max_tokens=1024,
+
                     )
     return llm
 
