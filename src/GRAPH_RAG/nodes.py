@@ -121,8 +121,8 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
                     fail_llm = False
                 # Document not relevant and retry with cluster summary
                 elif grade.lower() == "no" and i < 2:
-                    logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT TRY WITH content = cluster_summary")
-                    print(colored(f"TRY WITH content = cluster_summary",'magenta',attrs=["bold"]))
+                    logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT TRYING WITH -> content = cluster_summary")
+                    print(colored(f"TRYING WITH -> content = cluster_summary",'magenta',attrs=["bold"]))
                     content = cluster_summary
                 elif grade.lower() == "no" and i >= 2:
                     logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
@@ -209,6 +209,8 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     MAX_ITER = 4
     for _ in range(0,MAX_ITER):
         response = hall_chain.invoke({"documents": context, "generation": generation})
+        logger.info(f"hallucination grade : {response=}")
+        print(colored(f"LLM response -> Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
     
         if agent.model == "GROQ":
             fact_based_answer = response
@@ -218,11 +220,8 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
         if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no"):
             break
         else:
-            print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER -> Retry chain invoke ...",'light_cyan',attrs=["bold"]))
+            print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER:\n{fact_based_answer=}\n **Retry chain invoke ...**\n",'light_cyan',attrs=["bold"]))
         
-    logger.info(f"hallucination grade : {response=}")
-    print(colored(f"Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
-    
     return {"fact_based_answer" : fact_based_answer}
 
 
@@ -240,6 +239,8 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
     MAX_ITER = 4
     for _ in range(0,MAX_ITER):
         response = garder_chain.invoke({"question": question, "generation": generation})
+        logger.info(f"Answer grade : {response=}")
+        print(colored(f"LLM response -> Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
     
         if agent.model == "GROQ":
             grade = response
@@ -249,10 +250,7 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
         if (grade.lower() == "yes" or grade.lower() == "no"):
             break
         else:
-            print(colored(f"\nERROR LLM OUTPUT IN GENERATION GRADER -> Retry chain invoke ...",'light_cyan',attrs=["bold"]))
-        
-    logger.info(f"Answer grade : {response=}")
-    print(colored(f"Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))
+            print(colored(f"\nERROR LLM OUTPUT IN GENERATION GRADER:\n{grade=}\n **Retry chain invoke ...**\n",'light_cyan',attrs=["bold"]))
     
     return { "useful_answer" : grade}
 
@@ -266,7 +264,6 @@ def final_report(state : State) -> dict:
     grade_answer= state["useful_answer"]
     grade_hall= state["fact_based_answer"]
 
-    
     logger.info(f"Final model response : \n {state}")
     print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
    

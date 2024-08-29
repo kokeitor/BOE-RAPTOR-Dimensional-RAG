@@ -55,7 +55,7 @@ def get_open_ai(temperature=0, model='gpt-4o-mini'):
 
 def get_nvdia(temperature=0, model='meta/llama-3.1-405b-instruct'):
     """
-    Nvidia llama 3 model
+    Nvidia model
     Args:
         temperature (int, optional): _description_. Defaults to 0.
         model (str, optional): _description_.
