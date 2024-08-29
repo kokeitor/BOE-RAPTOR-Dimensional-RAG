@@ -1,5 +1,6 @@
 import os
 import logging
+import asyncio
 from RAG_EVAL.testset import generate_testset
 from RAG_EVAL.utils import setup_logging
 from dotenv import load_dotenv
@@ -21,11 +22,10 @@ def main() -> None:
     setup_logging()
     
     # Create Raptor data (make cluster summary, process and store in vector database)
-    testset = generate_testset(
-        docs_path="./data/boedataset", 
-        from_date="2024-08-28", 
-        to_date="2024-08-30"
-    )
+    docs_path="./data/boedataset" 
+    from_date="2024-08-28"
+    to_date="2024-08-30"
+    testset = generate_testset(docs_path, from_date, to_date)
     print(testset.to_pandas())
     print(testset)
     logger.info(f"{testset.to_pandas()}")
