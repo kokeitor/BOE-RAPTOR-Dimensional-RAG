@@ -39,9 +39,9 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
     else:
         answer = generation["query_label"]
         
-    logger.info(f"Query : \n {answer}")
-    logger.info(f"Query label: \n {question}")
-    logger.info(f"Full Response : \n {generation}")
+    logger.info(f"Query : {question}")
+    logger.info(f"Query label: {answer}")
+    logger.info(f"Full Response :{generation}")
     
     print(colored(f"\nQuestion -> {state['question'][-1]}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
     
@@ -91,28 +91,39 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
     
     # Score each doc
     relevant_docs = []
+    MAX_ITER = 5
     if len(documents) > 0:
         for index_doc , d in enumerate(documents):
+            i = 0
+            fail_llm = True
             content = d.page_content
             logger.info(f"Document content : \n {content}")
 
-            score = grader_chain.invoke({"question": question, "document": content})
+            while i <= MAX_ITER and fail_llm == True:
+                i += 1
+                score = grader_chain.invoke({"question": question, "document": content})
             
-            if agent.model == "GROQ":
-                grade = score
-            else:
-                grade = score['score']
+                if agent.model == "GROQ":
+                    grade = score
+                else:
+                    grade = score['score']
                 
-            print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
-            
-            # Document relevant
-            if grade.lower() == "yes":
-                logger.info(f"GRADE: DOCUMENT {index_doc} as RELEVANT")
-                relevant_docs.append(d)
-            # Document not relevant
-            else:
-                logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
+                print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
                 
+                # Document relevant
+                if grade.lower() == "yes":
+                    logger.info(f"GRADE: DOCUMENT {index_doc} as RELEVANT")
+                    relevant_docs.append(d)
+                    fail_llm = False
+                # Document not relevant
+                elif grade.lower() == "no":
+                    logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
+                    fail_llm = False
+                # LLM output error
+                else:
+                    print(colored(f"\nERROR LLM SCORING RETRIEVE DOC :\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
+                    print(colored(f"Retry chain invoke ... ",'magenta',attrs=["bold"]))
+                    
         # if only 0 or 1 doc relevant -> query processing necesary [no enough retrieved relevant context to answer]
         if len(relevant_docs) == 0:  
             return {"documents": None, "query_reprocess" : 'yes'}
