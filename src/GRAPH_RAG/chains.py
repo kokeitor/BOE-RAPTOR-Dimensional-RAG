@@ -1,10 +1,10 @@
 import logging
 import logging.config
 import logging.handlers
-from typing import List, Dict
+from typing import Union
 from pydantic import BaseModel
 from langchain.chains.llm import LLMChain
-from langchain.prompts import PromptTemplate
+from langchain.prompts import PromptTemplate, ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 from exceptions.exceptions import LangChainError
 from GRAPH_RAG.models import (
@@ -19,13 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_chain( 
-                prompt_template: str, 
+                prompt_template: Union[PromptTemplate,ChatPromptTemplate], 
                 parser: BaseTransformOutputParser,
-                get_model: callable = get_nvdia,
+                get_model: callable,
                 temperature : float = 0.0
               ) -> LLMChain:
     """Retorna la langchain chain"""
-    if not prompt_template and not isinstance(prompt_template,PromptTemplate):
+    if not prompt_template and not isinstance(prompt_template,(PromptTemplate,ChatPromptTemplate)):
       raise LangChainError()
     
     logger.info(f"Initializing LangChain using : {get_model.__name__}")

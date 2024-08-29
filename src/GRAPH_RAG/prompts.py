@@ -31,7 +31,6 @@ grader_docs_groq_prompt = ChatPromptTemplate.from_messages(
         ]
     )
 
-
 generate_groq_prompt = ChatPromptTemplate.from_messages(
         [
             (

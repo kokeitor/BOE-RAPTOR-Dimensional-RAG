@@ -1,15 +1,15 @@
 {
     "agents":{
             "query_classificator":{
-                                "name":"OPENAI",
+                                "name":"GROQ",
                                 "temperature":0
                                 },
               "docs_grader": {
-                            "name":"OPENAI",
+                            "name":"GROQ",
                             "temperature":0
                             },
               "query_processor": {
-                            "name":"OPENAI",
+                            "name":"GROQ",
                             "temperature":0
                             },
               "generator": {

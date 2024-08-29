@@ -164,7 +164,7 @@ class ConfigGraph:
                     if model is not None:
                         get_model = ConfigGraph.MODEL.get(model, None)
                         if get_model is None:
-                            logger.error(f"The Model defined for agent : {agent} isnt't available -> using NVDIA llama3 70B model")
+                            logger.error(f"The Model defined for agent : {agent} isnt't available -> using deafult model")
                             get_model = get_nvdia
                             prompt = self.get_model_agent_prompt(model ='NVIDIA', agent = agent)
                         else:
@@ -237,7 +237,7 @@ class ConfigGraph:
             logger.exception(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
 
-        if agent.model == "GROQ":
+        if agent == "GROQ":
             return StrOutputParser
         else:
             return JsonOutputParser
