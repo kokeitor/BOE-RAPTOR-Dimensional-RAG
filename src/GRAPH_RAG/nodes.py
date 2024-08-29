@@ -33,7 +33,12 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
     # LLM calling
     classify_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     generation = classify_chain.invoke({"text": question, "labels": labels})
-    answer = generation["query_label"]
+    
+    if agent.model == "GROQ":
+        answer = generation
+    else:
+        answer = generation["query_label"]
+        
     logger.info(f"Query : \n {answer}")
     logger.info(f"Query label: \n {question}")
     logger.info(f"Full Response : \n {generation}")
@@ -92,8 +97,12 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
             logger.info(f"Document content : \n {content}")
 
             score = grader_chain.invoke({"question": question, "document": content})
-            grade = score['score']
             
+            if agent.model == "GROQ":
+                grade = score
+            else:
+                grade = score['score']
+                
             print(colored(f"\nDoc {index_doc} -- {score=}\nScored Doc content : {content}",'magenta',attrs=["bold"]))
             
             # Document relevant
@@ -130,10 +139,12 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     # RAG generation
     rag_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     generation = rag_chain.invoke({"context": context, "question": question})
+    
     if agent.model == "GROQ":
         answer = generation
     else:
         answer = generation["answer"]
+        
     logger.info(f"RAG Context : \n {context}")
     logger.info(f"RAG Question : \n {question}")
     logger.info(f"RAG Response : \n {generation}")
@@ -152,7 +163,11 @@ def process_query(state : State, agent : Agent, get_chain : Callable = get_chain
     question = state["question"][-1]
     chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature ,parser=agent.parser)
     response = chain.invoke({"question": question})
-    reprocesed_question = response["reprocess_question"]
+
+    if agent.model == "GROQ":
+        reprocesed_question = response
+    else:
+        reprocesed_question = response["reprocess_question"]
 
     logger.info(f"{question=} // after reprocessing question -> {response=}")
     print(colored(f"Initial question : {question=}\nAfter reprocessing question : {response=}",'blue',attrs=["bold"]))
@@ -172,7 +187,12 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     
     hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = hall_chain.invoke({"documents": context, "generation": generation})
-    fact_based_answer = response["score"]
+    
+    if agent.model == "GROQ":
+        fact_based_answer = response
+    else:
+        fact_based_answer = response["score"]
+        
     logger.info(f"hallucination grade : {response=}")
 
     print(colored(f"Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
@@ -191,7 +211,12 @@ def generation_grader(state : State, agent : Agent, get_chain : Callable = get_c
 
     garder_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
     response = garder_chain.invoke({"question": question, "generation": generation})
-    grade = response["score"]
+    
+    if agent.model == "GROQ":
+        grade = response
+    else:
+        grade = response["score"]
+        
     logger.info(f"Answer grade : {response=}")
     
     print(colored(f"Useful answer to resolve the question -> {response}",'light_cyan',attrs=["bold"]))

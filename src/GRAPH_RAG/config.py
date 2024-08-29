@@ -21,6 +21,8 @@ from GRAPH_RAG.prompts import (
     grade_answer_prompt,
     grader_docs_prompt_openai,
     gen_prompt_openai,
+    query_classify_groq_prompt,
+    grader_docs_groq_prompt,
     generate_groq_prompt,
     hall_groq_prompt,
     grade_answer_groq_prompt,
@@ -61,9 +63,9 @@ class ConfigGraph:
             }
 
     AGENTS: ClassVar = {
-        "query_classificator": Agent(agent_name="query_classificator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_classify_prompt_openai,parser=JsonOutputParser),
-        "docs_grader": Agent(agent_name="docs_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
-        "query_processor": Agent(agent_name="query_processor", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
+        "query_classificator": Agent(agent_name="query_classificator", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=query_classify_prompt_openai,parser=JsonOutputParser),
+        "docs_grader": Agent(agent_name="docs_grader", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
+        "query_processor": Agent(agent_name="query_processor", model="OPENAI", get_model=get_open_ai_json, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
         "generator": Agent(agent_name="generator", model="GROQ", get_model=get_groq, temperature=0.0, prompt=generate_groq_prompt,parser=StrOutputParser),
         "hallucination_grader": Agent(agent_name="hallucination_grader", model="GROQ", get_model=get_groq, temperature=0.0, prompt=hall_groq_prompt,parser=StrOutputParser),
         "answer_grader": Agent(agent_name="answer_grader", model="GROQ", get_model=get_groq, temperature=0.0, prompt=grade_answer_groq_prompt,parser=StrOutputParser),
@@ -229,13 +231,17 @@ class ConfigGraph:
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Model {model} not supported")
         
     def get_agent_parser(self , agent :str) -> BaseTransformOutputParser:
-        """Get specific parser for each graph agent"""
-        agent = ConfigGraph.AGENTS.get(agent, None)
-        if not agent:
+        """Get specific parser for each graph agent depending on the model provider"""
+        
+        if not ConfigGraph.AGENTS.get(agent, None):
             logger.exception(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
             raise ConfigurationFileError(f"Error inside confiuration graph file -> Agent '{agent}' not supported")
+
+        if agent.model == "GROQ":
+            return StrOutputParser
         else:
-            return agent.parser
+            return JsonOutputParser
+
    
     
     def get_vector_db(self) -> VectorDB:

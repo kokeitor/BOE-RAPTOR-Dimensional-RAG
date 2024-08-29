@@ -4,6 +4,34 @@ from langchain import hub
 
 # GROQ FORMAT 
 
+query_classify_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are an assistant specialized in categorizing a text from the Spanish Boletín Oficial del Estado (BOE).\n
+            Your task is to classify the provided text using the specified list of labels. The possible labels are: {labels}\n
+            If the text does not belong to a label, classify it as 'Otra'.""",
+            ),
+            ("human", "{text}"),
+        ]
+    )
+
+grader_docs_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are an AI model designed grade the relevance of a retrieved document to a user question.\n
+                If the document contains keywords related to the user question, grade it as relevant.\n
+                It does not need to be a stringent test. The goal is to filter out erroneous retrievals. \n
+                Give a binary score 'yes' or 'no' score to indicate whether the document is relevant to the question. \n
+                Provide the binary score with no explanation.\n
+                Here is the retrieved document: {document} """,
+            ),
+            ("human", "{question}"),
+        ]
+    )
+
+
 generate_groq_prompt = ChatPromptTemplate.from_messages(
         [
             (
