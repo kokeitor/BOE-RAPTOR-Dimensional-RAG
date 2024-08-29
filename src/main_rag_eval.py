@@ -26,7 +26,6 @@ def main() -> None:
     from_date="2024-08-28"
     to_date="2024-08-30"
     testset = generate_testset(docs_path, from_date, to_date)
-    df = testset.to_pandas()
     
 if __name__ == "__main__":
     main()

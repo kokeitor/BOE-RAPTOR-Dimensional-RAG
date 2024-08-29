@@ -151,7 +151,7 @@ def generate_testset(docs_path: str, from_date: str, to_date: str, save_path : s
         for index, row in enumerate(testset_df.iterrows()):
             try:
                 translation = transalate_chain.invoke({"sentence":row["question"]})
-                logger.info(f"llm translation of {row["question"]}:\n{translation=}")  
+                logger.info(f"llm translation of {row['question']}:\n{translation=}")  
                 testset_df.loc[index,"question"] = translation
                 testset_df.loc[index,"original_question"] = row["question"]
             except Exception as e:
