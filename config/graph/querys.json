@@ -1,6 +1,52 @@
 [
     {
-        "user_question":"¿Cuál es el precio del Golden Virginia (50 g) en Ceuta y Melilla?",
-        "date":"2024-01-03"
+        "user_question": "¿Qué fecha tiene la resolución de la Subsecretaría sobre la Carrera Diplomática?",
+        "ground_truth": "La resolución tiene fecha del 18 de abril de 2024.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Cuál es la disposición del BOE que publica la resolución sobre la Carrera Diplomática?",
+        "ground_truth": "Es la Disposición 7911 del BOE núm. 97 de 2024.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Qué establece el artículo 14 del Real Decreto 674/1993 relacionado con los nombramientos en la Carrera Diplomática?",
+        "ground_truth": "Establece que los nombramientos en el nuevo destino se harán conforme a lo dispuesto en dicho artículo.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Cuándo debe realizarse la incorporación a los puestos asignados según la resolución de 18 de abril de 2024?",
+        "ground_truth": "La incorporación debe producirse durante el mes de agosto de 2024.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Quién firmó la resolución de 18 de abril de 2024 sobre la Carrera Diplomática?",
+        "ground_truth": "La firmó Luis Manuel Cuesta Civís, Subsecretario de Asuntos Exteriores, Unión Europea y Cooperación.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Qué recurso se puede interponer contra la resolución de 18 de abril de 2024?",
+        "ground_truth": "Se puede interponer recurso contencioso-administrativo en el plazo de dos meses ante el Tribunal Superior de Justicia.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿En qué publicación del BOE se corrigieron errores de la convocatoria de la Carrera Diplomática?",
+        "ground_truth": "En el BOE núm. 46 de 21 de febrero de 2024.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Cuál es el salario específico para el puesto de Segunda Jefatura en la Embajada de España en Francia según el anexo I?",
+        "ground_truth": "El salario específico es de 33.551,70 euros.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Cuál es la ciudad de destino para el puesto de Segunda Jefatura en la Embajada de España en Rusia según el anexo I?",
+        "ground_truth": "La ciudad de destino es Moscú.",
+        "date": "2024-08-29"
+    },
+    {
+        "user_question": "¿Qué funcionario fue designado como Cónsul General en el Consulado de España en Lyon según el anexo I?",
+        "ground_truth": "El funcionario designado es José Ricardo Gómez-Acebo y Rodríguez-Spiteri.",
+        "date": "2024-08-29"
     }
 ]

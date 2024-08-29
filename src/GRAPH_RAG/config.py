@@ -112,7 +112,7 @@ class ConfigGraph:
             self.data = self.get_data()
             logger.info(f"Definidos los datos mediante archivo JSON en {self.data_path}")
             if len(self.data) > 0:
-                self.user_questions = [self.get_user_question(q=user_q.get("user_question", None), date=user_q.get("date", None)) for user_q in self.data]
+                self.user_questions = [self.get_user_question(q=user_q.get("user_question", None), ground_truth=user_q.get("ground_truth", None), date=user_q.get("date", None)) for user_q in self.data]
             else:
                 logger.exception("No se han proporcionado candidatos en el archivo JSON con el correcto fomato [ [cv : '...', oferta : '...'] , [...] ] ")
                 raise JsonlFormatError()
@@ -276,9 +276,9 @@ class ConfigGraph:
             
         return vector_db
 
-    def get_user_question(self, q : Union[str,None] = None, date : Union[str,None] = None) -> Question:
+    def get_user_question(self, q : Union[str,None] = None, ground_truth : Union[str,None] = None ,  date : Union[str,None] = None) -> Question:
         if q and date:
-            return Question(id=get_id(), user_question=q, date=date)
+            return Question(id=get_id(), ground_truth = ground_truth, user_question=q, date=date)
         else:
             raise ConfigurationFileError(f"Error inside confiuration Query file -> Query and/or date data not provided") 
         

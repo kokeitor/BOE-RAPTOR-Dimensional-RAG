@@ -13,6 +13,7 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from RAG_EVAL.utils import get_current_spanish_date_iso
 
+
 # Logging configuration
 logger = logging.getLogger(__name__)
 

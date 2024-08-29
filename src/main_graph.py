@@ -7,6 +7,7 @@ from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdra
 from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
 from GRAPH_RAG.models import get_groq
+from RAG_EVAL.base_models import RagasDataset 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
 
@@ -117,8 +118,8 @@ def main() -> None:
             
             for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
-                    logger.debug(f"Graph event {key} - {value}")
-        
+                    logger.info(f"Graph event {key} - {value}")
+                
 if __name__ == '__main__':
     main()
 
