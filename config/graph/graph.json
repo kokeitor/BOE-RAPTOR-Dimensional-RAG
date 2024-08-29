@@ -13,15 +13,15 @@
                             "temperature":0
                             },
               "generator": {
-                              "name":"NVIDIA",
+                              "name":"GROQ",
                               "temperature":0
                               },
                 "hallucination_grader": {
-                            "name":"OPENAI",
+                            "name":"GROQ",
                             "temperature":0
                             },
                 "answer_grader": {
-                                "name":"OPENAI",
+                                "name":"GROQ",
                                 "temperature":0
                                 }
         },

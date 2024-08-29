@@ -10,10 +10,34 @@ generate_groq_prompt = ChatPromptTemplate.from_messages(
                 "system",
                 """You are an assistant for question-answering tasks.\n
                     Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
-                    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
+                    Use three sentences maximum and keep the answer concise.\n
                     Context:\n{context}\n""",
             ),
             ("human", "{question}"),
+        ]
+    )
+hall_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a grader assessing whether an answer is grounded in / supported by a set of facts. \n 
+                Give a binary score 'yes' or 'no' score to indicate\n
+                whether the answer is grounded in or supported by a set of facts. Provide the binary score with no preamble or explanation.\n
+                Here are the facts:\n{documents}\n""",
+            ),
+            ("human", "{generation}"),
+        ]
+    )
+grade_answer_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a grader assessing whether an  answer is useful to resolve a question.\n
+                Give a binary score 'yes' or 'no' to indicate whether the answer is useful to resolve a question.\n
+                Provide the binary score with no preamble or explanation.
+                Here is the question:\n{question}\n""",
+            ),
+            ("human", "{generation}"),
         ]
     )
 

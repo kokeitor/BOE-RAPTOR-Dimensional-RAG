@@ -10,15 +10,13 @@ from langchain_community.chat_models import ChatOllama
 import warnings
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-
+import os
 
 # Logging configuration
 logger = logging.getLogger(__name__)
 
-
 # Suppress all warnings
 warnings.filterwarnings("ignore")
-
 
 load_dotenv()
 
@@ -66,7 +64,7 @@ def get_nvdia(temperature=0, model='meta/llama-3.1-405b-instruct'):
     llm = ChatNVIDIA(
                     model=model,
                     temperature = temperature,
-                    api_key=" os.getenv('NVIDIA_API_KEY')",
+                    api_key=os.getenv('NVIDIA_API_KEY'),
                     top_p=0.7,
                     max_tokens=1024,
 

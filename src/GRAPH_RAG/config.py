@@ -22,6 +22,8 @@ from GRAPH_RAG.prompts import (
     grader_docs_prompt_openai,
     gen_prompt_openai,
     generate_groq_prompt,
+    hall_groq_prompt,
+    grade_answer_groq_prompt,
     query_process_prompt_openai,
     hallucination_prompt_openai,
     grade_answer_prompt_openai
@@ -62,9 +64,9 @@ class ConfigGraph:
         "query_classificator": Agent(agent_name="query_classificator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_classify_prompt_openai,parser=JsonOutputParser),
         "docs_grader": Agent(agent_name="docs_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grader_docs_prompt,parser=JsonOutputParser),
         "query_processor": Agent(agent_name="query_processor", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=query_process_prompt,parser=JsonOutputParser),
-        "generator": Agent(agent_name="generator", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=gen_prompt,parser=JsonOutputParser),
-        "hallucination_grader": Agent(agent_name="hallucination_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=hallucination_prompt,parser=JsonOutputParser),
-        "answer_grader": Agent(agent_name="answer_grader", model="NVIDIA", get_model=get_nvdia, temperature=0.0, prompt=grade_answer_prompt,parser=JsonOutputParser),
+        "generator": Agent(agent_name="generator", model="GROQ", get_model=get_groq, temperature=0.0, prompt=generate_groq_prompt,parser=StrOutputParser),
+        "hallucination_grader": Agent(agent_name="hallucination_grader", model="GROQ", get_model=get_groq, temperature=0.0, prompt=hall_groq_prompt,parser=StrOutputParser),
+        "answer_grader": Agent(agent_name="answer_grader", model="GROQ", get_model=get_groq, temperature=0.0, prompt=grade_answer_groq_prompt,parser=StrOutputParser),
     }
     
     VECTOR_DB: ClassVar = {
@@ -202,6 +204,10 @@ class ConfigGraph:
         elif model == 'GROQ':
             if agent == "generator":
                 return generate_groq_prompt
+            elif agent == "hallucination_grader":
+                    return hall_groq_prompt
+            elif agent == "answer_grader":
+                    return grade_answer_groq_prompt
         elif model == 'NVIDIA' or  model =='OLLAMA':
             if agent == 'query_classificator':
                 return query_classify_prompt
