@@ -55,13 +55,14 @@ class RagasEval:
                 storage_options= None,
                 trust_remote_code= None
                 )
+            logger.info(f"RAGAS hg testset {self.testset}")
         except Exception as e:
             logger.error(f"Error while pulling HG RAGAS testset {e}")
             
     def run(self, results_file_path : str):
         if self.testset:
             result = evaluate(
-                                self.testset,
+                                self.testset["train"],
                                 metrics=[
                                     context_precision,
                                     faithfulness,
@@ -95,8 +96,9 @@ class RagasEval:
             logging.info(f"Directory already exists: {directory}")
 
         # Save the DataFrame to CSV
-        self.results_df.to_csv(file_path, index=False)
+        self.results_df.to_csv(path_or_buf=file_path, index=False)
         logging.info(f"DataFrame saved to CSV at: {file_path}")
+                    
                     
 # Synthetic RAGAS testset generation : 
 
