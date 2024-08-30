@@ -14,6 +14,13 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from RAG_EVAL.utils import get_current_spanish_date_iso
 from datasets import Dataset, load_dataset
+from ragas.metrics import (
+    answer_relevancy,
+    faithfulness,
+    context_recall,
+    context_precision,
+)
+from ragas import evaluate
 
 
 # Logging configuration
@@ -25,7 +32,7 @@ class RagasEval:
         
         load_dotenv()
         try:
-            self.dataset = load_dataset(
+            self.testset = load_dataset(
                 path=str(os.getenv("HG_REPO_RAGAS_TESTSET_ID")),
                 name=dataset_name,
                 data_dir=dataset_name ,
@@ -51,7 +58,46 @@ class RagasEval:
         except Exception as e:
             logger.error(f"Error while pulling HG RAGAS testset {e}")
             
+    def run(self, results_file_path : str):
+        if self.testset:
+            result = evaluate(
+                                self.testset,
+                                metrics=[
+                                    context_precision,
+                                    faithfulness,
+                                    answer_relevancy,
+                                    context_recall,
+                                ],
+                            )
+            try:
+                self.results_df = result.to_pandas()
+                logger.info(f"Ragas Eval result dataframe :\n{self.results_df.head()}\n{self.results_df.columns=}\n{self.results_df.shape=}")
+                
+                self._save_df(file_path=results_file_path)
+                
+            except Exception as e:
+                logger.exception(f"Error while cretaing result dataframe")
+        else:
+            logger.error(f"Error while running RagasEval run() method , no testset initialization")
+    
+    def _save_df(self, file_path : str):
+        """Save a df inside a local directory in csv format
+        Args:
+            file_path (str): ...
+        """
+        # Get the directory path from the file path
+        directory = os.path.dirname(file_path)
 
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            logging.info(f"Directory created: {directory}")
+        else:
+            logging.info(f"Directory already exists: {directory}")
+
+        # Save the DataFrame to CSV
+        self.results_df.to_csv(file_path, index=False)
+        logging.info(f"DataFrame saved to CSV at: {file_path}")
+                    
 # Synthetic RAGAS testset generation : 
 
 def parse_date(date_str: str) -> datetime:

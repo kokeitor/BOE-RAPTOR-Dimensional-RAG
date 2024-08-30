@@ -1,7 +1,7 @@
 import os
 import logging
 import asyncio
-from RAG_EVAL.testset import generate_testset
+from RAG_EVAL.testset import generate_testset, RagasEval
 from RAG_EVAL.utils import setup_logging
 from dotenv import load_dotenv
 
@@ -22,10 +22,11 @@ def main() -> None:
     setup_logging()
     
     # Create Raptor data (make cluster summary, process and store in vector database)
-    docs_path="./data/boedataset" 
-    from_date="2024-08-28"
-    to_date="2024-08-30"
-    testset = generate_testset(docs_path, from_date, to_date)
+    ragas_evaluation = RagasEval(
+        hg_token=str(os.getenv('HG_API_KEY')),
+        dataset_name=""
+        )
+    ragas_evaluation.run(results_file_path=".data/rag evaluation/results")
     
 if __name__ == "__main__":
     main()
