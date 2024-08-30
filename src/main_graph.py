@@ -137,7 +137,6 @@ def main() -> None:
             
                 
         # Generate HG RAGAS testset
-        testset = ""
         hg_testset = testset.to_dataset()
         logger.warning(f"Ragas testset :\n{testset}")
         logger.warning(f"Ragas hugging face testset :\n{hg_testset}")

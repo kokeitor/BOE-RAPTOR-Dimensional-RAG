@@ -27,12 +27,20 @@ class RagasDataset:
     
     def add_atributes(self, question : str, answer : str, contexts : list[str], ground_truth : str):
         self.question.append(question)
-        self.answer.append(question)
-        self.contexts.append(question)
-        self.ground_truth.append(question)
+        self.answer.append(answer)
+        self.contexts.append(contexts)
+        self.ground_truth.append(ground_truth)
+        
+    def model_dump(self) -> dict:
+        return {
+                'question':self.question,
+                'answer': self.answer,
+                'contexts' : self.contexts,
+                'ground_truth': self.ground_truth
+                }
         
     def to_dataset(self) -> Dataset:
-        self.dataset = Dataset.from_dict(self.model_dump(mode="python")) 
+        self.dataset = Dataset.from_dict(self.model_dump()) 
         return self.dataset
     
     def push_to_hub(
@@ -40,7 +48,6 @@ class RagasDataset:
                     repo_id : str , 
                     hg_api_token : str , 
                     private: Optional[bool] = False, 
-                    token: Optional[str] = None, 
                     branch: Optional[str] = None
                     ) -> None:
         """
@@ -55,9 +62,6 @@ class RagasDataset:
         branch : Optional[str]
             The git branch to push the dataset to.
         """
-
-        if token is None:
-            token = self.hg_api_token
 
         if self.dataset:
             self.dataset.push_to_hub(
