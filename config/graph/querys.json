@@ -1,11 +1,5 @@
 [
     {
-        "user_question": "¿Qué título se establece en la Orden EFD/322/2024 del 8 de abril?",
-        "ground_truth": "Se establece el currículo de los ciclos inicial y final de grado medio correspondiente al título de Técnico Deportivo en Atletismo.",
-        "date": "2024-04-15",
-        "boe_id": "BOE-A-2024-7296"
-    },
-    {
         "user_question": "¿Cuál es la duración total de las enseñanzas del ciclo de grado medio para Técnico Deportivo en Atletismo?",
         "ground_truth": "La duración total es de 1.005 horas, organizadas en dos ciclos.",
         "date": "2024-04-15",
@@ -57,6 +51,12 @@
         "user_question": "¿Qué módulos del ciclo inicial de grado medio en atletismo se pueden ofrecer a distancia?",
         "ground_truth": "Los módulos reflejados en el anexo XIII del Real Decreto 427/2023 pueden ser ofertados a distancia parcial o totalmente.",
         "date": "2024-08-29",
+        "boe_id": "BOE-A-2024-7296"
+    },
+    {
+        "user_question": "¿Qué título se establece en la Orden EFD/322/2024 del 8 de abril?",
+        "ground_truth": "Se establece el currículo de los ciclos inicial y final de grado medio correspondiente al título de Técnico Deportivo en Atletismo.",
+        "date": "2024-04-15",
         "boe_id": "BOE-A-2024-7296"
     }
     ]

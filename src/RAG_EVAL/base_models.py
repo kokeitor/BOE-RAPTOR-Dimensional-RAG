@@ -8,7 +8,7 @@ from RAG_EVAL.utils import get_current_spanish_date_iso
 # Logging configuration
 logger = logging.getLogger(__name__)
 
-class RagasDataset(BaseModel):
+class RagasDataset:
     """
     Example :
     data_samples = {
@@ -19,11 +19,11 @@ class RagasDataset(BaseModel):
     'ground_truth': ['The first superbowl was held on January 15, 1967', 'The New England Patriots have won the Super Bowl a record six times']
     }
     """
-    
-    question : list[str]
-    answer : list[str]
-    contexts : list[list[str]]
-    ground_truth : list[str]
+    def __init__(self, question : list[str], answer : list[str], contexts : list[list[str]], ground_truth : list[str]):
+        self.question = question
+        self.answer = answer
+        self.contexts = contexts
+        self.ground_truth = ground_truth
     
     def add_atributes(self, question : str, answer : str, contexts : list[str], ground_truth : str):
         self.question.append(question)
