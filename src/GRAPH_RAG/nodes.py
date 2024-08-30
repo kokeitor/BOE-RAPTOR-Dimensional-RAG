@@ -28,7 +28,6 @@ def query_classificator(state : State, agent : Agent, get_chain : Callable = get
     question = state["question"][-1]
     _labels = LabelGenerator.LABELS.replace("\n", "").split(',')
     labels = [l.strip() for l in _labels]
-    print(colored(f"\labels:\n{labels}",'light_red',attrs=["bold"]))
     
     # LLM calling
     classify_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
@@ -265,9 +264,12 @@ def final_report(state : State) -> dict:
     grade_hall= state["fact_based_answer"]
 
     logger.info(f"Final model response : \n {state}")
+    report = f"""\nFinal model report : \n\n**QUESTIONS**: {questions}\n\n**\n\n
+    **RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n
+    **CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}"""
     print(colored(f"\nFinal model report 📝\n\n**QUESTIONS**: {questions}\n\n**\n\n**RETRIEVED DOCS**\n{documents}\n\n**ANSWER**\n{generation}\n\n**CONTEXT BASED ANSWER GRADE** : {grade_hall}\n\n**ANSWER GRADE** : {grade_answer}", 'light_yellow',attrs=["bold"]))
    
-    return {"report" : generation}
+    return {"report" : report}
 
 
 ### Conditional edge functions

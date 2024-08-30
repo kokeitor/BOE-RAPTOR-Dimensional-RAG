@@ -3,7 +3,8 @@ import logging
 from dotenv import load_dotenv
 from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
-from RAG_EVAL.base_models import RagasDataset 
+from RAG_EVAL.base_models import RagasDataset
+from langgraph.errors import InvalidUpdateError
 from langchain_core.runnables.config import RunnableConfig
 from GRAPH_RAG.graph_utils import (
                         setup_logging,
@@ -22,7 +23,7 @@ def main() -> None:
 
     # Set environment variables
     os.environ['LANGCHAIN_TRACING_V2'] = 'true'
-    # os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+    os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
     os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
     os.environ['PINECONE_API_KEY'] = os.getenv('PINECONE_API_KEY')
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
@@ -70,50 +71,76 @@ def main() -> None:
         config_graph = ConfigGraph(config_path=CONFIG_PATH, data_path=DATA_PATH)
         
         logger.info("Creating graph and compiling workflow...")
-        config_graph.graph = create_graph(config=config_graph)
-        config_graph.compile_graph = compile_graph(config_graph.graph)
-        save_graph(compile_graph=config_graph.compile_graph)
+        config_graph.graph = create_graph(config=config_graph) # create state graph
+        config_graph.compile_graph = compile_graph(config_graph.graph) 
+        # save_graph(compile_graph=config_graph.compile_graph)
         logger.info("Graph and workflow created")
         
         # RunnableConfig
-        runnable_config = RunnableConfig(recursion_limit=config_graph.iteraciones, configurable={"thread_id":config_graph.thread_id})
+        runnable_config = RunnableConfig(
+            recursion_limit=config_graph.iteraciones, 
+            configurable={"thread_id":config_graph.thread_id}
+            )
         
         # itera por todos questions definidos
-        logger.info(f"Total user questions:\n{config_graph.user_questions}")
-        for index , question in enumerate(config_graph.user_questions):
+        logger.warning(f"Total user questions = {len(config_graph.user_questions)}")
+        print(f"\nTotal user questions = {len(config_graph.user_questions)}")
+        logger.warning(f"User questions:\n{(config_graph.user_questions)}")
+        print(f"\nUser questions:\n{(config_graph.user_questions)}\n")
+        
+        questions = config_graph.user_questions
+        
+        for index , q in enumerate(questions):
             
-            logger.info(f"User Question: {question.user_question}")
-            logger.info(f"User id question: {question.id}")
-            inputs = {"question": [f"{question.user_question}"], "date" : question.date}
+            logger.warning(f"User Question number {index} : {q.user_question}")
+            logger.warning(f"User id question: {q.id}")
+            logger.warning(f"User boe date: {q.date}")
+            logger.warning(f"User boe_id : {q.boe_id}")
             
-            """ 
+            inputs = {
+                    "question": [f"{q.user_question}"], 
+                    "date": q.date,
+                    "query_label":  None,
+                    "generation": None, 
+                    "documents": None, 
+                    "fact_based_answer": None, 
+                    "useful_answer": None 
+                }
+            """
             for event in config_graph.compile_graph.stream(input=inputs,config=runnable_config):
                 for key , value in event.items():
-                    logger.info(f"Graph event {key} - {value}")
+                    logger.warning(f"Graph event {key} - {value}")
             """
-            state = config_graph.compile_graph.invoke(input=inputs,config=runnable_config)
-            logger.info(f"Final state graph -> {state}")
+            logger.warning(f"Invoking graph with inputs: {inputs}")
+            try:
+                state = config_graph.compile_graph.invoke(input=inputs, config=runnable_config)
+                logger.warning(f"Final state graph -> {state}")
+            except InvalidUpdateError as e:
+                logger.error(f"Error invoking graph -> {e}")
             
             # Creation of a Ragas testset evaluation
             if index == 0:
+                logger.warning(f"Creating RagasDataset ... ")
                 testset = RagasDataset(
-                                question=[question.user_question],
+                                question=[q.user_question],
                                 answer=[state["generation"]], 
                                 contexts=[[doc.page_content for doc in state["documents"]]],
-                                ground_truth=[question.ground_truth]
+                                ground_truth=[q.ground_truth]
                                 )
             else:
                 testset.add_atributes(
-                    question=question.user_question,
+                    question=q.user_question,
                     answer=state["generation"], 
                     contexts=[doc.page_content for doc in state["documents"]],
-                    ground_truth=question.ground_truth
+                    ground_truth=q.ground_truth
                     )
+            
                 
         # Generate HG RAGAS testset
+        testset = ""
         hg_testset = testset.to_dataset()
-        logger.info(f"Ragas testset :\n{testset}")
-        logger.info(f"Ragas hugging face testset :\n{hg_testset}")
+        logger.warning(f"Ragas testset :\n{testset}")
+        logger.warning(f"Ragas hugging face testset :\n{hg_testset}")
         
         # Push to hub the RAGAS testset
         testset.push_to_hub(
