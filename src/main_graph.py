@@ -1,18 +1,10 @@
 import os
 import logging
-from termcolor import colored
 from dotenv import load_dotenv
-from langchain.schema import Document
-from VectorDB.db import get_chromadb_retriever, get_pinecone_retriever, get_qdrant_retriever
 from GRAPH_RAG.graph import create_graph, compile_graph, save_graph
 from GRAPH_RAG.config import ConfigGraph
-from GRAPH_RAG.models import get_groq
 from RAG_EVAL.base_models import RagasDataset 
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import JsonOutputParser,StrOutputParser, BaseTransformOutputParser
-
 from langchain_core.runnables.config import RunnableConfig
-
 from GRAPH_RAG.graph_utils import (
                         setup_logging,
                         get_arg_parser
@@ -47,29 +39,6 @@ def main() -> None:
     os.environ['NVIDIA_API_KEY'] = os.getenv('NVIDIA_API_KEY')
     os.environ['GROQ_API_KEY'] = os.getenv('GROQ_API_KEY')
     
-    # Try groq model
-
-    #llm = get_groq()
-    #generate_groq_prompt = ChatPromptTemplate.from_messages(
-    #        [
-    #            (
-    #                "system",
-    #                """You are an assistant for question-answering tasks.\n
-    #                    Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know.\n
-    #                    Use three sentences maximum and keep the answer concise. Provide the answer to the question as a JSON with a single key 'answer'.\n
-    #                    Context:\n{context}\n""",
-    #            ),
-    #            ("human", "{question}"),
-    #        ]
-    #    )
-    #
-    #chain = generate_groq_prompt | llm | JsonOutputParser()
-    #print(chain.invoke(
-    #    {
-    #        "question": "¿Cuantos años tienes?",
-    #        "context": "Mi nombre es Pedrito"
-    #    }
-    #))
 
     # Logger set up
     setup_logging()
@@ -111,7 +80,7 @@ def main() -> None:
         
         # itera por todos questions definidos
         logger.info(f"Total user questions:\n{config_graph.user_questions}")
-        for question in config_graph.user_questions:
+        for index , question in enumerate(config_graph.user_questions):
             
             logger.info(f"User Question: {question.user_question}")
             logger.info(f"User id question: {question.id}")
@@ -124,6 +93,27 @@ def main() -> None:
             """
             state = config_graph.compile_graph.invoke(input=inputs,config=runnable_config)
             logger.info(f"Final state graph -> {state}")
+            
+            # Creation of a Ragas testset evaluation
+            if index == 0:
+                testset = RagasDataset(
+                                question=[question.user_question],
+                                answer=[state["generation"]], 
+                                contexts=[[doc.page_content for doc in state["documents"]]],
+                                ground_truth=[question.ground_truth]
+                                )
+            else:
+                testset.add_atributes(
+                    question=question.user_question,
+                    answer=state["generation"], 
+                    contexts=[doc.page_content for doc in state["documents"]],
+                    ground_truth=question.ground_truth
+                    )
+        hg_tesset = testset.to_dataset()
+        logger.info(f"Ragas testset :\n{testset}")
+        logger.info(f"Ragas hugging face testset :\n{hg_tesset}")
+                
+            
             
 if __name__ == '__main__':
     main()

@@ -24,6 +24,12 @@ class RagasDataset(BaseModel):
     contexts : list[list[str]]
     ground_truth : list[str]
     
+    def add_atributes(self, question : str, answer : str, contexts : list[str], ground_truth : str):
+        self.question.append(question)
+        self.answer.append(question)
+        self.contexts.append(question)
+        self.ground_truth.append(question)
+        
     def to_dataset(self) -> Dataset:
         self.dataset = Dataset.from_dict(self.model_dump(mode="python")) 
         return self.dataset
