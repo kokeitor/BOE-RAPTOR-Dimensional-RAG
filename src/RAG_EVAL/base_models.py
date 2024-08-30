@@ -3,6 +3,7 @@ import logging
 from typing import Union, Optional, Callable, ClassVar, TypedDict, Annotated, Literal
 from pydantic import BaseModel, Field
 from datasets import Dataset 
+from RAG_EVAL.utils import get_current_spanish_date_iso
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -34,3 +35,36 @@ class RagasDataset(BaseModel):
         self.dataset = Dataset.from_dict(self.model_dump(mode="python")) 
         return self.dataset
     
+    def push_to_hub(
+                    self, 
+                    repo_id : str , 
+                    hg_api_token : str , 
+                    private: Optional[bool] = False, 
+                    token: Optional[str] = None, 
+                    branch: Optional[str] = None
+                    ) -> None:
+        """
+        Pushes the dataset to the Hugging Face Hub.
+
+        Parameters:
+        -----------
+        private : Optional[bool]
+            Whether the repository should be private.
+        token : Optional[str]
+            The authentication token for the Hugging Face Hub.
+        branch : Optional[str]
+            The git branch to push the dataset to.
+        """
+
+        if token is None:
+            token = self.hg_api_token
+
+        if self.dataset:
+            self.dataset.push_to_hub(
+                repo_id=repo_id,
+                config_name=get_current_spanish_date_iso(),
+                commit_message=f"Date of push: {get_current_spanish_date_iso()}",
+                private=private,
+                token=hg_api_token)
+        else:
+            logger.error(f"No hugging face dataset created ->call to_dataset() method first")

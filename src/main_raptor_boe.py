@@ -34,7 +34,7 @@ def main() -> None:
     raptor_dataset = RaptorDataset(
         data_dir_path="./data/boedataset", 
         from_date="2024-08-28", 
-        to_date="2024-08-30",
+        to_date="2024-08-31",
         desire_columns=None # Means all columns
     )
     raptor_dataset.initialize_data()
@@ -47,7 +47,7 @@ def main() -> None:
                     )
     db.store_docs(docs=raptor_dataset.documents)
     
-    # Try database qeury
+    # Try database query
     query = "rendimiento neto del ovino y caprino de carne"
     filter_key="label_str"
     filter_value="Planes de Estudio y Normativas Educativas"

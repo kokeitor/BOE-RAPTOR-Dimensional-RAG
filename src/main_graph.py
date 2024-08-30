@@ -109,11 +109,18 @@ def main() -> None:
                     contexts=[doc.page_content for doc in state["documents"]],
                     ground_truth=question.ground_truth
                     )
-        hg_tesset = testset.to_dataset()
-        logger.info(f"Ragas testset :\n{testset}")
-        logger.info(f"Ragas hugging face testset :\n{hg_tesset}")
                 
-            
+        # Generate HG RAGAS testset
+        hg_testset = testset.to_dataset()
+        logger.info(f"Ragas testset :\n{testset}")
+        logger.info(f"Ragas hugging face testset :\n{hg_testset}")
+        
+        # Push to hub the RAGAS testset
+        testset.push_to_hub(
+            hg_api_token=str(os.getenv('HG_API_KEY')),
+            repo_id=str(os.getenv("HG_REPO_RAGAS_TESTSET_ID"))
+        )
+                
             
 if __name__ == '__main__':
     main()

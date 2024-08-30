@@ -70,7 +70,7 @@
   },
   "storer": {
     "store_path": "./data/boedataset",
-    "file_name":"28agosto",
+    "file_name":"boe_id_BOE-A-2024-7296",
     "file_format": "csv"
   },
   "google_sheet_database": {

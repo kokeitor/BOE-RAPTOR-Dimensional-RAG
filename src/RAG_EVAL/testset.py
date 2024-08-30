@@ -1,6 +1,7 @@
 import os
 import logging
 import pandas as pd
+from dotenv import load_dotenv
 from datetime import datetime
 from ragas.testset.generator import TestsetGenerator, TestDataset
 from ragas.testset.evolutions import simple, reasoning, multi_context
@@ -12,10 +13,46 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
 from RAG_EVAL.utils import get_current_spanish_date_iso
+from datasets import Dataset, load_dataset
 
 
 # Logging configuration
 logger = logging.getLogger(__name__)
+
+class RagasEval:
+    
+    def __init__(self, hg_token : str, dataset_name : str):
+        
+        load_dotenv()
+        try:
+            self.dataset = load_dataset(
+                path=str(os.getenv("HG_REPO_RAGAS_TESTSET_ID")),
+                name=dataset_name,
+                data_dir=dataset_name ,
+                data_files = None,
+                split = None,
+                cache_dir= None,
+                features= None,
+                download_config= None,
+                download_mode= None,
+                verification_mode= None,
+                ignore_verifications= "deprecated",
+                keep_in_memory= None,
+                save_infos= False,
+                revision= None,
+                token= hg_token,
+                use_auth_token= "deprecated",
+                task= "deprecated",
+                streaming= False,
+                num_proc= None,
+                storage_options= None,
+                trust_remote_code= None
+                )
+        except Exception as e:
+            logger.error(f"Error while pulling HG RAGAS testset {e}")
+            
+
+# Synthetic RAGAS testset generation : 
 
 def parse_date(date_str: str) -> datetime:
     """
