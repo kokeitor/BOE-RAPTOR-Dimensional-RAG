@@ -122,7 +122,7 @@ def retreived_docs_grader(state : State, agent : Agent, get_chain : Callable = g
                 # Document not relevant and retry with cluster summary
                 elif grade.lower() == "no" and i < 2:
                     logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT TRYING WITH -> content = cluster_summary")
-                    print(colored(f"TRYING WITH -> content = cluster_summary",'magenta',attrs=["bold"]))
+                    print(colored(f"\nTRYING WITH -> content = cluster_summary",'magenta',attrs=["bold"]))
                     content = cluster_summary
                 elif grade.lower() == "no" and i >= 2:
                     logger.warning(f"GRADE: DOCUMENT {index_doc} as NOT RELEVANT")
