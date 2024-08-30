@@ -1,52 +1,63 @@
 [
     {
-        "user_question": "¿Qué establece el artículo 14 del Real Decreto 674/1993 relacionado con los nombramientos en la Carrera Diplomática?",
-        "ground_truth": "Establece que los nombramientos en el nuevo destino se harán conforme a lo dispuesto en dicho artículo.",
-        "date": "2024-08-29"
+        "question": "¿Qué título se establece en la Orden EFD/322/2024 del 8 de abril?",
+        "ground_truth": "Se establece el currículo de los ciclos inicial y final de grado medio correspondiente al título de Técnico Deportivo en Atletismo.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Cuándo debe realizarse la incorporación a los puestos asignados según la resolución de 18 de abril de 2024?",
-        "ground_truth": "La incorporación debe producirse durante el mes de agosto de 2024.",
-        "date": "2024-08-29"
+        "question": "¿Cuál es la duración total de las enseñanzas del ciclo de grado medio para Técnico Deportivo en Atletismo?",
+        "ground_truth": "La duración total es de 1.005 horas, organizadas en dos ciclos.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Cuál es la disposición del BOE que publica la resolución sobre la Carrera Diplomática?",
-        "ground_truth": "Es la Disposición 7911 del BOE núm. 97 de 2024.",
-        "date": "2024-08-29"
+        "question": "¿Qué pruebas son necesarias para acceder al ciclo inicial de grado medio en atletismo?",
+        "ground_truth": "Es necesario superar la prueba de carácter específico RAE-ATAT101 descrita en el anexo VI del Real Decreto 427/2023.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Qué fecha tiene la resolución de la Subsecretaría sobre la Carrera Diplomática?",
-        "ground_truth": "La resolución tiene fecha del 18 de abril de 2024.",
-        "date": "2024-08-29"
+        "question": "¿Qué se garantiza según el artículo 4 de la Orden EFD/322/2024?",
+        "ground_truth": "Se garantiza el derecho de matriculación del alumnado que haya superado algún módulo de enseñanza deportiva en otra Comunidad Autónoma.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Quién firmó la resolución de 18 de abril de 2024 sobre la Carrera Diplomática?",
-        "ground_truth": "La firmó Luis Manuel Cuesta Civís, Subsecretario de Asuntos Exteriores, Unión Europea y Cooperación.",
-        "date": "2024-08-29"
+        "question": "¿Cuál es el objetivo principal del módulo 'Bases del comportamiento deportivo' en el currículo de Técnico Deportivo en Atletismo?",
+        "ground_truth": "El objetivo es que el alumno conozca las características de la infancia y conduzca al deportista en fase de iniciación deportiva, aplicando estrategias y técnicas de comunicación, motivación y dinámicas grupales.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Qué recurso se puede interponer contra la resolución de 18 de abril de 2024?",
-        "ground_truth": "Se puede interponer recurso contencioso-administrativo en el plazo de dos meses ante el Tribunal Superior de Justicia.",
-        "date": "2024-08-29"
+        "question": "¿Qué requisitos deben cumplir los espacios y equipamientos de los centros que impartan enseñanzas deportivas?",
+        "ground_truth": "Deben cumplir con la normativa sobre igualdad de oportunidades, diseño para todos y accesibilidad universal, prevención de riesgos laborales, y seguridad y salud en el puesto de trabajo.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿En qué publicación del BOE se corrigieron errores de la convocatoria de la Carrera Diplomática?",
-        "ground_truth": "En el BOE núm. 46 de 21 de febrero de 2024.",
-        "date": "2024-08-29"
+        "question": "¿Qué establece la Disposición adicional única de la Orden EFD/322/2024?",
+        "ground_truth": "Las Direcciones Provinciales y Consejerías de Educación tramitarán la autorización para impartir las enseñanzas de estos ciclos en los centros que lo soliciten y cumplan con los requisitos legales.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Cuál es el salario específico para el puesto de Segunda Jefatura en la Embajada de España en Francia según el anexo I?",
-        "ground_truth": "El salario específico es de 33.551,70 euros.",
-        "date": "2024-08-29"
+        "question": "¿Cuál es la carga horaria asignada al requisito de carácter específico del ciclo inicial de grado medio en atletismo?",
+        "ground_truth": "La carga horaria es de 120 horas.",
+        "date": "2024-04-15",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Cuál es la ciudad de destino para el puesto de Segunda Jefatura en la Embajada de España en Rusia según el anexo I?",
-        "ground_truth": "La ciudad de destino es Moscú.",
-        "date": "2024-08-29"
+        "question": "¿Qué se menciona sobre la figura del profesor especialista en los centros públicos?",
+        "ground_truth": "Las condiciones para establecer la figura del profesor especialista en los centros públicos están recogidas en el anexo VIII-B del Real Decreto 427/2023.",
+        "date": "2024-08-29",
+        "boe_id": "BOE-A-2024-7296"
     },
     {
-        "user_question": "¿Qué funcionario fue designado como Cónsul General en el Consulado de España en Lyon según el anexo I?",
-        "ground_truth": "El funcionario designado es José Ricardo Gómez-Acebo y Rodríguez-Spiteri.",
-        "date": "2024-08-29"
+        "question": "¿Qué módulos del ciclo inicial de grado medio en atletismo se pueden ofrecer a distancia?",
+        "ground_truth": "Los módulos reflejados en el anexo XIII del Real Decreto 427/2023 pueden ser ofertados a distancia parcial o totalmente.",
+        "date": "2024-08-29",
+        "boe_id": "BOE-A-2024-7296"
     }
-]
+    ]
+    

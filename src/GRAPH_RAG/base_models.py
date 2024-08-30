@@ -16,6 +16,7 @@ class Question(BaseModel):
     user_question : str
     ground_truth : str
     date : str
+    boe_id : str
     
 class State(TypedDict):
     """
