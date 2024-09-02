@@ -131,7 +131,7 @@ class RagasEval:
                     
                     logger.info("Getting means and distribution reports visual analysis ... ")
                     self.get_visual_report(df=self.results_df, output_file=results_file_path)
-                    logger.info(f"Reports saved inside {os.path.dirname(results_file_path)+"/metric reports",}")
+                    logger.info(f"Reports saved inside {os.path.dirname(results_file_path)+'/metric reports'}")
                 
             except Exception as e:
                 logger.exception(f"Error while cretaing result dataframe")
@@ -145,8 +145,6 @@ class RagasEval:
         """
         # Get the directory path from the file path
         directory = os.path.dirname(file_path)
-        file_name = file_path.split("/")[-1]
-        file_path += f"/metric reports/{file_name}"
 
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -169,6 +167,7 @@ class RagasEval:
         """
         # Path of the figures 
         directory = os.path.dirname(output_file)
+        directory += "/metric reports"
         
         # Check if required columns exist in the dataframe
         required_columns = ['context_precision', 'faithfulness', 'answer_relevancy', 'context_recall']
