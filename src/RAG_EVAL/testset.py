@@ -78,11 +78,13 @@ class RagasEval:
                 self.results_df = result.to_pandas()
                 logger.info(f"Ragas Eval result dataframe :\n{self.results_df.head()}\n{self.results_df.columns=}\n{self.results_df.shape=}")
                 
+                # Process results df : add question id and make metrics list for generaating reports and figures
+                self.process_results_df()
                 self._save_df(file_path=results_file_path)
                 
                 if get_analysis:
                     logger.info("Getting visual report analysis ... ")
-                    self.get_visual_report(df=self.results_df, output_file=f"{results_file_path}/metrics_report.png")
+                    self.get_visual_report(df=self.results_df, output_file=results_file_path)
                 
             except Exception as e:
                 logger.exception(f"Error while cretaing result dataframe")
@@ -95,7 +97,6 @@ class RagasEval:
             file_path (str): ...
         """
         # Get the directory path from the file path
-        file_path += "/results.csv"
         directory = os.path.dirname(file_path)
 
         if not os.path.exists(directory):
@@ -107,6 +108,21 @@ class RagasEval:
         # Save the DataFrame to CSV
         self.results_df.to_csv(path_or_buf=file_path, index=False)
         logger.info(f"DataFrame saved to CSV at: {file_path}")
+        
+    def process_results_df(self):
+        self.question_id = []
+        self.context_precision = []
+        self.faithfulness = []
+        self.answer_relevancy = []
+        self.context_recall = []
+        for index , row in enumerate(self.results_df.iterrows()):
+            logger.debug(f"row : {row}")
+            self.results_df.loc[index,"question_id"] = int(index + 1)
+            self.question_id.append(index + 1)
+            self.context_precision.append(row[1]["context_precision"])
+            self.faithfulness.append(row[1]["faithfulness"])
+            self.answer_relevancy.append(row[1]["answer_relevancy"])
+            self.context_recall.append(row[1]["context_recall"])
     
     def get_visual_report(self, df, output_file):
         """
@@ -116,6 +132,9 @@ class RagasEval:
             df (pd.DataFrame): DataFrame containing the metrics columns.
             output_file (str): The file path where the report image will be saved.
         """
+        # Path of the figures 
+        directory = os.path.dirname(output_file)
+        
         # Check if required columns exist in the dataframe
         required_columns = ['context_precision', 'faithfulness', 'answer_relevancy', 'context_recall']
         if not all(col in df.columns for col in required_columns):
@@ -128,44 +147,52 @@ class RagasEval:
         summary_stats = df_numeric.describe().T  # Transpose for better readability
         summary_stats['variance'] = df_numeric.var()
         summary_stats['range'] = df_numeric.max() - df_numeric.min()
-
-        # Create the plot
-        plt.figure(figsize=(12, 8))
-        plt.suptitle('Metrics Summary Report', fontsize=16)
-
-        # Heatmap for correlation matrix
-        plt.subplot(2, 2, 1)
-        sns.heatmap(df_numeric.corr(), annot=True, cmap='coolwarm', center=0)
-        plt.title('Correlation Matrix')
+        
 
         # Boxplot for distributions
-        plt.subplot(2, 2, 2)
+        plt.figure(figsize=(12, 8))
         sns.boxplot(data=df_numeric)
         plt.title('Metrics Distribution')
+        # Save the figure
+        plt.savefig(directory + "/metrics_distributions.png")
+        plt.close()
 
         # Bar plot for means
-        plt.subplot(2, 2, 3)
-        sns.barplot(x=summary_stats.index, y='mean', data=summary_stats)
+        plt.figure(figsize=(12, 8))
+        sns.barplot(x=summary_stats.index, y='mean', color="red", data=summary_stats)
         plt.title('Mean of Metrics')
         plt.ylabel('Mean')
+        plt.grid()
+        # Save the figure
+        plt.savefig(directory + "/metrics_means.png")
+        plt.close()
 
         # Summary statistics table
-        plt.subplot(2, 2, 4)
+        plt.figure(figsize=(12, 8))
         plt.axis('off')
         tbl = table(plt.gca(), summary_stats, loc='center', colWidths=[0.2]*len(summary_stats.columns))
         tbl.auto_set_font_size(False)
         tbl.set_fontsize(10)
         tbl.scale(1.2, 1.2)
         plt.title('Summary Statistics')
-
-        # Adjust layout to prevent overlap
-        plt.tight_layout(rect=[0, 0, 1, 0.95])
-
         # Save the figure
-        plt.savefig(output_file)
+        plt.savefig(directory + "/metrics_stats.png")
         plt.close()
 
-        logger.info(f"Report saved as {output_file}")
+        # Adjust layout to prevent overlap
+        # plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+        logger.info(f"Report saved as {directory}")
+        
+    @staticmethod
+    def get_scatter_plot(title : str , x : list, y : list, directory : str,  file_name :str):
+        plt.figure(figsize=(10, 8))
+        plt.scatter(x, y, color='blue', marker='o')
+        plt.title(f'{title}', fontsize=16 )
+        plt.grid(True)
+        plt.xlabel('Query ID', fontsize=12)
+        plt.ylabel(f"{title}", fontsize=12)
+        plt.savefig(directory + "/" + file_name)
                     
                     
 # Synthetic RAGAS testset generation : 
