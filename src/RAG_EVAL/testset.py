@@ -82,11 +82,11 @@ class RagasEval:
                 if get_visual_reports:
                     # Scatter plots of the metrics for each question id
                     RagasEval.get_scatter_plot(
-                        title="Context precison", 
+                        title="Context precision", 
                         df=self.results_df, 
-                        column="context_precison",
+                        column="context_precision",
                         directory=os.path.dirname(results_file_path)+"/metric reports",
-                        file_name="context_precison.png"
+                        file_name="context_precision.png"
                         )
                     RagasEval.get_scatter_plot(
                         title="Faithfulness", 
