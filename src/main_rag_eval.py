@@ -24,7 +24,7 @@ def main() -> None:
     # Create Raptor data (make cluster summary, process and store in vector database)
     ragas_evaluation = RagasEval(
         hg_token=str(os.getenv('HG_API_KEY')),
-        dataset_name="20240830133239"
+        dataset_name="20240902203907"
         )
     ragas_evaluation.run(results_file_path="./data/rag evaluation/results/results.csv", get_visual_reports=True)
     
