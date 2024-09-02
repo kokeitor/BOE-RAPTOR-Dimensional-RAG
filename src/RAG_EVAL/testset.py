@@ -85,53 +85,53 @@ class RagasEval:
                         title="Context precison", 
                         df=self.results_df, 
                         column="context_precison",
-                        directory=os.path.dirname(results_file_path),
+                        directory=os.path.dirname(results_file_path)+"/metric reports",
                         file_name="context_precison.png"
                         )
                     RagasEval.get_scatter_plot(
                         title="Faithfulness", 
                         df=self.results_df, 
                         column="faithfulness",
-                        directory=os.path.dirname(results_file_path),
+                        directory=os.path.dirname(results_file_path)+"/metric reports",
                         file_name="faithfulness.png"
                         )
                     RagasEval.get_scatter_plot(
                         title="Answer relevancy", 
                         df=self.results_df, 
                         column="answer_relevancy",
-                        directory=os.path.dirname(results_file_path),
+                        directory=os.path.dirname(results_file_path)+"/metric reports",
                         file_name="answer_relevancy.png"
                         )
                     RagasEval.get_scatter_plot(
                         title="Context Recall", 
                         df=self.results_df, 
                         column="context_recall",
-                        directory=os.path.dirname(results_file_path),
+                        directory=os.path.dirname(results_file_path)+"/metric reports",
                         file_name="context_recall.png"
                         )
                     
                     # Generate df with only columns of metrics results
                     required_columns = ['context_precision', 'faithfulness', 'answer_relevancy', 'context_recall']
-                    self.stats_df = self.results_df.select_dtypes('number')[required_columns].describe().round(decimals=2)
+                    self.stats_df = self.results_df.select_dtypes('number')[required_columns].describe()
                     RagasEval.get_table_plot(
-                                df=self.results_df[required_columns], 
+                                df=self.results_df[required_columns].round(decimals=2), 
                                 title="RAGAS Test Set", 
-                                directory=os.path.dirname(results_file_path),
+                                directory=os.path.dirname(results_file_path)+"/metric reports",
                                 file_name="ragas_testset.png"
                                 )
                     
                     # Stats dataframe
                     self.stats_df = self.results_df.select_dtypes('number').describe()
                     RagasEval.get_table_plot(
-                                df=self.stats_df , 
+                                df=self.stats_df.round(decimals=2) , 
                                 title="RAGAS Metrics Statistics", 
-                                directory=os.path.dirname(results_file_path),
+                                directory=os.path.dirname(results_file_path)+"/metric reports",
                                 file_name="metrics_statistics.png"
                                 )
                     
                     logger.info("Getting means and distribution reports visual analysis ... ")
                     self.get_visual_report(df=self.results_df, output_file=results_file_path)
-                    logger.info(f"Reports saved as {os.path.dirname(results_file_path)}")
+                    logger.info(f"Reports saved inside {os.path.dirname(results_file_path)+"/metric reports",}")
                 
             except Exception as e:
                 logger.exception(f"Error while cretaing result dataframe")
@@ -145,6 +145,8 @@ class RagasEval:
         """
         # Get the directory path from the file path
         directory = os.path.dirname(file_path)
+        file_name = file_path.split("/")[-1]
+        file_path += f"/metric reports/{file_name}"
 
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -193,6 +195,7 @@ class RagasEval:
         sns.barplot(x=summary_stats.index, y='mean', color="red", data=summary_stats)
         plt.title('Mean of Metrics')
         plt.ylabel('Mean')
+        plt.xlabel('RAGAS metrics')
         plt.grid()
         plt.savefig(directory + "/metrics_means.png")
         plt.close()
