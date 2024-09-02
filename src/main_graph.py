@@ -135,7 +135,6 @@ def main() -> None:
                     ground_truth=q.ground_truth
                     )
             
-                
         # Generate HG RAGAS testset
         hg_testset = testset.to_dataset()
         logger.warning(f"Ragas testset :\n{testset}")
