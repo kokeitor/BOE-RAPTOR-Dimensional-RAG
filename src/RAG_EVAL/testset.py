@@ -184,14 +184,14 @@ class RagasEval:
         
         # Boxplot for distributions
         plt.figure(figsize=(12, 8))
-        sns.boxplot(data=df_numeric)
+        sns.boxplot(data=df_numeric,color="#57d3f2")
         plt.title('Metrics Distribution')
         plt.savefig(directory + "/metrics_distributions.png")
         plt.close()
 
         # Bar plot for means
         plt.figure(figsize=(12, 8))
-        sns.barplot(x=summary_stats.index, y='mean', color="red", data=summary_stats)
+        sns.barplot(x=summary_stats.index, y='mean', color="#65f0b0", data=summary_stats)
         plt.title('Mean of Metrics')
         plt.ylabel('Mean')
         plt.xlabel('RAGAS metrics')
@@ -204,7 +204,7 @@ class RagasEval:
         plt.figure(figsize=(10, 8))
         plot = True
         try: 
-            plt.scatter(range(1,df.shape[0]+1), df[column], color='blue', marker='o')
+            plt.scatter(range(1,df.shape[0]+1), df[column], color='#57d3f2', marker='o')
         except Exception as e:
             logger.error(f"{e}")
             plot = False
