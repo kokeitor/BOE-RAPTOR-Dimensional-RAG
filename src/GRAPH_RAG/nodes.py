@@ -11,7 +11,7 @@ from GRAPH_RAG.base_models import (
 from GRAPH_RAG.chains import get_chain
 from ETL.llm import LabelGenerator
 from GRAPH_RAG.graph_utils import get_current_spanish_date_iso, merge_page_content
-
+import re
 
 # Logging configuration
 logger = logging.getLogger(__name__)
@@ -207,25 +207,35 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     documents = state["documents"]
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
-    hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
+    # Break graph and go to reprocess query if model says 'I dont know'
+    expresion_regular = r"\b(don't|know)\b" # localiza don't yo know
+    coincidencias = re.findall(expresion_regular, generation)
     
-    MAX_ITER = 4
-    for _ in range(0,MAX_ITER):
-        response = hall_chain.invoke({"documents": context, "generation": generation})
-        logger.info(f"hallucination grade : {response=}")
-        print(colored(f"LLM response -> Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
+    if len(coincidencias): # si devuelve una lista no vacia es que ha encontrado alguna de esas palabras
+        
+        logger.warning(f"Generator LLM says {generation}, founded {coincidencias=} -> need requery")
+        return {"fact_based_answer" : 'reprocess_query'}
     
-        if agent.model == "GROQ":
-            fact_based_answer = response
-        else:
-            fact_based_answer = response["score"]
+    else: # si devuelve una lista  vacia es que NO ha encontrado alguna de esas palabras
+        hall_chain = get_chain(get_model=agent.get_model, prompt_template=agent.prompt, temperature=agent.temperature, parser=agent.parser)
         
-        if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no" or fact_based_answer.lower() == "requery"):
-            break
-        else:
-            print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER:\n{fact_based_answer=}\n **Retry chain invoke ...**\n",'light_cyan',attrs=["bold"]))
+        MAX_ITER = 4
+        for _ in range(0,MAX_ITER):
+            response = hall_chain.invoke({"documents": context, "generation": generation})
+            logger.info(f"hallucination grade : {response=}")
+            print(colored(f"LLM response -> Answer supported by context -> {response}",'light_cyan',attrs=["bold"]))
         
-    return {"fact_based_answer" : fact_based_answer}
+            if agent.model == "GROQ":
+                fact_based_answer = response
+            else:
+                fact_based_answer = response["score"]
+            
+            if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no"):
+                break
+            else:
+                print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER:\n{fact_based_answer=}\n **Retry chain invoke ...**\n",'light_cyan',attrs=["bold"]))
+            
+        return {"fact_based_answer" : fact_based_answer}
 
 
 def generation_grader(state : State, agent : Agent, get_chain : Callable = get_chain) -> dict:
@@ -314,11 +324,11 @@ def route_generate_grade_gen(state : State) -> str:
         logger.info("Routing to -> 'Grader generation'")
         print(colored("\n\nRouting to -> Grader generation\n\n",'light_green',attrs=["underline"]))
         return 'generation_grader'
-    elif state["fact_based_answer"] == "no":
+    if state["fact_based_answer"] == "no":
         logger.info("Routing to -> 'Generation'")
         print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
-    elif state["fact_based_answer"] == "requery":
+    if state["fact_based_answer"] == 'reprocess_query':
         logger.info("Routing to -> 'reprocess_query'")
         print(colored("\n\nRouting to -> reprocess_query\n\n",'light_green',attrs=["underline"]))
         return 'reprocess_query'

@@ -74,6 +74,7 @@ def create_graph(config : ConfigGraph) -> StateGraph:
                                 path_map={
                                     "generator":"generator",
                                     "generation_grader":"generation_grader",
+                                    "reprocess_query":"reprocess_query",
                                 }
                                 )
     graph.add_conditional_edges(
