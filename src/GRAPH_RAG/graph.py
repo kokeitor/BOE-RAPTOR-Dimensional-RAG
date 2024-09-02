@@ -22,8 +22,8 @@ from GRAPH_RAG.nodes import (
     hallucination_checker,
     generation_grader,
     final_report,
-    route_generate_grade_gen,
-    route_retrieve_final
+    route_requery_grade_gen,
+    route_requery_final
 )
 
 
@@ -70,17 +70,17 @@ def create_graph(config : ConfigGraph) -> StateGraph:
     graph.add_edge( "generator","hallucination_checker")
     graph.add_conditional_edges(
                                 source="hallucination_checker",
-                                path=route_generate_grade_gen,
+                                path=route_requery_grade_gen,
                                 path_map={
-                                    "generator":"generator",
+                                    "reprocess_query":"reprocess_query",
                                     "generation_grader":"generation_grader",
                                 }
                                 )
     graph.add_conditional_edges(
                                 source="generation_grader",
-                                path=route_retrieve_final,
+                                path=route_requery_final,
                                 path_map={
-                                    "retriever":"retriever",
+                                    "reprocess_query":"reprocess_query",
                                     "final_report":"final_report",
                                 }
                                 )

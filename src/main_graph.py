@@ -73,7 +73,7 @@ def main() -> None:
         logger.info("Creating graph and compiling workflow...")
         config_graph.graph = create_graph(config=config_graph) # create state graph
         config_graph.compile_graph = compile_graph(config_graph.graph) 
-        # save_graph(compile_graph=config_graph.compile_graph)
+        save_graph(compile_graph=config_graph.compile_graph)
         logger.info("Graph and workflow created")
         
         # RunnableConfig
