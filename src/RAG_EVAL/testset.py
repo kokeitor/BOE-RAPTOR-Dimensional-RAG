@@ -23,6 +23,7 @@ from ragas.metrics import (
 from ragas import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 from pandas.plotting import table
 
 
@@ -119,10 +120,13 @@ class RagasEval:
         if not all(col in df.columns for col in required_columns):
             raise ValueError(f"The dataframe must contain the following columns: {required_columns}")
         
+        # Filter numeric dataframe 
+        df_numeric = df.loc[:,required_columns]
+        
         # Calculate summary statistics
-        summary_stats = df.describe().T  # Transpose for better readability
-        summary_stats['variance'] = df.var()
-        summary_stats['range'] = df.max() - df.min()
+        summary_stats = df_numeric.describe().T  # Transpose for better readability
+        summary_stats['variance'] = df_numeric.var()
+        summary_stats['range'] = df_numeric.max() - df_numeric.min()
 
         # Create the plot
         plt.figure(figsize=(12, 8))
@@ -130,12 +134,12 @@ class RagasEval:
 
         # Heatmap for correlation matrix
         plt.subplot(2, 2, 1)
-        sns.heatmap(df.corr(), annot=True, cmap='coolwarm', center=0)
+        sns.heatmap(df_numeric.corr(), annot=True, cmap='coolwarm', center=0)
         plt.title('Correlation Matrix')
 
         # Boxplot for distributions
         plt.subplot(2, 2, 2)
-        sns.boxplot(data=df)
+        sns.boxplot(data=df_numeric)
         plt.title('Metrics Distribution')
 
         # Bar plot for means
