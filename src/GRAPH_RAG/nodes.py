@@ -203,16 +203,15 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     logger.info(f"hallucination_checker node : \n {state}")
     print(colored(f"\n{agent.agent_name=} 👩🏿 -> {agent.model=} : ", 'light_cyan',attrs=["bold"]))
     
-    generation = state["question"][-1]
+    generation = state["generation"]
     documents = state["documents"]
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
     # Break graph and go to reprocess query if model says 'I dont know'
-    expresion_regular = r"\b(don't|know)\b" # localiza 'don't' yo 'know'
+    expresion_regular = r"\b(don't|know)\b" # localiza 'don't' o 'know'
     coincidencias = re.findall(expresion_regular, generation)
-    
-    if len(coincidencias): # si devuelve una lista no vacia es que ha encontrado alguna de esas palabras
-        
+
+    if len(coincidencias) > 0: # si devuelve una lista no vacia es que ha encontrado alguna de esas palabras
         logger.warning(f"Generator LLM says {generation}, founded {coincidencias=} -> need requery")
         return {"fact_based_answer" : 'reprocess_query'}
     
