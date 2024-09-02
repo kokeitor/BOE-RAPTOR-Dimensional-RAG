@@ -208,7 +208,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
     context = merge_page_content(docs = documents) # Merge docs page_content into unique str for the model context
     
     # Break graph and go to reprocess query if model says 'I dont know'
-    expresion_regular = r"\b(don't|know)\b" # localiza don't yo know
+    expresion_regular = r"\b(don't|know)\b" # localiza 'don't' yo 'know'
     coincidencias = re.findall(expresion_regular, generation)
     
     if len(coincidencias): # si devuelve una lista no vacia es que ha encontrado alguna de esas palabras
@@ -287,20 +287,6 @@ def final_report(state : State) -> dict:
 
 
 ### Conditional edge functions
-def route_retrieve_final(state : State) -> str:
-    """Route to retrieve node or to final report"""
-    
-    logger.info(f"Router Retrieval or Final Report : \n {state}")
-
-    if state["query_reprocess"] == "yes":
-        logger.info("Routing to -> 'query_reprocess'")
-        print(colored("\n\nRouting to -> query_reprocess\n\n",'light_green',attrs=["underline"]))
-        return 'reprocess_query'
-    if state["query_reprocess"] == "no":
-        logger.info("Routing to -> 'generator'")
-        print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
-        return 'generator'
-    
 def route_generate_requery(state : State) -> str:
     """Route to generation or to reprocess question """
     
