@@ -23,7 +23,7 @@ from GRAPH_RAG.nodes import (
     generation_grader,
     final_report,
     route_generate_grade_gen,
-    route_generate_final
+    route_retrieve_final
 )
 
 
@@ -78,9 +78,9 @@ def create_graph(config : ConfigGraph) -> StateGraph:
                                 )
     graph.add_conditional_edges(
                                 source="generation_grader",
-                                path=route_generate_final,
+                                path=route_retrieve_final,
                                 path_map={
-                                    "generator":"generator",
+                                    "retriever":"retriever",
                                     "final_report":"final_report",
                                 }
                                 )

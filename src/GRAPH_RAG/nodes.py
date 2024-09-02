@@ -316,7 +316,7 @@ def route_generate_grade_gen(state : State) -> str:
         return 'generator'
 
     
-def route_generate_final(state : State) -> str:
+def route_retrieve_final(state : State) -> str:
     """Route to generation or to final report"""
     
     logger.info(f"Router Generation or Final report : \n {state}")
@@ -326,8 +326,8 @@ def route_generate_final(state : State) -> str:
         print(colored("\n\nRouting to -> Final Report\n\n",'light_green',attrs=["underline"]))
         return 'final_report'
     if state["useful_answer"] == "no":
-        logger.info("Routing to -> 'Generation'")
-        print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
-        return 'generator'
+        logger.info("Routing to -> 'retriever'")
+        print(colored("\n\nRouting to -> retriever\n\n",'light_green',attrs=["underline"]))
+        return 'retriever'
 
     
