@@ -95,6 +95,7 @@ class RagasEval:
             file_path (str): ...
         """
         # Get the directory path from the file path
+        file_path += "/results.csv"
         directory = os.path.dirname(file_path)
 
         if not os.path.exists(directory):
