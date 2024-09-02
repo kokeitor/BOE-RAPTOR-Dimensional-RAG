@@ -272,7 +272,21 @@ def final_report(state : State) -> dict:
     return {"report" : report}
 
 
-### Conditional edge functions 
+### Conditional edge functions
+def route_retrieve_final(state : State) -> str:
+    """Route to retrieve node or to final report"""
+    
+    logger.info(f"Router Retrieval or Final Report : \n {state}")
+
+    if state["query_reprocess"] == "yes":
+        logger.info("Routing to -> 'query_reprocess'")
+        print(colored("\n\nRouting to -> query_reprocess\n\n",'light_green',attrs=["underline"]))
+        return 'reprocess_query'
+    if state["query_reprocess"] == "no":
+        logger.info("Routing to -> 'generator'")
+        print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
+        return 'generator'
+    
 def route_generate_requery(state : State) -> str:
     """Route to generation or to reprocess question """
     
@@ -287,7 +301,7 @@ def route_generate_requery(state : State) -> str:
         print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
         return 'generator'
     
-def route_requery_grade_gen(state : State) -> str:
+def route_generate_grade_gen(state : State) -> str:
     """Route to generation or to grade the generation/answer"""
     
     logger.info(f"Router Generation or Grader Generation : \n {state}")
@@ -297,12 +311,12 @@ def route_requery_grade_gen(state : State) -> str:
         print(colored("\n\nRouting to -> Grader generation\n\n",'light_green',attrs=["underline"]))
         return 'generation_grader'
     if state["fact_based_answer"] == "no":
-        logger.info("Routing to -> 'reprocess_query'")
-        print(colored("\n\nRouting to -> reprocess_query\n\n",'light_green',attrs=["underline"]))
-        return 'reprocess_query'
+        logger.info("Routing to -> 'Generation'")
+        print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
+        return 'generator'
 
     
-def route_requery_final(state : State) -> str:
+def route_generate_final(state : State) -> str:
     """Route to generation or to final report"""
     
     logger.info(f"Router Generation or Final report : \n {state}")
@@ -312,8 +326,8 @@ def route_requery_final(state : State) -> str:
         print(colored("\n\nRouting to -> Final Report\n\n",'light_green',attrs=["underline"]))
         return 'final_report'
     if state["useful_answer"] == "no":
-        logger.info("Routing to -> 'reprocess_query'")
-        print(colored("\n\nRouting to -> reprocess_query\n\n",'light_green',attrs=["underline"]))
-        return 'reprocess_query'
+        logger.info("Routing to -> 'Generation'")
+        print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
+        return 'generator'
 
     

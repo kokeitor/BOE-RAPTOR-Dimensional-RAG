@@ -22,6 +22,7 @@ from GRAPH_RAG.prompts import (
     grader_docs_prompt_openai,
     gen_prompt_openai,
     query_classify_groq_prompt,
+    query_process_groq_prompt,
     grader_docs_groq_prompt,
     generate_groq_prompt,
     hall_groq_prompt,
@@ -214,7 +215,7 @@ class ConfigGraph:
             elif agent == "docs_grader":
                 return grader_docs_groq_prompt
             elif agent == "query_processor":
-                return query_process_prompt_openai
+                return query_process_groq_prompt
             elif agent == "generator":
                 return generate_groq_prompt
             elif agent == "hallucination_grader":

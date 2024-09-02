@@ -67,6 +67,18 @@ grade_answer_groq_prompt = ChatPromptTemplate.from_messages(
         ]
     )
 
+query_process_groq_prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a question re-writer that converts an input question to a better version that is optimized for vectorstore retrieval. \n
+                    Look at the input and try to reason about the underlying semantic intent / meaning.\n
+                    Provide the reprocessed question in spanish.""",
+            ),
+            ("human", "{question}"),
+        ]
+    )
+
 # NVIDIA FORMAT 
 
 query_classify_prompt =  PromptTemplate(
