@@ -21,6 +21,9 @@ from ragas.metrics import (
     context_precision,
 )
 from ragas import evaluate
+import matplotlib.pyplot as plt
+import seaborn as sns
+from pandas.plotting import table
 
 
 # Logging configuration
@@ -59,7 +62,7 @@ class RagasEval:
         except Exception as e:
             logger.error(f"Error while pulling HG RAGAS testset {e}")
             
-    def run(self, results_file_path : str):
+    def run(self, results_file_path : str, get_analysis : bool = False):
         if self.testset:
             result = evaluate(
                                 self.testset["train"],
@@ -76,6 +79,10 @@ class RagasEval:
                 
                 self._save_df(file_path=results_file_path)
                 
+                if get_analysis:
+                    logger.info("Getting visual report analysis ... ")
+                    self.get_visual_report(df=self.results_df, output_file=f"{results_file_path}/metrics_report.png")
+                
             except Exception as e:
                 logger.exception(f"Error while cretaing result dataframe")
         else:
@@ -91,13 +98,69 @@ class RagasEval:
 
         if not os.path.exists(directory):
             os.makedirs(directory)
-            logging.info(f"Directory created: {directory}")
+            logger.info(f"Directory created: {directory}")
         else:
-            logging.info(f"Directory already exists: {directory}")
+            logger.info(f"Directory already exists: {directory}")
 
         # Save the DataFrame to CSV
         self.results_df.to_csv(path_or_buf=file_path, index=False)
-        logging.info(f"DataFrame saved to CSV at: {file_path}")
+        logger.info(f"DataFrame saved to CSV at: {file_path}")
+    
+    def get_visual_report(self, df, output_file):
+        """
+        Creates a visual report with summary statistics of the provided dataframe metrics and saves it as an image.
+        
+        Parameters:
+            df (pd.DataFrame): DataFrame containing the metrics columns.
+            output_file (str): The file path where the report image will be saved.
+        """
+        # Check if required columns exist in the dataframe
+        required_columns = ['context_precision', 'faithfulness', 'answer_relevancy', 'context_recall']
+        if not all(col in df.columns for col in required_columns):
+            raise ValueError(f"The dataframe must contain the following columns: {required_columns}")
+        
+        # Calculate summary statistics
+        summary_stats = df.describe().T  # Transpose for better readability
+        summary_stats['variance'] = df.var()
+        summary_stats['range'] = df.max() - df.min()
+
+        # Create the plot
+        plt.figure(figsize=(12, 8))
+        plt.suptitle('Metrics Summary Report', fontsize=16)
+
+        # Heatmap for correlation matrix
+        plt.subplot(2, 2, 1)
+        sns.heatmap(df.corr(), annot=True, cmap='coolwarm', center=0)
+        plt.title('Correlation Matrix')
+
+        # Boxplot for distributions
+        plt.subplot(2, 2, 2)
+        sns.boxplot(data=df)
+        plt.title('Metrics Distribution')
+
+        # Bar plot for means
+        plt.subplot(2, 2, 3)
+        sns.barplot(x=summary_stats.index, y='mean', data=summary_stats)
+        plt.title('Mean of Metrics')
+        plt.ylabel('Mean')
+
+        # Summary statistics table
+        plt.subplot(2, 2, 4)
+        plt.axis('off')
+        tbl = table(plt.gca(), summary_stats, loc='center', colWidths=[0.2]*len(summary_stats.columns))
+        tbl.auto_set_font_size(False)
+        tbl.set_fontsize(10)
+        tbl.scale(1.2, 1.2)
+        plt.title('Summary Statistics')
+
+        # Adjust layout to prevent overlap
+        plt.tight_layout(rect=[0, 0, 1, 0.95])
+
+        # Save the figure
+        plt.savefig(output_file)
+        plt.close()
+
+        logger.info(f"Report saved as {output_file}")
                     
                     
 # Synthetic RAGAS testset generation : 
