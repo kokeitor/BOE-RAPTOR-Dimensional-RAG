@@ -169,6 +169,10 @@ def generator(state : State, agent : Agent, get_chain : Callable = get_chain) ->
     
     print(colored(f"\nQuestion -> {state['question'][-1]}\nContext -> {context}\nResponse -> {generation}\n",'light_red',attrs=["bold"]))
     
+    if answer == "I you don't know":
+        logger.warning(f"Bad generation due to retrieval : {answer=}")
+        return {"generation" : answer}
+    
     return {"generation" : answer}
 
 
@@ -216,7 +220,7 @@ def hallucination_checker(state : State, agent : Agent, get_chain : Callable = g
         else:
             fact_based_answer = response["score"]
         
-        if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no"):
+        if (fact_based_answer.lower() == "yes" or fact_based_answer.lower() == "no" or fact_based_answer.lower() == "requery"):
             break
         else:
             print(colored(f"\nERROR LLM OUTPUT IN HALLUCINATION GRADER:\n{fact_based_answer=}\n **Retry chain invoke ...**\n",'light_cyan',attrs=["bold"]))
@@ -310,12 +314,15 @@ def route_generate_grade_gen(state : State) -> str:
         logger.info("Routing to -> 'Grader generation'")
         print(colored("\n\nRouting to -> Grader generation\n\n",'light_green',attrs=["underline"]))
         return 'generation_grader'
-    if state["fact_based_answer"] == "no":
+    elif state["fact_based_answer"] == "no":
         logger.info("Routing to -> 'Generation'")
         print(colored("\n\nRouting to -> Generation\n\n",'light_green',attrs=["underline"]))
         return 'generator'
+    elif state["fact_based_answer"] == "requery":
+        logger.info("Routing to -> 'reprocess_query'")
+        print(colored("\n\nRouting to -> reprocess_query\n\n",'light_green',attrs=["underline"]))
+        return 'reprocess_query'
 
-    
 def route_generate_final(state : State) -> str:
     """Route to generation or to final report"""
     

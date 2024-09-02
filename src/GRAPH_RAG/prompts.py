@@ -47,8 +47,8 @@ hall_groq_prompt = ChatPromptTemplate.from_messages(
             (
                 "system",
                 """You are a grader assessing whether an answer is grounded in / supported by a set of facts. \n 
-                Give a binary score 'yes' or 'no' score to indicate\n
-                whether the answer is grounded in or supported by a set of facts. Provide the binary score with no preamble or explanation.\n
+                Give a score 'yes' , 'no' or , if the answer is 'I don´t know', 'requery' score to indicate\n
+                whether the answer is grounded in or supported by a set of facts. Provide the score with no preamble or explanation.\n
                 Here are the facts:\n{documents}\n""",
             ),
             ("human", "{generation}"),
