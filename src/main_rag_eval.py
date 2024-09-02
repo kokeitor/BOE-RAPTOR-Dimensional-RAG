@@ -26,7 +26,7 @@ def main() -> None:
         hg_token=str(os.getenv('HG_API_KEY')),
         dataset_name="20240830133239"
         )
-    ragas_evaluation.run(results_file_path="./data/rag evaluation/results/results.csv", get_analysis=True)
+    ragas_evaluation.run(results_file_path="./data/rag evaluation/results/results.csv", get_visual_reports=True)
     
 if __name__ == "__main__":
     main()

@@ -23,8 +23,6 @@ from ragas.metrics import (
 from ragas import evaluate
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
-from pandas.plotting import table
 
 
 # Logging configuration
@@ -63,7 +61,7 @@ class RagasEval:
         except Exception as e:
             logger.error(f"Error while pulling HG RAGAS testset {e}")
             
-    def run(self, results_file_path : str, get_analysis : bool = False):
+    def run(self, results_file_path : str, get_visual_reports : bool = False):
         if self.testset:
             result = evaluate(
                                 self.testset["train"],
@@ -79,12 +77,61 @@ class RagasEval:
                 logger.info(f"Ragas Eval result dataframe :\n{self.results_df.head()}\n{self.results_df.columns=}\n{self.results_df.shape=}")
                 
                 # Process results df : add question id and make metrics list for generaating reports and figures
-                self.process_results_df()
                 self._save_df(file_path=results_file_path)
                 
-                if get_analysis:
-                    logger.info("Getting visual report analysis ... ")
+                if get_visual_reports:
+                    # Scatter plots of the metrics for each question id
+                    RagasEval.get_scatter_plot(
+                        title="Context precison", 
+                        df=self.results_df, 
+                        column="context_precison",
+                        directory=os.path.dirname(results_file_path),
+                        file_name="context_precison.png"
+                        )
+                    RagasEval.get_scatter_plot(
+                        title="Faithfulness", 
+                        df=self.results_df, 
+                        column="faithfulness",
+                        directory=os.path.dirname(results_file_path),
+                        file_name="faithfulness.png"
+                        )
+                    RagasEval.get_scatter_plot(
+                        title="Answer relevancy", 
+                        df=self.results_df, 
+                        column="answer_relevancy",
+                        directory=os.path.dirname(results_file_path),
+                        file_name="answer_relevancy.png"
+                        )
+                    RagasEval.get_scatter_plot(
+                        title="Context Recall", 
+                        df=self.results_df, 
+                        column="context_recall",
+                        directory=os.path.dirname(results_file_path),
+                        file_name="context_recall.png"
+                        )
+                    
+                    # Generate df with only columns of metrics results
+                    required_columns = ['context_precision', 'faithfulness', 'answer_relevancy', 'context_recall']
+                    self.stats_df = self.results_df.select_dtypes('number')[required_columns].describe().round(decimals=2)
+                    RagasEval.get_table_plot(
+                                df=self.results_df[required_columns], 
+                                title="RAGAS Test Set", 
+                                directory=os.path.dirname(results_file_path),
+                                file_name="ragas_testset.png"
+                                )
+                    
+                    # Stats dataframe
+                    self.stats_df = self.results_df.select_dtypes('number').describe()
+                    RagasEval.get_table_plot(
+                                df=self.stats_df , 
+                                title="RAGAS Metrics Statistics", 
+                                directory=os.path.dirname(results_file_path),
+                                file_name="metrics_statistics.png"
+                                )
+                    
+                    logger.info("Getting means and distribution reports visual analysis ... ")
                     self.get_visual_report(df=self.results_df, output_file=results_file_path)
+                    logger.info(f"Reports saved as {os.path.dirname(results_file_path)}")
                 
             except Exception as e:
                 logger.exception(f"Error while cretaing result dataframe")
@@ -109,20 +156,6 @@ class RagasEval:
         self.results_df.to_csv(path_or_buf=file_path, index=False)
         logger.info(f"DataFrame saved to CSV at: {file_path}")
         
-    def process_results_df(self):
-        self.question_id = []
-        self.context_precision = []
-        self.faithfulness = []
-        self.answer_relevancy = []
-        self.context_recall = []
-        for index , row in enumerate(self.results_df.iterrows()):
-            logger.debug(f"row : {row}")
-            self.results_df.loc[index,"question_id"] = int(index + 1)
-            self.question_id.append(index + 1)
-            self.context_precision.append(row[1]["context_precision"])
-            self.faithfulness.append(row[1]["faithfulness"])
-            self.answer_relevancy.append(row[1]["answer_relevancy"])
-            self.context_recall.append(row[1]["context_recall"])
     
     def get_visual_report(self, df, output_file):
         """
@@ -148,12 +181,10 @@ class RagasEval:
         summary_stats['variance'] = df_numeric.var()
         summary_stats['range'] = df_numeric.max() - df_numeric.min()
         
-
         # Boxplot for distributions
         plt.figure(figsize=(12, 8))
         sns.boxplot(data=df_numeric)
         plt.title('Metrics Distribution')
-        # Save the figure
         plt.savefig(directory + "/metrics_distributions.png")
         plt.close()
 
@@ -163,40 +194,62 @@ class RagasEval:
         plt.title('Mean of Metrics')
         plt.ylabel('Mean')
         plt.grid()
-        # Save the figure
         plt.savefig(directory + "/metrics_means.png")
         plt.close()
 
-        # Summary statistics table
-        plt.figure(figsize=(12, 8))
-        plt.axis('off')
-        tbl = table(plt.gca(), summary_stats, loc='center', colWidths=[0.2]*len(summary_stats.columns))
-        tbl.auto_set_font_size(False)
-        tbl.set_fontsize(10)
-        tbl.scale(1.2, 1.2)
-        plt.title('Summary Statistics')
-        # Save the figure
-        plt.savefig(directory + "/metrics_stats.png")
-        plt.close()
-
-        # Adjust layout to prevent overlap
-        # plt.tight_layout(rect=[0, 0, 1, 0.95])
-
-        logger.info(f"Report saved as {directory}")
+    @staticmethod
+    def get_scatter_plot(title : str , df : pd.DataFrame, column : str, directory : str,  file_name :str):
+        plt.figure(figsize=(10, 8))
+        plot = True
+        try: 
+            plt.scatter(range(1,df.shape[0]+1), df[column], color='blue', marker='o')
+        except Exception as e:
+            logger.error(f"{e}")
+            plot = False
+        if plot:
+            plt.title(f'{title}', fontsize=16 )
+            plt.grid(True)
+            plt.xlabel('Query ID', fontsize=12)
+            plt.ylabel(f"{title}", fontsize=12)
+            plt.savefig(directory + "/" + file_name)
         
     @staticmethod
-    def get_scatter_plot(title : str , x : list, y : list, directory : str,  file_name :str):
-        plt.figure(figsize=(10, 8))
-        plt.scatter(x, y, color='blue', marker='o')
-        plt.title(f'{title}', fontsize=16 )
-        plt.grid(True)
-        plt.xlabel('Query ID', fontsize=12)
-        plt.ylabel(f"{title}", fontsize=12)
-        plt.savefig(directory + "/" + file_name)
+    def get_table_plot(df : pd.DataFrame , title : str, directory : str,  file_name :str):
+
+        plt.figure(figsize=(12, 8))
+        plt.axis('off')
+        
+        cell_text = df.values.tolist() # Convert summary statistics to a 2D list for the table
+        tbl = plt.table(
+            cellText=cell_text,
+            colLabels=df.columns,
+            rowLabels=df.index,
+            cellLoc='center',
+            colWidths=[0.2] * len(df.columns),
+            colColours=['#65f0b0'] * len(df.columns),
+            rowColours=['#57d3f2'] * df.shape[0],
+            loc='center'
+        )
+        # Customize the table
+        tbl.auto_set_font_size(False)
+        tbl.set_fontsize(10)  # Set font size
+        tbl.scale(1.2, 1.2)  # Scale table size
+        
+        # Customize headers and body table separately
+        for key, cell in tbl.get_celld().items():
+            if key[0] == 0 or key[1] == -1:
+                cell.set_text_props(weight='bold', color="black")
+                cell.set_edgecolor(color='black')
+            else:
+                cell.set_color(c='#cdcdcb')
+                cell.set_edgecolor(color='black')
+            cell.set_linewidth(2)
+        
+        plt.title(f'{title}')
+        plt.savefig(directory +"/"+file_name)
                     
                     
 # Synthetic RAGAS testset generation : 
-
 def parse_date(date_str: str) -> datetime:
     """
     Parses a date string into a datetime object.
