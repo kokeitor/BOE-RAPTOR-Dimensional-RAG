@@ -300,7 +300,7 @@ def route_generate_requery(state : State) -> str:
         print(colored("\n\nRouting to -> generator\n\n",'light_green',attrs=["underline"]))
         return 'generator'
     
-def route_generate_grade_gen(state : State) -> str:
+def route_generate_gradegen_requery(state : State) -> str:
     """Route to generation or to grade the generation/answer"""
     
     logger.info(f"Router Generation or Grader Generation : \n {state}")
