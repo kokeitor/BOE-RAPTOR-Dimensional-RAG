@@ -204,7 +204,7 @@ class RagasEval:
         plt.figure(figsize=(10, 8))
         plot = True
         try: 
-            plt.scatter(range(1,df.shape[0]+1), df[column], color='#57d3f2', marker='o')
+            plt.plot(range(1,df.shape[0]+1), df[column], linewidth=0.8, markersize=5, color='#57d3f2', marker='o')
         except Exception as e:
             logger.error(f"{e}")
             plot = False
