@@ -9,6 +9,7 @@
 /data/boedataset
 /data/figures
 /data/notes
+/data/diagramas
 
 # Ignore environment variable files
 .env
